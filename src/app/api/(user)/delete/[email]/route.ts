@@ -1,8 +1,9 @@
+import { NextRequest, NextResponse } from "next/server";
+import { dbConnect } from "@/app/api/mongodb";
+import { z } from "zod";
 import { validateEmail, validatePassword } from "@/app/api/validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 const reqSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -13,6 +14,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ email: string }> }
 ) {
+  await dbConnect();
+
   const { email } = await params;
   const { password } = await req.json();
 

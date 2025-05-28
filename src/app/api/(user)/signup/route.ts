@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { dbConnect } from "../../mongodb";
+import { z } from "zod";
 import { validateEmail, validatePassword } from "../../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
@@ -13,6 +13,7 @@ const reqSchema = z.object({
 
 export async function POST(req: NextRequest) {
   await dbConnect();
+
   const body = await req.json();
 
   const bodyData = reqSchema.safeParse(body);
