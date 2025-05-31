@@ -74,11 +74,11 @@ export async function POST(req: NextRequest) {
   }
 
   const nutritionPerServing = {
-    calories: totalCalories / servings,
-    ENERC_KCAL: totalENERC_KCAL / servings,
-    PROCNT_KCAL: totalPROCNT_KCAL / servings,
-    FAT_KCAL: totalFAT_KCAL / servings,
-    CHOCDF_KCAL: totalCHOCDF_KCAL / servings,
+    calories: (totalCalories / servings).toFixed(2),
+    ENERC_KCAL: (totalENERC_KCAL / servings).toFixed(2),
+    PROCNT_KCAL: (totalPROCNT_KCAL / servings).toFixed(2),
+    FAT_KCAL: (totalFAT_KCAL / servings).toFixed(2),
+    CHOCDF_KCAL: (totalCHOCDF_KCAL / servings).toFixed(2),
   };
 
   const newRecipe = new Recipe({
