@@ -1,12 +1,11 @@
 import { model, models, Schema } from "mongoose";
-import { ST } from "next/dist/shared/lib/utils";
 
 const RecipeSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
     name: {
       type: String,
@@ -51,13 +50,32 @@ const RecipeSchema = new Schema(
           required: true,
         },
         nutrition: {
-          type: [String],
-          required: true,
+          type: Schema.Types.Mixed,
+          required: false,
         },
       },
     ],
     nutritionPerServing: {
-      type: String,
+      calories: {
+        type: Number,
+        required: true,
+      },
+      ENERC_KCAL: {
+        type: Number,
+        required: true,
+      },
+      PROCNT_KCAL: {
+        type: Number,
+        required: true,
+      },
+      FAT_KCAL: {
+        type: Number,
+        required: true,
+      },
+      CHOCDF_KCAL: {
+        type: Number,
+        required: true,
+      },
     },
     instructions: {
       type: [String],
