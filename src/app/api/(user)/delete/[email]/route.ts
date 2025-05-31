@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import { z } from "zod";
-import { validateEmail, validatePassword } from "@/app/api/validations";
+import { validatePassword } from "@/app/api/validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
@@ -24,12 +24,6 @@ export async function DELETE(
     return NextResponse.json({ error: data.error }, { status: 400 });
   }
 
-  if (!validateEmail(email)) {
-    return NextResponse.json(
-      { error: "Invalid email address" },
-      { status: 400 }
-    );
-  }
   if (!validatePassword(password)) {
     return NextResponse.json({ error: "Invalid password" }, { status: 400 });
   }

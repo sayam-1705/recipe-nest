@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
 import { z } from "zod";
-import { validateEmail, validatePassword } from "../../validations";
+import { validatePassword } from "../../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { createJwt } from "../../helpers";
@@ -23,12 +23,6 @@ export async function POST(req: NextRequest) {
 
   const { email, password } = body;
 
-  if (!validateEmail(email)) {
-    return NextResponse.json(
-      { error: "Invalid email address" },
-      { status: 400 }
-    );
-  }
   if (!validatePassword(password)) {
     return NextResponse.json({ error: "Invalid password" }, { status: 400 });
   }
