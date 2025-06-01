@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
 import { z } from "zod";
-import { validatePassword } from "../../validations";
+import { validatePassword } from "../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-import { createJwt } from "../../helpers";
+import { createJwt } from "../helpers";
 
 const reqSchema = z.object({
   email: z.string().email("Invalid email address"),

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import { z } from "zod";
-import { validatePassword } from "@/app/api/validations";
+import { validatePassword } from "@/app/api/(user)/validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
