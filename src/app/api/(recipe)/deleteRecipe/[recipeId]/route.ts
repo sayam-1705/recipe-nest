@@ -6,7 +6,7 @@ import { auth } from "@/app/api/auth";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ recipeId: string }> }
 ) {
   try {
     await dbConnect();
@@ -19,16 +19,16 @@ export async function DELETE(
       );
     }
 
-    const { id } = await params;
+    const { recipeId } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
       return NextResponse.json(
         { error: "Invalid recipe ID format" },
         { status: 400 }
       );
     }
 
-    const existingRecipe = await Recipe.findById(id);
+    const existingRecipe = await Recipe.findById(recipeId);
     if (!existingRecipe) {
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
     }
@@ -40,7 +40,7 @@ export async function DELETE(
       );
     }
 
-    await Recipe.deleteOne({ _id: id });
+    await Recipe.deleteOne({ _id: recipeId });
 
     return NextResponse.json(
       { message: "Recipe deleted successfully" },

@@ -28,7 +28,7 @@ const reqSchema = z.object({
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ recipeId: string }> }
 ) {
   try {
     await dbConnect();
@@ -48,9 +48,9 @@ export async function PUT(
       return NextResponse.json({ error: bodyData.error }, { status: 400 });
     }
 
-    const { id } = await params;
+    const { recipeId } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
       return NextResponse.json(
         { error: "Invalid recipe ID format" },
         { status: 400 }
@@ -71,7 +71,7 @@ export async function PUT(
       image,
     } = bodyData.data;
 
-    const existingRecipe = await Recipe.findById(id);
+    const existingRecipe = await Recipe.findById(recipeId);
     if (!existingRecipe) {
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
     }
@@ -122,7 +122,7 @@ export async function PUT(
     };
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(
-      id,
+      recipeId,
       {
         name,
         type,
