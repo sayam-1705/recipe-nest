@@ -3,9 +3,17 @@ import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
 
 export async function GET(req: NextRequest) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const recipes = await Recipe.find();
+    const recipes = await Recipe.find();
 
-  return NextResponse.json({ recipes }, { status: 200 });
+    return NextResponse.json({ recipes }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    return NextResponse.json(
+      { error: "An error occurred while fetching recipes" },
+      { status: 500 }
+    );
+  }
 }

@@ -15,50 +15,61 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ email: string }> }
 ) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const authData = await auth(req);
-  if (!authData) {
+    const authData = await auth(req);
+    if (!authData) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    const { email } = await params;
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (authData.email !== email) {
+      return NextResponse.json(
+        { error: "You can only delete your own account" },
+        { status: 403 }
+      );
+    }
+
+    const { password } = await req.json();
+
+    const data = reqSchema.safeParse({ email, password });
+    if (!data.success) {
+      return NextResponse.json({ error: data.error }, { status: 400 });
+    }
+
+    if (!validatePassword(password)) {
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return NextResponse.json(
+        { error: "Invalid Credentials" },
+        { status: 401 }
+      );
+    }
+
+    await User.deleteOne({ email: email });
+
     return NextResponse.json(
-      { error: "Authentication required" },
-      { status: 401 }
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Delete user error:", error);
+    return NextResponse.json(
+      { error: "An error occurred while trying to delete the user" },
+      { status: 500 }
     );
   }
-
-  const { email } = await params;
-
-  if (authData.email !== email) {
-    return NextResponse.json(
-      { error: "You can only delete your own account" },
-      { status: 403 }
-    );
-  }
-
-  const { password } = await req.json();
-
-  const data = reqSchema.safeParse({ email, password });
-  if (!data.success) {
-    return NextResponse.json({ error: data.error }, { status: 400 });
-  }
-
-  if (!validatePassword(password)) {
-    return NextResponse.json({ error: "Invalid password" }, { status: 400 });
-  }
-
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  const isPasswordMatch = await bcrypt.compare(password, user.password);
-  if (!isPasswordMatch) {
-    return NextResponse.json({ error: "Invalid Credentials" }, { status: 401 });
-  }
-
-  await User.deleteOne({ email: email });
-
-  return NextResponse.json(
-    { message: "User deleted successfully" },
-    { status: 200 }
-  );
 }

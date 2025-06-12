@@ -12,40 +12,51 @@ const reqSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const body = await req.json();
+    const body = await req.json();
 
-  const bodyData = reqSchema.safeParse(body);
-  if (!bodyData.success) {
-    return NextResponse.json({ error: bodyData.error }, { status: 400 });
+    const bodyData = reqSchema.safeParse(body);
+    if (!bodyData.success) {
+      return NextResponse.json({ error: bodyData.error }, { status: 400 });
+    }
+
+    const { name, email, password } = body;
+
+    if (!validatePassword(password)) {
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+    }
+
+    const userExists = await User.findOne({ email: email });
+    if (userExists) {
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+    await newUser.save();
+
+    return NextResponse.json(
+      {
+        message: "User created successfully",
+        user: { name: newUser.name, email: newUser.email },
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Signup error:", error);
+    return NextResponse.json(
+      { error: "An error occurred during signup" },
+      { status: 500 }
+    );
   }
-
-  const { name, email, password } = body;
-
-  if (!validatePassword(password)) {
-    return NextResponse.json({ error: "Invalid password" }, { status: 400 });
-  }
-
-  const userExists = await User.findOne({ email: email });
-  if (userExists) {
-    return NextResponse.json({ error: "User already exists" }, { status: 400 });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const newUser = new User({
-    name,
-    email,
-    password: hashedPassword,
-  });
-  await newUser.save();
-
-  return NextResponse.json(
-    {
-      message: "User created successfully",
-      user: { name: newUser.name, email: newUser.email },
-    },
-    { status: 201 }
-  );
 }

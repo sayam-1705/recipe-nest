@@ -8,41 +8,49 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const authData = await auth(req);
-  if (!authData) {
+    const authData = await auth(req);
+    if (!authData) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: "Invalid recipe ID format" },
+        { status: 400 }
+      );
+    }
+
+    const existingRecipe = await Recipe.findById(id);
+    if (!existingRecipe) {
+      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+    }
+
+    if (existingRecipe.userId.toString() !== authData.userId) {
+      return NextResponse.json(
+        { error: "You can only delete your own recipes" },
+        { status: 403 }
+      );
+    }
+
+    await Recipe.deleteOne({ _id: id });
+
     return NextResponse.json(
-      { error: "Authentication required" },
-      { status: 401 }
+      { message: "Recipe deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Delete recipe error:", error);
+    return NextResponse.json(
+      { error: "An error occurred while deleting the recipe" },
+      { status: 500 }
     );
   }
-
-  const { id } = await params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return NextResponse.json(
-      { error: "Invalid recipe ID format" },
-      { status: 400 }
-    );
-  }
-
-  const existingRecipe = await Recipe.findById(id);
-  if (!existingRecipe) {
-    return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
-  }
-
-  if (existingRecipe.userId.toString() !== authData.userId) {
-    return NextResponse.json(
-      { error: "You can only delete your own recipes" },
-      { status: 403 }
-    );
-  }
-
-  await Recipe.deleteOne({ _id: id });
-
-  return NextResponse.json(
-    { message: "Recipe deleted successfully" },
-    { status: 200 }
-  );
 }

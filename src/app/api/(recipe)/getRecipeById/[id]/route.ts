@@ -7,21 +7,29 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const { id } = await params;
+    const { id } = await params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: "Invalid recipe ID format" },
+        { status: 400 }
+      );
+    }
+
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ recipe }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching recipe:", error);
     return NextResponse.json(
-      { error: "Invalid recipe ID format" },
-      { status: 400 }
+      { error: "An error occurred while fetching the recipe" },
+      { status: 500 }
     );
   }
-
-  const recipe = await Recipe.findById(id);
-  if (!recipe) {
-    return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ recipe }, { status: 200 });
 }
