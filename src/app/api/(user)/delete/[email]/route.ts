@@ -4,6 +4,7 @@ import { z } from "zod";
 import { validatePassword } from "@/app/api/(user)/validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
+import { auth } from "@/app/api/auth";
 
 const reqSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,7 +17,23 @@ export async function DELETE(
 ) {
   await dbConnect();
 
+  const authData = await auth(req);
+  if (!authData) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    );
+  }
+
   const { email } = await params;
+
+  if (authData.email !== email) {
+    return NextResponse.json(
+      { error: "You can only delete your own account" },
+      { status: 403 }
+    );
+  }
+
   const { password } = await req.json();
 
   const data = reqSchema.safeParse({ email, password });

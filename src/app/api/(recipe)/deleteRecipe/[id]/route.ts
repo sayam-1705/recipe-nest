@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
+import { auth } from "@/app/api/auth";
 
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
+
+  const authData = await auth(req);
+  if (!authData) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    );
+  }
 
   const { id } = await params;
 
@@ -21,6 +30,13 @@ export async function DELETE(
   const existingRecipe = await Recipe.findById(id);
   if (!existingRecipe) {
     return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+  }
+
+  if (existingRecipe.userId.toString() !== authData.userId) {
+    return NextResponse.json(
+      { error: "You can only delete your own recipes" },
+      { status: 403 }
+    );
   }
 
   await Recipe.deleteOne({ _id: id });

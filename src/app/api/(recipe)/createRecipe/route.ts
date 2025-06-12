@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getNutritionInfo } from "../GetNutritionInfo";
 import { Ingredient } from "../IngredientType";
 import Recipe from "@/models/Recipe";
+import { auth } from "@/app/api/auth";
 
 const reqSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -26,6 +27,14 @@ const reqSchema = z.object({
 
 export async function POST(req: NextRequest) {
   await dbConnect();
+
+  const authData = await auth(req);
+  if (!authData) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    );
+  }
 
   const body = await req.json();
 
@@ -74,14 +83,15 @@ export async function POST(req: NextRequest) {
   }
 
   const nutritionPerServing = {
-    calories: (totalCalories / servings).toFixed(2),
-    ENERC_KCAL: (totalENERC_KCAL / servings).toFixed(2),
-    PROCNT_KCAL: (totalPROCNT_KCAL / servings).toFixed(2),
-    FAT_KCAL: (totalFAT_KCAL / servings).toFixed(2),
-    CHOCDF_KCAL: (totalCHOCDF_KCAL / servings).toFixed(2),
+    calories: Number((totalCalories / servings).toFixed(2)),
+    ENERC_KCAL: Number((totalENERC_KCAL / servings).toFixed(2)),
+    PROCNT_KCAL: Number((totalPROCNT_KCAL / servings).toFixed(2)),
+    FAT_KCAL: Number((totalFAT_KCAL / servings).toFixed(2)),
+    CHOCDF_KCAL: Number((totalCHOCDF_KCAL / servings).toFixed(2)),
   };
 
   const newRecipe = new Recipe({
+    userId: authData.userId,
     name,
     type,
     meal,
