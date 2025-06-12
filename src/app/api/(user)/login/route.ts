@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: bodyData.error }, { status: 400 });
     }
 
-    const { email, password } = body;
+    const { email, password } = bodyData.data;
 
     if (!validatePassword(password)) {
       return NextResponse.json({ error: "Invalid password" }, { status: 400 });
