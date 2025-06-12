@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
 import { z } from "zod";
 import { getNutritionInfo } from "../getNutritionInfo";
-import { Ingredient } from "../ingredientType";
 import Recipe from "@/models/Recipe";
 import { auth } from "@/app/api/auth";
 

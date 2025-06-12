@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { AuthData } from "./authDataType"; 
 
 export async function auth(req: NextRequest): Promise<AuthData | null> {
   try {
