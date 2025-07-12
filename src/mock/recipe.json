@@ -1,0 +1,247 @@
+{
+  "recipes": [
+    {
+      "userId": "507f1f77bcf86cd799439011",
+      "name": "Classic Spaghetti Carbonara",
+      "type": "Italian",
+      "meal": "Dinner",
+      "time": "30 minutes",
+      "difficulty": "Medium",
+      "season": "All Year",
+      "occasion": "Weeknight",
+      "servings": 4,
+      "ingredients": [
+        {
+          "name": "Spaghetti",
+          "quantity": "400g",
+          "nutrition": {
+            "calories": 371,
+            "carbs": 75,
+            "protein": 13,
+            "fat": 1.5
+          }
+        },
+        {
+          "name": "Pancetta",
+          "quantity": "150g",
+          "nutrition": {
+            "calories": 563,
+            "carbs": 0,
+            "protein": 21,
+            "fat": 53
+          }
+        },
+        {
+          "name": "Eggs",
+          "quantity": "3 large",
+          "nutrition": {
+            "calories": 210,
+            "carbs": 1.5,
+            "protein": 18,
+            "fat": 15
+          }
+        },
+        {
+          "name": "Parmesan Cheese",
+          "quantity": "100g",
+          "nutrition": {
+            "calories": 431,
+            "carbs": 4,
+            "protein": 38,
+            "fat": 29
+          }
+        },
+        {
+          "name": "Black Pepper",
+          "quantity": "1 tsp",
+          "nutrition": {
+            "calories": 6,
+            "carbs": 1.5,
+            "protein": 0.2,
+            "fat": 0.1
+          }
+        }
+      ],
+      "nutritionPerServing": {
+        "calories": 395,
+        "ENERC_KCAL": 395,
+        "PROCNT_KCAL": 90,
+        "FAT_KCAL": 198,
+        "CHOCDF_KCAL": 205
+      },
+      "instructions": [
+        "Cook spaghetti in salted boiling water until al dente",
+        "In a large pan, cook pancetta until crispy",
+        "Beat eggs with grated Parmesan cheese and black pepper",
+        "Drain pasta, reserving some pasta water",
+        "Add hot pasta to the pan with pancetta",
+        "Remove from heat and quickly mix in egg mixture",
+        "Add pasta water if needed to create creamy sauce",
+        "Serve immediately with extra Parmesan"
+      ],
+      "image": "https://imgs.search.brave.com/kG409c6___QmbIEOb1mviHA8gZAHKzoqZNV8a78dOJY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM5/NjA5NzM0My9waG90/by90cmFkaXRpb25h/bC1pdGFsaWFuLXBh/c3RhLWNhcmJvbmFy/YS13aXRoLWJhY29u/LXBhcm1lc2FuLWVn/Zy1hbmQtcGVwcGVy/LW9uLWEtZGFyay1i/YWNrZ3JvdW5kLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz04/a3VxbmFQRzNvNW92/eXFQN3FCQWg5Wjl1/cGhVbTZyUGp0TVN1/ZmlYZ3NZPQ"
+    },
+    {
+      "userId": "507f1f77bcf86cd799439012",
+      "name": "Chicken Tikka Masala",
+      "type": "Indian",
+      "meal": "Dinner",
+      "time": "45 minutes",
+      "difficulty": "Hard",
+      "season": "All Year",
+      "occasion": "Special Occasion",
+      "servings": 6,
+      "ingredients": [
+        {
+          "name": "Chicken Breast",
+          "quantity": "800g",
+          "nutrition": {
+            "calories": 165,
+            "carbs": 0,
+            "protein": 31,
+            "fat": 3.6
+          }
+        },
+        {
+          "name": "Greek Yogurt",
+          "quantity": "200ml",
+          "nutrition": {
+            "calories": 100,
+            "carbs": 6,
+            "protein": 17,
+            "fat": 0.4
+          }
+        },
+        {
+          "name": "Tomato Puree",
+          "quantity": "400ml",
+          "nutrition": {
+            "calories": 82,
+            "carbs": 19,
+            "protein": 4,
+            "fat": 0.2
+          }
+        },
+        {
+          "name": "Heavy Cream",
+          "quantity": "200ml",
+          "nutrition": {
+            "calories": 691,
+            "carbs": 5,
+            "protein": 4,
+            "fat": 73
+          }
+        },
+        {
+          "name": "Garam Masala",
+          "quantity": "2 tbsp",
+          "nutrition": {
+            "calories": 12,
+            "carbs": 2,
+            "protein": 0.5,
+            "fat": 0.5
+          }
+        }
+      ],
+      "nutritionPerServing": {
+        "calories": 425,
+        "ENERC_KCAL": 425,
+        "PROCNT_KCAL": 124,
+        "FAT_KCAL": 189,
+        "CHOCDF_KCAL": 112
+      },
+      "instructions": [
+        "Marinate chicken in yogurt and spices for 2 hours",
+        "Grill chicken pieces until cooked through",
+        "In a large pan, sauté onions and garlic",
+        "Add tomato puree and cook until thick",
+        "Add cream and garam masala",
+        "Add grilled chicken and simmer for 10 minutes",
+        "Garnish with fresh cilantro",
+        "Serve with basmati rice and naan bread"
+      ],
+      "image": "https://imgs.search.brave.com/ow5QdInKkqho-CtiN5PyTsVayBZLiFTN5yTn9EVrC8I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzQwLzA1LzUz/LzM2MF9GXzg0MDA1/NTM0OV9kREpEYlNK/VmdqQVVDekJVMjBp/MlJmNEJHVlY2RUtT/TC5qcGc"
+    },
+    {
+      "userId": "507f1f77bcf86cd799439013",
+      "name": "Chocolate Chip Cookies",
+      "type": "American",
+      "meal": "Dessert",
+      "time": "25 minutes",
+      "difficulty": "Easy",
+      "season": "All Year",
+      "occasion": "Casual",
+      "servings": 24,
+      "ingredients": [
+        {
+          "name": "All-Purpose Flour",
+          "quantity": "300g",
+          "nutrition": {
+            "calories": 1092,
+            "carbs": 228,
+            "protein": 31,
+            "fat": 3
+          }
+        },
+        {
+          "name": "Butter",
+          "quantity": "200g",
+          "nutrition": {
+            "calories": 1628,
+            "carbs": 0,
+            "protein": 2,
+            "fat": 184
+          }
+        },
+        {
+          "name": "Brown Sugar",
+          "quantity": "150g",
+          "nutrition": {
+            "calories": 581,
+            "carbs": 149,
+            "protein": 0,
+            "fat": 0
+          }
+        },
+        {
+          "name": "Chocolate Chips",
+          "quantity": "200g",
+          "nutrition": {
+            "calories": 1060,
+            "carbs": 120,
+            "protein": 10,
+            "fat": 62
+          }
+        },
+        {
+          "name": "Vanilla Extract",
+          "quantity": "1 tsp",
+          "nutrition": {
+            "calories": 12,
+            "carbs": 0.5,
+            "protein": 0,
+            "fat": 0
+          }
+        }
+      ],
+      "nutritionPerServing": {
+        "calories": 182,
+        "ENERC_KCAL": 182,
+        "PROCNT_KCAL": 7,
+        "FAT_KCAL": 94,
+        "CHOCDF_KCAL": 81
+      },
+      "instructions": [
+        "Preheat oven to 375°F (190°C)",
+        "Cream butter and brown sugar until fluffy",
+        "Beat in eggs and vanilla extract",
+        "Gradually mix in flour until just combined",
+        "Fold in chocolate chips",
+        "Drop rounded tablespoons onto baking sheet",
+        "Bake for 9-11 minutes until golden brown",
+        "Cool on baking sheet for 5 minutes before transferring"
+      ],
+      "image": "https://imgs.search.brave.com/0O2ExZ7N4Ha7VxLN5sJl19F9xWFIDmix6c2_dEHqF5A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cmVjaXBldGluZWF0/cy5jb20vdGFjaHlv/bi8yMDI1LzAzL1Ro/ZS1DaG9jb2xhdGUt/Q2hpcC1Db29raWUt/b2YtbXktZHJlYW1z/LV8wLmpwZw"
+    }
+  ]
+}
