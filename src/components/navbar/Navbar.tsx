@@ -29,16 +29,16 @@ const Navbar = () => {
           Home
         </Link>
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-500"
-          href="/"
-        >
-          Menu
-        </Link>
-        <Link
           className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-600"
           href="/"
         >
           How it works
+        </Link>
+        <Link
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-500"
+          href="/"
+        >
+          Menu
         </Link>
         <Link
           className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-700"
