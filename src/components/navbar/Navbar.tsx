@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-between items-center px-14 py-3 bg-white shadow-sm transition-all duration-500 hover:shadow-md animate-fade-in-up">
+    <nav className="flex justify-between items-center px-14 py-3 bg-white shadow-sm transition-all duration-500 hover:shadow-md">
       <Link
         className="flex items-center group transition-all duration-300 hover:scale-105 animate-gentle-float"
         href="/"
@@ -21,39 +21,39 @@ const Navbar = () => {
           RecipeNest
         </span>
       </Link>
-      <div className="flex gap-7 text-lg font-medium animate-fade-in-up delay-200">
+      <div className="flex gap-7 text-lg font-medium">
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-300"
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-400"
           href="/"
         >
           Home
         </Link>
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-400"
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-500"
           href="/"
         >
           Menu
         </Link>
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-500"
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-600"
           href="/"
         >
           How it works
         </Link>
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-600"
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-700"
           href="/"
         >
           About
         </Link>
         <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-600"
+          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-800"
           href="/"
         >
           Contact
         </Link>
       </div>
-      <div className="flex gap-4 font-medium text-base animate-fade-in-up delay-1000">
+      <div className="flex gap-4 font-medium text-base animate-fade-in-up delay-800">
         <Link
           className="border-[1px] border-color-dark-green px-4 py-1.5 rounded-3xl transition-all duration-500 hover:bg-color-dark-green hover:text-white hover:scale-110 hover:shadow-lg active:scale-95 transform"
           href="/login"
