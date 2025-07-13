@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NavLink from "./NavLink";
 
 const Navbar = () => {
   return (
@@ -22,36 +23,21 @@ const Navbar = () => {
         </span>
       </Link>
       <div className="flex gap-7 text-lg font-medium">
-        <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-400"
-          href="/"
-        >
+        <NavLink href="/" delay={400}>
           Home
-        </Link>
-        <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-600"
-          href="/"
-        >
+        </NavLink>
+        <NavLink href="/" delay={500}>
           How it works
-        </Link>
-        <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-500"
-          href="/"
-        >
+        </NavLink>
+        <NavLink href="/" delay={600}>
           Menu
-        </Link>
-        <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-700"
-          href="/"
-        >
+        </NavLink>
+        <NavLink href="/" delay={700}>
           About
-        </Link>
-        <Link
-          className="relative transition-all duration-500 hover:text-color-orange hover:scale-110 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-color-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-800"
-          href="/"
-        >
+        </NavLink>
+        <NavLink href="/" delay={800}>
           Contact
-        </Link>
+        </NavLink>
       </div>
       <div className="flex gap-4 font-medium text-base animate-fade-in-up delay-800">
         <Link
