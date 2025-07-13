@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       ingredients,
     } = bodyData.data;
 
-    const query: any = {};
+    const query: Record<string, unknown> = {};
 
     if (name) query.name = { $regex: name, $options: "i" };
     if (type) query.type = type;

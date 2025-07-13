@@ -17,6 +17,7 @@ export async function auth(req: NextRequest): Promise<AuthData | null> {
       const decodedToken = jwt.verify(token, secret) as AuthData;
       return decodedToken;
     } catch (error) {
+      console.error("Token verification error:", error);
       NextResponse.json({ error: "Invalid token." }, { status: 401 });
       return null;
     }

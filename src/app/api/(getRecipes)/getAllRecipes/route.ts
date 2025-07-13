@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     await dbConnect();
 

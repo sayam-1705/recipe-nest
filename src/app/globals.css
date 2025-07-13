@@ -84,6 +84,10 @@
   animation-delay: 0.6s;
 }
 
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
 .delay-1000 {
   animation-delay: 1s;
 }

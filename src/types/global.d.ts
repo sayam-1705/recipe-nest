@@ -9,6 +9,12 @@ declare global {
   interface Ingredient {
     name: string;
     quantity: string;
-    nutrition?: any;
+    nutrition?: {
+      calories?: number;
+      protein?: number;
+      carbs?: number;
+      fat?: number;
+      [key: string]: unknown;
+    };
   }
 }

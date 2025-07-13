@@ -138,7 +138,7 @@ const ShowRecipe = async ({
               Ingredients
             </h2>
             <ul className="space-y-3">
-              {recipeData.ingredients.map((ingredient: any, index: number) => (
+              {recipeData.ingredients.map((ingredient: Ingredient, index: number) => (
                 <li key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
                   <span className="font-medium text-gray-800 group-hover:text-gray-900">{ingredient.name}</span>
                   <span className="text-gray-600 bg-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">

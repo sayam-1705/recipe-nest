@@ -2,7 +2,7 @@
 
 import recipeData from "@/mock/recipe.json";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 const Carousel = () => {
@@ -10,11 +10,11 @@ const Carousel = () => {
   const router = useRouter();
   const totalSlides = recipeData.recipes.length;
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === totalSlides - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, [totalSlides]);
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -29,7 +29,7 @@ const Carousel = () => {
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [totalSlides]);
+  }, [nextSlide]);
 
   return (
     <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100 animate-fade-in-up">
