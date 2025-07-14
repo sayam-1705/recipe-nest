@@ -46,14 +46,14 @@ const Carousel = () => {
               <div className="w-full h-full relative">
                 <div className="h-full flex flex-col justify-center absolute z-10 left-0">
                   <div className="transform transition-all duration-700 ease-out animate-fade-in-up delay-400">
-                    <h3 className="text-6xl font-bold mb-6 bg-gradient-to-l from-gray-300 to-color-medium-green bg-clip-text text-transparent leading-tight transition-all duration-500 hover:scale-105">
+                    <h3 className="text-6xl font-bold mb-6 bg-gradient-to-l from-gray-300 to-color-dark-green bg-clip-text text-transparent leading-tight transition-all duration-500 hover:scale-105">
                       {recipe.name}
                     </h3>
                     <button
                       onClick={() =>
                         router.push(`/showRecipe/${recipe.userId}`)
                       }
-                      className="relative text-xl text-color-medium-green font-medium transition-all duration-300 hover:text-orange-500 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full transform hover:scale-105 hover:translate-x-1"
+                      className="relative text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-orange-500 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full transform hover:scale-105 hover:translate-x-1"
                     >
                       View Recipe
                     </button>
