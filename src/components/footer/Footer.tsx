@@ -3,7 +3,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <div>
-      <div className="grid grid-cols-4 gap-10 bg-color-dark-green text-color-white px-20 py-12 animate-fadeIn">
+      <div className="grid grid-cols-4 gap-10 bg-color-dark-green text-color-white animate-fade-in-up px-20 py-12">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-2 transition-transform duration-300">
             <svg

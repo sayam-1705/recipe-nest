@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: rgba(255, 112, 9, 0.15);
+}
+
 /* Custom animations for minimalistic design */
 @keyframes fadeIn {
   from {

@@ -32,7 +32,7 @@ const Carousel = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100 animate-fade-in-up">
+    <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-color-orange bg-opacity-25 transition-shadow duration-500 hover:shadow-3xl">
         <div
           className="h-[500px] flex transition-transform duration-1000 ease-out"
@@ -41,7 +41,7 @@ const Carousel = () => {
           {recipeData.recipes.map((recipe, index) => (
             <div
               key={index}
-              className="w-full h-full flex-shrink-0 pl-24 animate-fade-in-up delay-200"
+              className="w-full h-full flex-shrink-0 pl-24"
             >
               <div className="w-full h-full relative">
                 <div className="h-full flex flex-col justify-center absolute z-10 left-0">

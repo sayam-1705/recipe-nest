@@ -5,7 +5,7 @@ const About = () => {
   return (
     <div className="relative">
       <div className="sticky top-0 bg-color-light-green text-white grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-10">
-        <div className="flex flex-col justify-center gap-8 lg:gap-10 animate-fade-in-up">
+        <div className="flex flex-col justify-center gap-8 lg:gap-10">
           <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-200">
             Join Recipe Nest community today!
           </h1>
@@ -25,15 +25,15 @@ const About = () => {
             </Link>
           </span>
         </div>
-        <div className="relative flex justify-center items-center animate-scale-in delay-300">
+        <div className="relative flex justify-center items-center delay-300">
           <div
             className="absolute top-10 right-0 z-10 flex flex-col items-center justify-center 
                          bg-color-orange-blur backdrop-blur-sm p-4 rounded-2xl 
                          animate-gentle-float delay-800 
                          transition-all duration-300 hover:scale-105"
           >
-            <span className="font-bold text-3xl lg:text-4xl">2M+</span>
-            <span className="tracking-tight text-xs lg:text-sm">
+            <span className="font-bold text-3xl animate-fade-in-up">2M+</span>
+            <span className="tracking-tight text-xs animate-fade-in-up">
               Recipe published
             </span>
           </div>
@@ -43,8 +43,8 @@ const About = () => {
                          animate-gentle-float delay-1000 
                          transition-all duration-300 hover:scale-105"
           >
-            <span className="font-bold text-3xl lg:text-4xl">100k+</span>
-            <span className="tracking-tight text-xs lg:text-sm">
+            <span className="font-bold text-3xl animate-fade-in-up">100k+</span>
+            <span className="tracking-tight text-xs animate-fade-in-up">
               Active home cooks
             </span>
           </div>
@@ -60,7 +60,7 @@ const About = () => {
       </div>
       
       <div className="relative bg-color-medium-green text-white grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-20">
-        <div className="relative flex justify-center items-center order-2 lg:order-1 animate-scale-in delay-200">
+        <div className="relative flex justify-center items-center order-2 delay-200">
           <div className="absolute bottom-5 right-5 z-10 animate-fade-in-up delay-700">
             <Link
               className="inline-block bg-color-orange text-color-dark-green font-medium px-6 py-3 rounded-full 
@@ -81,7 +81,7 @@ const About = () => {
                      transition-all duration-500 hover:scale-105 hover:shadow-xl"
           />
         </div>
-        <div className="flex flex-col justify-center gap-8 lg:gap-10 order-1 lg:order-2 animate-fade-in-up delay-300">
+        <div className="flex flex-col justify-center gap-8 lg:gap-10 order-1 lg:order-2 delay-300">
           <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-500">
             Share your culinary creation with others
           </h1>

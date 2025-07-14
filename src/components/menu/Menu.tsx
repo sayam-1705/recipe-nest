@@ -3,10 +3,10 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 const Menu = () => {
   return (
     <div className="bg-color-orange bg-opacity-20 grid grid-cols-2 p-10 gap-10">
-      <div className="flex flex-col justify-center gap-6 animate-fade-in-up pr-10">
+      <div className="flex flex-col justify-center gap-6 pr-10">
         <div className="flex flex-col gap-2">
-          <h1 className="text-6xl font-bold text-gray-800">Discover Amazing</h1>
-          <h1 className="text-6xl font-bold">
+          <h1 className="text-6xl font-bold text-gray-800 animate-fade-in-up">Discover Amazing</h1>
+          <h1 className="text-6xl font-bold animate-fade-in-up">
             <span className="text-color-orange bg-gradient-to-r from-color-orange to-orange-500 bg-clip-text text-transparent mr-2">
               Recipes
             </span>
