@@ -8,7 +8,7 @@ interface User {
   email: string;
 }
 
-const RecipeCard = async () => {
+const RecipeCard = () => {
   const recipe: Recipe = recipeData.recipes[0];
 
   console.log(recipe.userId);
@@ -20,7 +20,7 @@ const RecipeCard = async () => {
   console.log("userData", userData);
 
   return (
-    <div className="group flex flex-col w-80 bg-white shadow-sm hover:shadow-md transition-all duration-500 ease-out rounded-2xl overflow-hidden border border-gray-100 animate-fade-in-up hover:animate-gentle-float">
+    <div className="group flex flex-col w-80 bg-white shadow-sm hover:shadow-md transition-all duration-500 ease-out rounded-2xl overflow-hidden border border-gray-100 animate-fade-in-up">
       {/* Recipe Image */}
       <div className="relative overflow-hidden rounded-t-2xl">
         <Image
@@ -54,7 +54,7 @@ const RecipeCard = async () => {
         {/* View Recipe Button */}
         <Link
           href={`/showRecipe/${recipe._id}`}
-          className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-color-orange to-orange-500 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600 hover:animate-shimmer"
+          className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-color-orange to-orange-500 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600"
         >
           View Recipe
           <svg

@@ -1,4 +1,4 @@
-import RecipeCard from "../recipeCard/RecipeCard";
+import MenuCarousel from "../menuCarousel/MenuCarousel";
 
 const Menu = () => {
   return (
@@ -28,7 +28,8 @@ const Menu = () => {
           cooks around the world
         </p>
       </div>
-      <RecipeCard />
+      
+      <MenuCarousel totalCards={5} cardWidth={320} />
     </div>
   );
 };
