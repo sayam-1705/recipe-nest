@@ -1,6 +1,8 @@
-import axios from "axios";
 import mongoose from "mongoose";
 import Image from "next/image";
+import recipeData from "@/mock/recipe.json";
+import userData from "@/mock/users.json";
+import NutritionChart from "@/components/nutritionChart/NutritionChart";
 
 const ShowRecipe = async ({
   params,
@@ -9,166 +11,238 @@ const ShowRecipe = async ({
 }) => {
   const { recipeId } = await params;
 
-  const recipe = await axios.get(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/getRecipeById/${recipeId}`
-  );
+  const recipe = recipeData.recipes.find((r) => r._id === recipeId.toString());
 
-  const recipeData = recipe?.data?.recipe;
-  console.log("Recipe Data:", recipeData);
+  if (!recipe) {
+    return <div>Recipe not found</div>;
+  }
 
-  const user = await axios.get(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/getUserById/${recipeData.userId}`
-  );
+  const user = userData.users.find((u) => u._id === recipe.userId);
 
-  const userData = user?.data?.user;
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
-  console.log("User Data:", userData);
+  const recipeWithDate = {
+    ...recipe,
+    createdAt: new Date().toISOString(),
+  };
+
+  console.log("Recipe Data:", recipeWithDate);
+  console.log("User Data:", user);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-6xl mx-auto p-6">
-        {/* Main Recipe Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1">
-          <div className="grid md:grid-cols-2 gap-0">
-            {/* Image Section */}
-            <div className="relative h-80 md:h-96 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden group">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          <div className="flex justify-center items-center animate-fade-in-up">
+            <div className="relative group overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-700 ease-out">
               <Image
-                src={recipeData.image}
-                alt={recipeData.name}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                className="transition-all duration-700 group-hover:scale-110 filter brightness-100 group-hover:brightness-110"
+                src={recipeWithDate.image}
+                alt="Recipe Image"
+                width={600}
+                height={600}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center space-y-8 p-8 animate-fade-in-up delay-200">
+            <div className="space-y-6">
+              <h1 className="text-5xl font-medium text-gray-900 leading-tight animate-fade-in-up delay-300 tracking-tight">
+                {recipeWithDate.name}
+              </h1>
+
+              <div className="flex items-center justify-between animate-fade-in-up delay-400">
+                <div className="flex items-center space-x-4 group cursor-pointer hover:scale-105 transition-transform duration-300">
+                  <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-medium text-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-gray-800 font-medium text-lg group-hover:text-orange-600 transition-colors duration-300">
+                      By {user.name}
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      {new Date(recipeWithDate.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Recipe Info Section */}
-            <div className="p-8 space-y-6">
-              <div className="space-y-4">
-                <h1 className="text-4xl font-bold text-gray-800 leading-tight animate-fade-in">
-                  {recipeData.name}
-                </h1>
-                
-                {/* Author and Date */}
-                <div className="flex items-center justify-between">
-                  <div className="relative inline-block group">
-                    <div className="text-gray-600 cursor-pointer hover:text-blue-600 transition-all duration-300 flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                        {userData.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span>By {userData.name}</span>
-                    </div>
-                    <div className="absolute left-0 top-full mt-2 bg-gray-900 text-white text-sm rounded-xl px-4 py-3 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap z-20 shadow-2xl transform translate-y-2 group-hover:translate-y-0">
-                      <div className="font-semibold">{userData.name}</div>
-                      <div className="text-gray-300 text-xs">{userData.email}</div>
-                      <div className="absolute -top-1 left-4 w-2 h-2 bg-gray-900 transform rotate-45"></div>
-                    </div>
-                  </div>
-                  <div className="text-gray-500 text-sm bg-gray-100 px-3 py-1 rounded-full">
-                    {new Date(recipeData.createdAt).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-
-              {/* Recipe Tags */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Recipe Details</h3>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200 hover:bg-blue-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.type}
-                  </span>
-                  <span className="px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200 hover:bg-green-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.meal}
-                  </span>
-                  <span className="px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-200 hover:bg-purple-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.time}
-                  </span>
-                  <span className="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium border border-orange-200 hover:bg-orange-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.difficulty}
-                  </span>
-                  <span className="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium border border-pink-200 hover:bg-pink-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.season}
-                  </span>
-                  <span className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium border border-indigo-200 hover:bg-indigo-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.occasion}
-                  </span>
-                  <span className="px-4 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-medium border border-gray-200 hover:bg-gray-100 transition-colors duration-200 hover:scale-105 transform">
-                    {recipeData.servings} servings
-                  </span>
-                </div>
-              </div>
-
-              {/* Nutrition Information */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Nutrition per serving</h3>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                  <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-xl border border-red-200 hover:shadow-md transition-all duration-300">
-                    <div className="text-xs text-red-600 font-medium uppercase tracking-wide">Calories</div>
-                    <div className="text-2xl font-bold text-red-700">{recipeData.nutritionPerServing.calories}</div>
-                  </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200 hover:shadow-md transition-all duration-300">
-                    <div className="text-xs text-blue-600 font-medium uppercase tracking-wide">Energy</div>
-                    <div className="text-2xl font-bold text-blue-700">{recipeData.nutritionPerServing.ENERC_KCAL}</div>
-                  </div>
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200 hover:shadow-md transition-all duration-300">
-                    <div className="text-xs text-green-600 font-medium uppercase tracking-wide">Protein</div>
-                    <div className="text-2xl font-bold text-green-700">{recipeData.nutritionPerServing.PROCNT_KCAL}g</div>
-                  </div>
-                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-xl border border-yellow-200 hover:shadow-md transition-all duration-300">
-                    <div className="text-xs text-yellow-600 font-medium uppercase tracking-wide">Fat</div>
-                    <div className="text-2xl font-bold text-yellow-700">{recipeData.nutritionPerServing.FAT_KCAL}g</div>
-                  </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200 hover:shadow-md transition-all duration-300">
-                    <div className="text-xs text-purple-600 font-medium uppercase tracking-wide">Carbs</div>
-                    <div className="text-2xl font-bold text-purple-700">{recipeData.nutritionPerServing.CHOCDF_KCAL}g</div>
-                  </div>
-                </div>
+            <div className="space-y-6 animate-fade-in-up delay-500">
+              <div className="flex flex-wrap gap-3">
+                <span className="px-6 py-3 bg-slate-50 text-slate-700 rounded-full text-sm font-medium border border-slate-200 hover:bg-slate-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M280-120v-80h160v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80v-80h400v80h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h160v80H280Zm0-408v-152h-80v40q0 38 22 68.5t58 43.5Zm200 128q50 0 85-35t35-85v-240H360v240q0 50 35 85t85 35Zm200-128q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z" />
+                  </svg>
+                  {recipeWithDate.type}
+                </span>
+                <span className="px-6 py-3 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200 hover:bg-emerald-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z" />
+                  </svg>
+                  {recipeWithDate.meal}
+                </span>
+                <span className="px-6 py-3 bg-amber-50 text-amber-700 rounded-full text-sm font-medium border border-amber-200 hover:bg-amber-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z" />
+                  </svg>
+                  {recipeWithDate.time}
+                </span>
+                <span className="px-6 py-3 bg-red-50 text-red-700 rounded-full text-sm font-medium border border-red-200 hover:bg-red-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+                  </svg>
+                  {recipeWithDate.difficulty}
+                </span>
+                <span className="px-6 py-3 bg-teal-50 text-teal-700 rounded-full text-sm font-medium border border-teal-200 hover:bg-teal-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-650 142-763l56-57 113 113-57 57Zm508 508L650-254l55-56 113 113-56 55ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm283-100q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Z" />
+                  </svg>
+                  {recipeWithDate.season}
+                </span>
+                <span className="px-6 py-3 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-200 hover:bg-purple-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-197q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-82v-78q-33 0-56.5-23.5T360-320v-40L168-552q-3 18-5.5 36t-2.5 36q0 121 79.5 212T440-162Zm276-102q20-22 36-47.5t26.5-53q10.5-27.5 16-56.5t5.5-59q0-98-54.5-179T600-776v16q0 33-23.5 56.5T520-680h-80v80q0 17-11.5 28.5T400-560h-80v80h240q17 0 28.5 11.5T600-440v120h40q26 0 47 15.5t29 40.5Z" />
+                  </svg>
+                  {recipeWithDate.occasion}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Ingredients and Instructions */}
-        <div className="grid md:grid-cols-2 gap-8 mt-8">
-          {/* Ingredients */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all duration-300">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-8 h-8 bg-green-500 rounded-full mr-3 flex items-center justify-center">
-                <span className="text-white text-sm">🥬</span>
-              </div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-10 mb-12 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up delay-600 border border-gray-100">
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-4xl font-light text-gray-800 flex items-center gap-4 tracking-wide">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="32px"
+                viewBox="0 -960 960 960"
+                width="32px"
+                fill="#6B7280"
+                className="transition-colors duration-300"
+              >
+                <path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z" />
+              </svg>
               Ingredients
             </h2>
-            <ul className="space-y-3">
-              {recipeData.ingredients.map((ingredient: Ingredient, index: number) => (
-                <li key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
-                  <span className="font-medium text-gray-800 group-hover:text-gray-900">{ingredient.name}</span>
-                  <span className="text-gray-600 bg-white px-3 py-1 rounded-full text-sm font-medium shadow-sm">
-                    {ingredient.quantity}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <div className="text-xl font-medium text-gray-600 bg-gray-50 px-6 py-3 rounded-full border border-gray-200 shadow-sm">
+              Servings: {recipeWithDate.servings}
+            </div>
           </div>
 
-          {/* Instructions */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all duration-300">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-              <div className="w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center">
-                <span className="text-white text-sm">📝</span>
-              </div>
-              Instructions
-            </h2>
-            <ol className="space-y-4">
-              {recipeData.instructions.map((instruction: string, index: number) => (
-                <li key={index} className="flex group">
-                  <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 group-hover:scale-110 transition-transform duration-200">
-                    {index + 1}
+          <div className="grid grid-cols-6 gap-4">
+            {recipeWithDate.ingredients.map((ingr, idx) => (
+              <div
+                className="group bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-500 cursor-pointer hover:-translate-y-1 animate-fade-in-up"
+                key={idx}
+                style={{ animationDelay: `${0.7 + idx * 0.1}s` }}
+              >
+                <div className="text-center space-y-3">
+                  <div className="text-lg font-semibold text-orange-600 group-hover:text-orange-700 transition-colors duration-300">
+                    {ingr.quantity}
                   </div>
-                  <p className="text-gray-700 leading-relaxed group-hover:text-gray-900 transition-colors duration-200">
+                  <div className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-300 font-medium">
+                    {ingr.name}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-10">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-10 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up delay-800 border border-gray-100">
+            <h2 className="text-4xl font-light text-gray-800 mb-10 flex items-center gap-4 tracking-wide">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="32px"
+                viewBox="0 -960 960 960"
+                width="32px"
+                fill="#6B7280"
+                className="transition-colors duration-300"
+              >
+                <path d="M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z" />
+              </svg>
+              Nutrition Info
+            </h2>
+            <div className="transform transition-transform duration-500">
+              <NutritionChart
+                nutritionData={recipeWithDate.nutritionPerServing}
+              />
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-10 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up delay-900 border border-gray-100">
+            <h2 className="text-4xl font-light text-gray-800 mb-10 flex items-center gap-4 tracking-wide">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="32px"
+                viewBox="0 -960 960 960"
+                width="32px"
+                fill="#6B7280"
+                className="transition-colors duration-300"
+              >
+                <path d="M200-200h560v-367L567-760H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h400l240 240v400q0 33-23.5 56.5T760-120H200Zm80-160h400v-80H280v80Zm0-160h400v-80H280v80Zm0-160h280v-80H280v80Zm-80 400v-560 560Z" />
+              </svg>
+              Cooking Directions
+            </h2>
+            <div className="space-y-6">
+              {recipeWithDate.instructions.map((instruction, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-orange-200 hover:shadow-md transition-all duration-300 animate-fade-in-up"
+                  style={{ animationDelay: `${1 + idx * 0.1}s` }}
+                >
+                  <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+                    {idx + 1}
+                  </div>
+                  <p className="text-gray-700 leading-relaxed hover:text-gray-900 transition-colors duration-300 font-medium">
                     {instruction}
                   </p>
-                </li>
+                </div>
               ))}
-            </ol>
+            </div>
           </div>
         </div>
       </div>

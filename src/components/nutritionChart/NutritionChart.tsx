@@ -1,0 +1,201 @@
+"use client";
+
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend, Title);
+
+interface NutritionData {
+  calories: number;
+  ENERC_KCAL: number;
+  PROCNT_KCAL: number;
+  FAT_KCAL: number;
+  CHOCDF_KCAL: number;
+}
+
+interface NutritionChartProps {
+  nutritionData: NutritionData;
+}
+
+const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
+  const data = {
+    labels: ["Protein", "Fat", "Carbohydrates"],
+    datasets: [
+      {
+        data: [
+          nutritionData.PROCNT_KCAL,
+          nutritionData.FAT_KCAL,
+          nutritionData.CHOCDF_KCAL,
+        ],
+        backgroundColor: [
+          "rgba(16, 185, 129, 0.8)", // Emerald for protein
+          "rgba(245, 158, 11, 0.8)", // Amber for fat
+          "rgba(139, 92, 246, 0.8)", // Violet for carbs
+        ],
+        borderColor: [
+          "rgb(16, 185, 129)",
+          "rgb(245, 158, 11)",
+          "rgb(139, 92, 246)",
+        ],
+        borderWidth: 2,
+        hoverBackgroundColor: [
+          "rgba(16, 185, 129, 0.95)",
+          "rgba(245, 158, 11, 0.95)",
+          "rgba(139, 92, 246, 0.95)",
+        ],
+        hoverBorderColor: [
+          "rgb(16, 185, 129)",
+          "rgb(245, 158, 11)",
+          "rgb(139, 92, 246)",
+        ],
+        hoverBorderWidth: 3,
+        hoverOffset: 8,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      animateScale: true,
+      animateRotate: true,
+      duration: 1200,
+      easing: "easeOutQuart" as const,
+    },
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+        labels: {
+          padding: 15,
+          font: {
+            size: 14,
+            family: "Poppins, sans-serif",
+            weight: "normal" as const,
+          },
+          usePointStyle: true,
+          pointStyle: "circle",
+          color: "#4B5563",
+        },
+      },
+      title: {
+        display: true,
+        text: `Total: ${nutritionData.calories} calories`,
+        font: {
+          size: 18,
+          weight: "normal" as const,
+          family: "Poppins, sans-serif",
+        },
+        padding: {
+          top: 15,
+          bottom: 25,
+        },
+        color: "#374151",
+      },
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.85)",
+        titleColor: "#F3F4F6",
+        bodyColor: "#F3F4F6",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        borderWidth: 1,
+        cornerRadius: 12,
+        padding: 16,
+        titleFont: {
+          size: 14,
+          weight: "normal" as const,
+        },
+        bodyFont: {
+          size: 13,
+          weight: "normal" as const,
+        },
+        callbacks: {
+          label: function (context: any) {
+            const label = context.label || "";
+            const value = context.parsed || 0;
+            const total =
+              nutritionData.PROCNT_KCAL +
+              nutritionData.FAT_KCAL +
+              nutritionData.CHOCDF_KCAL;
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value}g (${percentage}%)`;
+          },
+        },
+      },
+    },
+    elements: {
+      arc: {
+        borderWidth: 0,
+        borderRadius: 4,
+      },
+    },
+    onHover: (event: any, elements: any) => {
+      event.native.target.style.cursor =
+        elements.length > 0 ? "pointer" : "default";
+    },
+  };
+
+  return (
+    <div className="w-full space-y-8">
+      <div className="grid grid-cols-2 gap-6">
+        <div
+          className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200 hover:shadow-lg hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          style={{ animationDelay: "0.1s" }}
+        >
+          <div className="text-xs text-orange-600 font-medium uppercase tracking-wider mb-2 group-hover:text-orange-700 transition-colors duration-300">
+            Calories
+          </div>
+          <div className="text-3xl font-light text-orange-800 group-hover:text-orange-900 transition-colors duration-300">
+            {nutritionData.calories}
+          </div>
+        </div>
+        <div
+          className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg hover:border-emerald-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          style={{ animationDelay: "0.2s" }}
+        >
+          <div className="text-xs text-emerald-600 font-medium uppercase tracking-wider mb-2 group-hover:text-emerald-700 transition-colors duration-300">
+            Protein
+          </div>
+          <div className="text-3xl font-light text-emerald-800 group-hover:text-emerald-900 transition-colors duration-300">
+            {nutritionData.PROCNT_KCAL}g
+          </div>
+        </div>
+        <div
+          className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-2xl border border-amber-200 hover:shadow-lg hover:border-amber-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          style={{ animationDelay: "0.3s" }}
+        >
+          <div className="text-xs text-amber-600 font-medium uppercase tracking-wider mb-2 group-hover:text-amber-700 transition-colors duration-300">
+            Fat
+          </div>
+          <div className="text-3xl font-light text-amber-800 group-hover:text-amber-900 transition-colors duration-300">
+            {nutritionData.FAT_KCAL}g
+          </div>
+        </div>
+        <div
+          className="bg-gradient-to-br from-violet-50 to-violet-100 p-6 rounded-2xl border border-violet-200 hover:shadow-lg hover:border-violet-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          style={{ animationDelay: "0.4s" }}
+        >
+          <div className="text-xs text-violet-600 font-medium uppercase tracking-wider mb-2 group-hover:text-violet-700 transition-colors duration-300">
+            Carbs
+          </div>
+          <div className="text-3xl font-light text-violet-800 group-hover:text-violet-900 transition-colors duration-300">
+            {nutritionData.CHOCDF_KCAL}g
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="h-96 flex justify-center items-center animate-fade-in-up"
+        style={{ animationDelay: "0.5s" }}
+      >
+        <div className="w-80 h-80 transition-all duration-500 :scale-105 relative group">
+          <div className="absolute inset-0 bg-gradienthover-to-br from-orange-100/20 to-violet-100/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+          <div className="relative z-10 w-full h-full p-4 bg-white/50 backdrop-blur-sm transition-all duration-500">
+            <Pie data={data} options={options} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NutritionChart;
