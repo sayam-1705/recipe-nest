@@ -11,6 +11,7 @@ const reqSchema = z.object({
   difficulty: z.string().optional(),
   season: z.string().optional(),
   occasion: z.string().optional(),
+  dietaryType: z.string().optional(),
   ingredients: z
     .array(
       z.object({
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
       difficulty,
       season,
       occasion,
+      dietaryType,
       ingredients,
     } = bodyData.data;
 
@@ -51,6 +53,7 @@ export async function POST(req: NextRequest) {
     if (difficulty) query.difficulty = difficulty;
     if (season) query.season = season;
     if (occasion) query.occasion = occasion;
+    if (dietaryType) query.dietaryType = dietaryType;
     if (ingredients && ingredients.length > 0) {
       query.ingredients = {
         $elemMatch: {

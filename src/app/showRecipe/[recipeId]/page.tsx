@@ -146,6 +146,18 @@ const ShowRecipe = async ({
                   </svg>
                   {recipeWithDate.occasion}
                 </span>
+                <span className="px-6 py-3 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200 hover:bg-green-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="16px"
+                    viewBox="0 -960 960 960"
+                    width="16px"
+                    fill="currentColor"
+                  >
+                    <path d="M440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q94 0 156.5 62.5T840-621q0 46-15.5 88T775-446q-33.5 45-85 96T567-234L440-120Zm0-79q66-60 113-110t79.5-86q32.5-36 46-69t13.5-58q0-62-42.5-105T544-760q-51 0-90 31.5T403-650h-46q-12-77-51-108.5T216-790q-62 0-105 43t-43 105q0 25 13.5 58t46 69q32.5 36 79.5 86T320-319q66 60 120 119Z" />
+                  </svg>
+                  {recipeWithDate.dietaryType}
+                </span>
               </div>
             </div>
           </div>

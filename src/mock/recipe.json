@@ -10,6 +10,7 @@
       "difficulty": "Medium",
       "season": "All Year",
       "occasion": "Weeknight",
+      "dietaryType": "Non-Vegetarian",
       "servings": 4,
       "ingredients": [
         {
@@ -92,6 +93,7 @@
       "difficulty": "Hard",
       "season": "All Year",
       "occasion": "Special Occasion",
+      "dietaryType": "Non-Vegetarian",
       "servings": 6,
       "ingredients": [
         {
@@ -174,6 +176,7 @@
       "difficulty": "Easy",
       "season": "All Year",
       "occasion": "Casual",
+      "dietaryType": "Vegetarian",
       "servings": 24,
       "ingredients": [
         {
@@ -244,7 +247,79 @@
         "Bake for 9-11 minutes until golden brown",
         "Cool on baking sheet for 5 minutes before transferring"
       ],
-      "image": "https://imgs.search.brave.com/0O2ExZ7N4Ha7VxLN5sJl19F9xWFIDmix6c2_dEHqF5A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cmVjaXBldGluZWF0/cy5jb20vdGFjaHlv/bi8yMDI1LzAzL1Ro/ZS1DaG9jb2xhdGUt/Q2hpcC1Db29raWUt/b2YtbXktZHJlYW1z/LV8wLmpwZw"
+      "image": "https://imgs.search.brave.com/0O2ExZ7N4Ha7VxLN5sJl19F9xWFIDmix6c2_dEHqF5A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cmVjaXBlcGluZWF0/cy5jb20vdGFjaHlv/bi8yMDI1LzAzL1Ro/ZS1DaG9jb2xhdGUt/Q2hpcC1Db29raWUt/b2YtbXktZHJlYW1z/LV8wLmpwZw"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439024",
+      "userId": "507f1f77bcf86cd799439014",
+      "name": "Quinoa Buddha Bowl",
+      "type": "Health Food",
+      "meal": "Lunch",
+      "time": "20 minutes",
+      "difficulty": "Easy",
+      "season": "All Year",
+      "occasion": "Everyday",
+      "dietaryType": "Vegan",
+      "servings": 2,
+      "ingredients": [
+        {
+          "name": "Quinoa",
+          "quantity": "1 cup",
+          "nutrition": {
+            "calories": 222,
+            "carbs": 39,
+            "protein": 8,
+            "fat": 4
+          }
+        },
+        {
+          "name": "Chickpeas",
+          "quantity": "1 can",
+          "nutrition": {
+            "calories": 269,
+            "carbs": 45,
+            "protein": 15,
+            "fat": 4
+          }
+        },
+        {
+          "name": "Avocado",
+          "quantity": "1 large",
+          "nutrition": {
+            "calories": 322,
+            "carbs": 17,
+            "protein": 4,
+            "fat": 29
+          }
+        },
+        {
+          "name": "Spinach",
+          "quantity": "2 cups",
+          "nutrition": {
+            "calories": 14,
+            "carbs": 2,
+            "protein": 2,
+            "fat": 0
+          }
+        }
+      ],
+      "nutritionPerServing": {
+        "calories": 414,
+        "ENERC_KCAL": 414,
+        "PROCNT_KCAL": 116,
+        "FAT_KCAL": 185,
+        "CHOCDF_KCAL": 515
+      },
+      "instructions": [
+        "Cook quinoa according to package instructions",
+        "Drain and rinse chickpeas",
+        "Wash and prepare spinach",
+        "Slice avocado",
+        "Combine all ingredients in a bowl",
+        "Drizzle with lemon juice and olive oil",
+        "Season with salt and pepper"
+      ],
+      "image": "https://imgs.search.brave.com/buddha-bowl-quinoa-vegan.jpg"
     }
   ]
 }

@@ -28,6 +28,7 @@ declare global {
     difficulty: string;
     season: string;
     occasion: string;
+    dietaryType: string;
     servings: number;
     ingredients: Ingredient[];
     nutritionPerServing?: {

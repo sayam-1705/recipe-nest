@@ -35,6 +35,11 @@ const RecipeSchema = new Schema(
       type: String,
       required: true,
     },
+    dietaryType: {
+      type: String,
+      enum: ["Vegetarian", "Non-Vegetarian", "Vegan"],
+      required: true,
+    },
     servings: {
       type: Number,
       required: true,

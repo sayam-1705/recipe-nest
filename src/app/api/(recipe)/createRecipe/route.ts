@@ -13,6 +13,9 @@ const reqSchema = z.object({
   difficulty: z.string().min(1, "Difficulty is required"),
   season: z.string().min(1, "Season is required"),
   occasion: z.string().min(1, "Occasion is required"),
+  dietaryType: z.enum(["Vegetarian", "Non-Vegetarian", "Vegan"], {
+    required_error: "Dietary type is required",
+  }),
   servings: z.number().min(1, "Servings must be at least 1"),
   ingredients: z.array(
     z.object({
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest) {
       difficulty,
       season,
       occasion,
+      dietaryType,
       servings,
       ingredients,
       instructions,
@@ -99,6 +103,7 @@ export async function POST(req: NextRequest) {
       difficulty,
       season,
       occasion,
+      dietaryType,
       servings,
       ingredients: ingredientsWithNutrition,
       nutritionPerServing,
