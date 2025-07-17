@@ -13,7 +13,7 @@ interface UpdateRecipeProps {
 
 const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   const resolvedParams = use(params);
-  const [recipe, setRecipe] = useState<any>(null);
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +37,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
         
         // Find the recipe by ID from the static JSON data
         const foundRecipe = recipeData.recipes.find(
-          (recipe: any) => recipe._id === resolvedParams.recipeId
+          (recipe: Recipe) => recipe._id === resolvedParams.recipeId
         );
         
         if (!foundRecipe) {
@@ -59,11 +59,11 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     }
   }, [resolvedParams.recipeId]);
 
-  const handleFormDataChange = (data: any) => {
+  const handleFormDataChange = (data: Partial<Recipe>) => {
     console.log('Updated form data:', data);
   };
 
-  const handleUpdateRecipe = async (formData: any) => {
+  const handleUpdateRecipe = async (formData: Partial<Recipe>) => {
     try {
       setIsSubmitting(true);
       

@@ -1,7 +1,7 @@
 "use client";
 
 import RecipeCard from "../recipeCard/RecipeCard";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 interface MenuCarouselProps {
   totalCards?: number;
@@ -25,7 +25,7 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   const lastInteractionRef = useRef<number>(Date.now());
 
   // Scroll to a specific card
-  const scrollToCard = (index: number) => {
+  const scrollToCard = useCallback((index: number) => {
     if (!carouselRef.current) return;
     const containerWidth = carouselRef.current.offsetWidth;
     const paddingWidth = (containerWidth - cardWidth) / 2;
@@ -36,22 +36,22 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
       behavior: 'smooth'
     });
     setCurrentIndex(index);
-  };
+  }, [cardWidth]);
 
   // Auto scroll to next card
-  const autoScrollToNext = () => {
+  const autoScrollToNext = useCallback(() => {
     const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
     if (timeSinceLastInteraction < 2000) return;
     
     const nextIndex = (currentIndex + 1) % totalCards;
     scrollToCard(nextIndex);
-  };
+  }, [currentIndex, totalCards, scrollToCard]);
 
   // Auto scroll management
-  const startAutoScroll = () => {
+  const startAutoScroll = useCallback(() => {
     if (autoScrollRef.current) clearInterval(autoScrollRef.current);
     autoScrollRef.current = setInterval(autoScrollToNext, 3000);
-  };
+  }, [autoScrollToNext]);
 
   const stopAutoScroll = () => {
     if (autoScrollRef.current) {
@@ -135,13 +135,13 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [middleCardIndex]);
+  }, [middleCardIndex, scrollToCard]);
 
   // Auto scroll effect
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
-  }, [currentIndex]);
+  }, [currentIndex, startAutoScroll]);
 
   // Get card styling based on position relative to current focused card
   const getCardStyle = (index: number) => {

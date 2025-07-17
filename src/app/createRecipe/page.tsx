@@ -16,12 +16,12 @@ const CreateRecipe = () => {
     occasions: ["Everyday", "Party", "Holiday", "Special", "Quick Meal", "Date Night", "Family Gathering"],
   };
 
-  const handleFormDataChange = (data: any) => {
+  const handleFormDataChange = (data: Partial<Recipe>) => {
     // Optional: Handle form data changes if needed
     console.log('Form data changed:', data);
   };
 
-  const handleCreateRecipe = async (formData: any) => {
+  const handleCreateRecipe = async (formData: Partial<Recipe>) => {
     try {
       setIsSubmitting(true);
       

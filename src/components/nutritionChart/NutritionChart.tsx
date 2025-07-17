@@ -1,7 +1,7 @@
 "use client";
 
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, ChartEvent, ActiveElement } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
@@ -109,7 +109,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
           weight: "normal" as const,
         },
         callbacks: {
-          label: function (context: any) {
+          label: function (context: { label: string; parsed: number }) {
             const label = context.label || "";
             const value = context.parsed || 0;
             const total =
@@ -128,9 +128,11 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         borderRadius: 4,
       },
     },
-    onHover: (event: any, elements: any) => {
-      event.native.target.style.cursor =
-        elements.length > 0 ? "pointer" : "default";
+    onHover: (event: ChartEvent, elements: ActiveElement[]) => {
+      const target = event.native?.target as HTMLElement;
+      if (target) {
+        target.style.cursor = elements.length > 0 ? "pointer" : "default";
+      }
     },
   };
 

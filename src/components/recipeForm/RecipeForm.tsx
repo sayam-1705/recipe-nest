@@ -155,7 +155,7 @@ const RecipeForm = ({
           Recipe Essentials
         </h2>
         <p className="text-neutral-600 text-lg">
-          Let's capture the heart of your culinary creation
+          Let&apos;s capture the heart of your culinary creation
         </p>
       </div>
 
@@ -245,7 +245,7 @@ const RecipeForm = ({
           value={formData.occasion}
           onChange={(value) => handleInputChange("occasion", value)}
           options={staticData.occasions}
-          placeholder="What's the vibe?"
+          placeholder="What&apos;s the vibe?"
         />
       </div>
     </div>
