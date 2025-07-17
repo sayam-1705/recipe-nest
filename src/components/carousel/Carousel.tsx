@@ -33,7 +33,7 @@ const Carousel = () => {
 
   return (
     <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-color-orange bg-opacity-25 transition-shadow duration-500 hover:shadow-3xl">
+      <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg transition-shadow duration-500 hover:shadow-3xl">
         <div
           className="h-[500px] flex transition-transform duration-1000 ease-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -46,14 +46,14 @@ const Carousel = () => {
               <div className="w-full h-full relative">
                 <div className="h-full flex flex-col justify-center absolute z-10 left-0">
                   <div className="transform transition-all duration-700 ease-out animate-fade-in-up delay-400">
-                    <h3 className="text-6xl font-bold mb-6 bg-gradient-to-l from-gray-300 to-color-dark-green bg-clip-text text-transparent leading-tight transition-all duration-500 hover:scale-105">
+                    <h3 className="text-6xl font-bold mb-6 bg-gradient-to-l from-gray-300 to-secondary-green-dark bg-clip-text text-transparent leading-tight transition-all duration-500 hover:scale-105">
                       {recipe.name}
                     </h3>
                     <button
                       onClick={() =>
                         router.push(`/showRecipe/${recipe.userId}`)
                       }
-                      className="relative text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-orange-500 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full transform hover:scale-105 hover:translate-x-1"
+                      className="relative text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-primary-orange after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-orange after:transition-all after:duration-300 hover:after:w-full transform hover:scale-105 hover:translate-x-1"
                     >
                       View Recipe
                     </button>
@@ -82,7 +82,7 @@ const Carousel = () => {
               onClick={() => goToSlide(dotIndex)}
               className={`w-8 h-1 rounded-full transition-all duration-300 transform hover:scale-110 ${
                 dotIndex === currentIndex
-                  ? "bg-orange-500 scale-125 shadow-lg"
+                  ? "bg-primary-orange scale-125 shadow-lg"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
               aria-label={`Go to slide ${dotIndex + 1}`}
@@ -92,7 +92,7 @@ const Carousel = () => {
 
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-20 animate-fade-in-up delay-500 hover:-translate-x-0.5"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-neutral-white/90 backdrop-blur-sm hover:bg-neutral-white text-neutral-800 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-20 animate-fade-in-up delay-500 hover:-translate-x-0.5"
           aria-label="Previous slide"
         >
           <svg
@@ -112,7 +112,7 @@ const Carousel = () => {
 
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-20 animate-fade-in-up delay-500 hover:translate-x-0.5"
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-neutral-white/90 backdrop-blur-sm hover:bg-neutral-white text-neutral-800 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-20 animate-fade-in-up delay-500 hover:translate-x-0.5"
           aria-label="Next slide"
         >
           <svg

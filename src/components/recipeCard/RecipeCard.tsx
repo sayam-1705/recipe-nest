@@ -20,7 +20,7 @@ const RecipeCard = () => {
   console.log("userData", userData);
 
   return (
-    <div className="group flex flex-col w-80 bg-white shadow-sm hover:shadow-md transition-all duration-500 ease-out rounded-2xl overflow-hidden border border-gray-100 animate-fade-in-up">
+    <div className="recipe-card group flex flex-col w-80 bg-neutral-white shadow-sm hover:shadow-md transition-all duration-500 ease-smooth rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
       {/* Recipe Image */}
       <div className="relative overflow-hidden rounded-t-2xl">
         <Image
@@ -36,8 +36,8 @@ const RecipeCard = () => {
       <div className="p-5 flex-1 flex flex-col">
         {/* Author Info */}
         <div className="flex items-center gap-3 mb-4 animate-fade-in-up delay-200">
-          <div className="w-9 h-9 bg-gradient-to-br from-color-orange to-orange-500 rounded-full flex items-center justify-center shadow-sm">
-            <span className="text-white font-semibold text-sm">
+          <div className="w-9 h-9 bg-gradient-to-br from-primary-orange to-primary-orange-hover rounded-full flex items-center justify-center shadow-sm">
+            <span className="text-neutral-white font-semibold text-sm">
               {userData?.name?.charAt(0) || "U"}
             </span>
           </div>
@@ -47,14 +47,14 @@ const RecipeCard = () => {
         </div>
 
         {/* Recipe Name */}
-        <h3 className="text-xl font-bold text-gray-800 mb-4 line-clamp-2 animate-fade-in-up delay-400">
+        <h3 className="text-xl font-bold text-gray-800 mb-4 text-clamp-2 animate-fade-in-up delay-400">
           {recipe.name}
         </h3>
 
         {/* View Recipe Button */}
         <Link
           href={`/showRecipe/${recipe._id}`}
-          className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-color-orange to-orange-500 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600"
+          className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-primary-orange to-primary-orange-hover text-neutral-white font-semibold rounded-xl hover:from-primary-orange-hover hover:to-primary-orange hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600"
         >
           View Recipe
           <svg

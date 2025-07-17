@@ -39,7 +39,7 @@ const Input: React.FC<InputProps> = ({
     <div
       className={`space-y-3 transform transition-all duration-300 ease-out ${containerClassName}`}
     >
-      <label htmlFor={name} className="block text-sm font-semibold text-gray-700 uppercase tracking-wide transition-colors duration-200 hover:text-orange-600">
+      <label htmlFor={name} className="block text-sm font-semibold text-neutral-700 uppercase tracking-wide transition-colors duration-200 hover:text-primary-orange">
         {label}
         {required && <span className="text-red-500 ml-1 animate-pulse">*</span>}
       </label>
@@ -54,10 +54,10 @@ const Input: React.FC<InputProps> = ({
         required={required}
         min={min}
         max={max}
-        className={`w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm transform active:border-orange-500 active:outline-none ${
+        className={`w-full px-4 py-4 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-0 focus:border-primary-orange focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-primary-orange-light hover:shadow-md bg-neutral-white shadow-sm transform active:border-primary-orange active:outline-none ${
           disabled
             ? "opacity-50 cursor-not-allowed"
-            : "cursor-text hover:bg-orange-50/30"
+            : "cursor-text hover:bg-primary-orange-bg"
         } ${className}`}
       />
     </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 const About = () => {
   return (
     <div className="relative">
-      <div className="sticky top-0 bg-color-light-green text-white grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-10">
+      <div className="sticky top-0 bg-secondary-green-light text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-10">
         <div className="flex flex-col justify-center gap-8 lg:gap-10">
           <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-200">
             Join Recipe Nest community today!
@@ -15,10 +15,10 @@ const About = () => {
           </p>
           <span className="animate-fade-in-up delay-600">
             <Link
-              className="inline-block bg-color-orange text-color-dark-green font-medium px-6 py-3 rounded-full 
-                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-orange-500 
-                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 
-                       focus:ring-offset-color-dark-green"
+              className="inline-block bg-primary-orange text-secondary-green-dark font-medium px-6 py-3 rounded-full 
+                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary-orange-hover 
+                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2 
+                       focus:ring-offset-secondary-green-dark"
               href="/"
             >
               Signup, its free
@@ -28,7 +28,7 @@ const About = () => {
         <div className="relative flex justify-center items-center delay-300">
           <div
             className="absolute top-10 right-0 z-10 flex flex-col items-center justify-center 
-                         bg-color-orange-blur backdrop-blur-sm p-4 rounded-2xl 
+                         bg-primary-orange-light backdrop-blur-glass p-4 rounded-2xl 
                          animate-gentle-float delay-800 
                          transition-all duration-300 hover:scale-105"
           >
@@ -39,7 +39,7 @@ const About = () => {
           </div>
           <div
             className="absolute bottom-10 left-0 z-10 flex flex-col items-center justify-center 
-                         bg-color-orange-blur backdrop-blur-sm p-4 rounded-2xl 
+                         bg-primary-orange-light backdrop-blur-glass p-4 rounded-2xl 
                          animate-gentle-float delay-1000 
                          transition-all duration-300 hover:scale-105"
           >
@@ -53,20 +53,20 @@ const About = () => {
             alt="About Us"
             width={500}
             height={300}
-            className="rounded-2xl shadow-lg animate-fadeIn delay-500 
+            className="rounded-2xl shadow-lg animate-fade-in delay-500 
                      transition-all duration-500 hover:scale-105 hover:shadow-xl"
           />
         </div>
       </div>
       
-      <div className="relative bg-color-medium-green text-white grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-20">
+      <div className="relative bg-secondary-green-medium text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-20">
         <div className="relative flex justify-center items-center order-2 delay-200">
           <div className="absolute bottom-5 right-5 z-10 animate-fade-in-up delay-700">
             <Link
-              className="inline-block bg-color-orange text-color-dark-green font-medium px-6 py-3 rounded-full 
-                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-orange-500 
-                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 
-                       focus:ring-offset-color-dark-green animate-subtle-pulse"
+              className="inline-block bg-primary-orange text-secondary-green-dark font-medium px-6 py-3 rounded-full 
+                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary-orange-hover 
+                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2 
+                       focus:ring-offset-secondary-green-dark animate-subtle-pulse"
               href="/"
             >
               Share to community
@@ -77,7 +77,7 @@ const About = () => {
             alt="About Us"
             width={500}
             height={300}
-            className="rounded-2xl shadow-lg animate-fadeIn delay-400 
+            className="rounded-2xl shadow-lg animate-fade-in delay-400 
                      transition-all duration-500 hover:scale-105 hover:shadow-xl"
           />
         </div>

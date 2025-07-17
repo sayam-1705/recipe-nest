@@ -28,24 +28,24 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
           nutritionData.CHOCDF_KCAL,
         ],
         backgroundColor: [
-          "rgba(16, 185, 129, 0.8)", // Emerald for protein
-          "rgba(245, 158, 11, 0.8)", // Amber for fat
+          "rgba(34, 197, 94, 0.8)", // Green for protein
+          "rgba(251, 146, 60, 0.8)", // Orange for fat
           "rgba(139, 92, 246, 0.8)", // Violet for carbs
         ],
         borderColor: [
-          "rgb(16, 185, 129)",
-          "rgb(245, 158, 11)",
+          "rgb(34, 197, 94)",
+          "rgb(251, 146, 60)",
           "rgb(139, 92, 246)",
         ],
         borderWidth: 2,
         hoverBackgroundColor: [
-          "rgba(16, 185, 129, 0.95)",
-          "rgba(245, 158, 11, 0.95)",
+          "rgba(34, 197, 94, 0.95)",
+          "rgba(251, 146, 60, 0.95)",
           "rgba(139, 92, 246, 0.95)",
         ],
         hoverBorderColor: [
-          "rgb(16, 185, 129)",
-          "rgb(245, 158, 11)",
+          "rgb(34, 197, 94)",
+          "rgb(251, 146, 60)",
           "rgb(139, 92, 246)",
         ],
         hoverBorderWidth: 3,

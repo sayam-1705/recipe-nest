@@ -2,12 +2,12 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 
 const Menu = () => {
   return (
-    <div className="bg-color-orange bg-opacity-20 grid grid-cols-2 p-10 gap-10">
+    <div className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10">
       <div className="flex flex-col justify-center gap-6 pr-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-6xl font-bold text-gray-800 animate-fade-in-up">Discover Amazing</h1>
           <h1 className="text-6xl font-bold animate-fade-in-up">
-            <span className="text-color-orange bg-gradient-to-r from-color-orange to-orange-500 bg-clip-text text-transparent mr-2">
+            <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-primary-orange-hover bg-clip-text text-transparent mr-2">
               Recipes
             </span>
             <svg
@@ -16,7 +16,7 @@ const Menu = () => {
               height="40px"
               viewBox="0 -960 960 960"
               width="40px"
-              fill="#FF7009"
+              fill="currentColor"
             >
               <path d="M673-446.67H160v-66.66h513l-240-240L480-800l320 320-320 320-47-46.67 240-240Z" />
             </svg>

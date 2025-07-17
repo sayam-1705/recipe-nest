@@ -46,7 +46,7 @@ const Select: React.FC<SelectProps> = ({
   const DropdownIcon = () => (
     <svg
       className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-all duration-300 ease-out pointer-events-none ${
-        disabled ? "text-gray-300" : "text-gray-500 group-hover:text-orange-500"
+        disabled ? "text-neutral-300" : "text-neutral-500 group-hover:text-primary-orange"
       }`}
       fill="none"
       stroke="currentColor"
@@ -68,7 +68,7 @@ const Select: React.FC<SelectProps> = ({
     >
       <label
         htmlFor={name}
-        className="block text-sm font-semibold text-gray-700 uppercase tracking-wide transition-colors duration-200 hover:text-orange-600"
+        className="block text-sm font-semibold text-neutral-700 uppercase tracking-wide transition-colors duration-200 hover:text-primary-orange"
       >
         {label}
         {required && <span className="text-red-500 ml-1 animate-pulse">*</span>}
@@ -81,10 +81,10 @@ const Select: React.FC<SelectProps> = ({
           onChange={handleChange}
           disabled={disabled}
           required={required}
-          className={`w-full px-4 py-4 pr-12 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm transform appearance-none active:border-orange-500 active:outline-none ${
+          className={`w-full px-4 py-4 pr-12 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-0 focus:border-primary-orange focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-primary-orange-light hover:shadow-md bg-neutral-white shadow-sm transform appearance-none active:border-primary-orange active:outline-none ${
             disabled
               ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer hover:bg-orange-50/30"
+              : "cursor-pointer hover:bg-primary-orange-bg"
           } ${className}`}
         >
           <option value="">{placeholder}</option>

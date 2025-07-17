@@ -148,13 +148,13 @@ const RecipeForm = ({
   const renderStep1 = () => (
     <div className={`space-y-8 transition-all duration-300 ${animationClass}`}>
       <div className="text-center mb-12">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg">
+        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg animate-subtle-pulse">
           👨‍🍳
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <h2 className="text-3xl font-bold text-neutral-800 mb-3">
           Recipe Essentials
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-neutral-600 text-lg">
           Let's capture the heart of your culinary creation
         </p>
       </div>
@@ -201,13 +201,13 @@ const RecipeForm = ({
   const renderStep2 = () => (
     <div className={`space-y-8 transition-all duration-300 ${animationClass}`}>
       <div className="text-center mb-12">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg">
+        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg animate-subtle-pulse">
           ⭐
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <h2 className="text-3xl font-bold text-neutral-800 mb-3">
           Recipe Characteristics
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-neutral-600 text-lg">
           Define the personality of your dish
         </p>
       </div>
@@ -254,27 +254,27 @@ const RecipeForm = ({
   const renderStep3 = () => (
     <div className={`space-y-8 transition-all duration-300 ${animationClass}`}>
       <div className="text-center mb-12">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg">
+        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg animate-subtle-pulse">
           🍽️
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <h2 className="text-3xl font-bold text-neutral-800 mb-3">
           Ingredients & Portions
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-neutral-600 text-lg">
           The building blocks of your masterpiece
         </p>
       </div>
 
       <div className="space-y-8">
-        <div className="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-orange-200 transition-all duration-300 shadow-sm hover:shadow-md">
+        <div className="bg-neutral-50 rounded-2xl p-6 border-2 border-neutral-200 hover:border-primary-orange-light transition-all duration-300 shadow-sm hover:shadow-md">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-lg font-bold shadow-md">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-lg font-bold shadow-md">
               👥
             </div>
             <div className="space-y-2">
               <label
                 htmlFor="servings"
-                className="block text-sm font-semibold text-gray-700 uppercase tracking-wide"
+                className="block text-sm font-semibold text-neutral-700 uppercase tracking-wide"
               >
                 Serves How Many?
               </label>
@@ -287,7 +287,7 @@ const RecipeForm = ({
                 onChange={(e) =>
                   handleInputChange("servings", parseInt(e.target.value))
                 }
-                className="w-24 px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm text-center font-semibold active:border-orange-500 active:outline-none"
+                className="w-24 px-4 py-3 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-0 focus:border-primary-orange focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-primary-orange-light hover:shadow-md bg-neutral-50 shadow-sm text-center font-semibold active:border-primary-orange active:outline-none"
               />
             </div>
           </div>
@@ -295,14 +295,14 @@ const RecipeForm = ({
 
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              <span className="text-orange-500">🥄</span>
+            <h3 className="text-xl font-bold text-neutral-800 flex items-center gap-2">
+              <span className="text-primary-orange">🥄</span>
               Ingredients List
             </h3>
             <button
               type="button"
               onClick={addIngredient}
-              className="flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
+              className="flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-primary-orange to-primary-orange-dark text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
             >
               <span className="w-5 h-5 flex items-center justify-center text-2xl font-medium">
                 +
@@ -314,7 +314,7 @@ const RecipeForm = ({
           {formData.ingredients.map((ingredient, index) => (
             <div
               key={index}
-              className="flex items-center gap-4 p-6 bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-200 transition-all duration-300 shadow-sm hover:shadow-md transform"
+              className="flex items-center gap-4 p-6 bg-neutral-white rounded-2xl border-2 border-neutral-200 hover:border-primary-orange-light transition-all duration-300 shadow-sm hover:shadow-md transform"
             >
               <div className="flex-1">
                 <input
@@ -324,7 +324,7 @@ const RecipeForm = ({
                   onChange={(e) =>
                     handleIngredientChange(index, "name", e.target.value)
                   }
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm active:border-orange-500 active:outline-none"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-0 focus:border-primary-orange focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-primary-orange-light hover:shadow-md bg-neutral-white shadow-sm active:border-primary-orange active:outline-none"
                   placeholder="What ingredient?"
                 />
               </div>
@@ -336,7 +336,7 @@ const RecipeForm = ({
                   onChange={(e) =>
                     handleIngredientChange(index, "quantity", e.target.value)
                   }
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm active:border-orange-500 active:outline-none"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-0 focus:border-primary-orange focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-primary-orange-light hover:shadow-md bg-neutral-white shadow-sm active:border-primary-orange active:outline-none"
                   placeholder="How much? (e.g., 1 cup, 2 tbsp)"
                 />
               </div>
@@ -361,13 +361,13 @@ const RecipeForm = ({
   const renderStep4 = () => (
     <div className={`space-y-8 transition-all duration-300 ${animationClass}`}>
       <div className="text-center mb-12">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg">
+        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-lg">
           📖
         </div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <h2 className="text-3xl font-bold text-neutral-800 mb-3">
           Recipe Instructions
         </h2>
-        <p className="text-gray-600 text-lg">
+        <p className="text-neutral-600 text-lg">
           Guide others through your culinary journey
         </p>
       </div>
@@ -375,14 +375,14 @@ const RecipeForm = ({
       <div className="space-y-8">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              <span className="text-orange-500">📝</span>
+            <h3 className="text-xl font-bold text-neutral-800 flex items-center gap-2">
+              <span className="text-primary-orange">📝</span>
               Step-by-Step Guide
             </h3>
             <button
               type="button"
               onClick={addInstruction}
-              className="flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
+              className="flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-primary-orange to-primary-orange-dark text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
             >
               <span className="w-5 h-5 flex items-center justify-center text-2xl font-medium">
                 +
@@ -394,9 +394,9 @@ const RecipeForm = ({
           {formData.instructions.map((instruction, index) => (
             <div
               key={index}
-              className="flex items-start gap-4 p-6 bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-200 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.02]"
+              className="flex items-start gap-4 p-6 bg-neutral-white rounded-2xl border-2 border-neutral-200 hover:border-primary-orange-light transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.02]"
             >
-              <span className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">
+              <span className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-sm font-bold shadow-md">
                 {index + 1}
               </span>
               <div className="flex-1">
