@@ -1,4 +1,14 @@
+"use client";
+
+import { useState } from "react";
+
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div
       className="flex justify-center items-center bg-cover bg-center bg-no-repeat min-h-screen px-4 relative"
@@ -17,21 +27,61 @@ const Login = () => {
             name="email"
             placeholder="Enter your email"
           />
-          <input
-            className="bg-white/20 backdrop-blur-md px-4 py-3 border border-white/30 rounded-lg text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50"
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-          />
+          <div className="relative">
+            <input
+              className="bg-white/20 backdrop-blur-md px-4 py-3 pr-12 border border-white/30 rounded-lg text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50 w-full"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors duration-300"
+            >
+              {showPassword ? (
+                // Eye with slash (hide password)
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20px"
+                  viewBox="0 -960 960 960"
+                  width="20px"
+                  fill="currentColor"
+                >
+                  <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
+                </svg>
+              ) : (
+                // Eye open (show password)
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20px"
+                  viewBox="0 -960 960 960"
+                  width="20px"
+                  fill="currentColor"
+                >
+                  <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                </svg>
+              )}
+            </button>
+          </div>
           <button
             type="submit"
-            className="bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2"
+            className="flex items-center justify-center gap-1 bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2"
           >
             Log In
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#ffffff"
+            >
+              <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+            </svg>
           </button>
         </div>
-        <p className="text-white/80 mt-6 text-center flex gap-1">
-          Don't have an account?
+        <p className="text-white/80 mt-6 text-center">
+          Don't have an account?{" "}
           <a
             href="/signup"
             className="text-orange-300 font-medium hover:text-orange-200 transition-colors duration-300 no-underline hover:underline"
