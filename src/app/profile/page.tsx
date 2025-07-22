@@ -98,7 +98,7 @@ const Profile = () => {
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
-                  <RecipeCard />
+                  <RecipeCard isModified={true} />
                 </div>
               ))}
             </div>
