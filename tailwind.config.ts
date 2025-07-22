@@ -37,6 +37,8 @@ export default {
         "bounce-horizontal": "bounceHorizontal 1s ease-in-out infinite",
         "slide-up": "slideUp 0.5s ease-out forwards",
         "glow": "glow 3s ease-in-out infinite",
+        "signup-fade-in": "signupFadeIn 0.6s ease-out",
+        "signup-slide-down": "signupSlideDown 0.4s ease-out 0.2s both",
       },
       keyframes: {
         fadeInUp: {
@@ -74,6 +76,14 @@ export default {
         glow: {
           "0%, 100%": { boxShadow: "0 0 20px rgba(255, 112, 9, 0.2)" },
           "50%": { boxShadow: "0 0 30px rgba(255, 112, 9, 0.4)" },
+        },
+        signupFadeIn: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        signupSlideDown: {
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       transitionTimingFunction: {
