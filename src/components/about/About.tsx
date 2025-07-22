@@ -5,26 +5,6 @@ const About = () => {
   return (
     <div className="relative">
       <div className="sticky top-0 bg-secondary-green-light text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-10">
-        <div className="flex flex-col justify-center gap-8 lg:gap-10">
-          <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-200">
-            Join Recipe Nest community today!
-          </h1>
-          <p className="text-base lg:text-lg font-normal tracking-tight leading-7 opacity-90 animate-fade-in-up delay-400">
-            Signup now and connect with fellow home cooks, share your favourite
-            recipes, and discover new culinary delights.
-          </p>
-          <span className="animate-fade-in-up delay-600">
-            <Link
-              className="inline-block bg-primary-orange text-secondary-green-dark font-medium px-6 py-3 rounded-full 
-                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary-orange-hover 
-                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2 
-                       focus:ring-offset-secondary-green-dark"
-              href="/"
-            >
-              Signup, its free
-            </Link>
-          </span>
-        </div>
         <div className="relative flex justify-center items-center delay-300">
           <div
             className="absolute top-10 right-0 z-10 flex flex-col items-center justify-center 
@@ -57,9 +37,38 @@ const About = () => {
                      transition-all duration-500 hover:scale-105 hover:shadow-xl"
           />
         </div>
+        <div className="flex flex-col justify-center gap-8 lg:gap-10">
+          <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-200">
+            Join Recipe Nest community today!
+          </h1>
+          <p className="text-base lg:text-lg font-normal tracking-tight leading-7 opacity-90 animate-fade-in-up delay-400">
+            Signup now and connect with fellow home cooks, share your favourite
+            recipes, and discover new culinary delights.
+          </p>
+          <span className="animate-fade-in-up delay-600">
+            <Link
+              className="inline-block bg-primary-orange text-secondary-green-dark font-medium px-6 py-3 rounded-full 
+                       transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary-orange-hover 
+                       active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2 
+                       focus:ring-offset-secondary-green-dark"
+              href="/"
+            >
+              Signup, its free
+            </Link>
+          </span>
+        </div>
       </div>
-      
+
       <div className="relative bg-secondary-green-medium text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-20">
+        <div className="flex flex-col justify-center gap-8 lg:gap-10 order-1 lg:order-2 delay-300">
+          <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-500">
+            Share your culinary creation with others
+          </h1>
+          <p className="text-base lg:text-lg font-normal tracking-tight leading-7 opacity-90 animate-fade-in-up delay-600">
+            Showcase your recipes and culinary masterpieces. Inspire others and
+            receive feedback from a supportive community of fellow home cooks.
+          </p>
+        </div>
         <div className="relative flex justify-center items-center order-2 delay-200">
           <div className="absolute bottom-5 right-5 z-10 animate-fade-in-up delay-700">
             <Link
@@ -80,15 +89,6 @@ const About = () => {
             className="rounded-2xl shadow-lg animate-fade-in delay-400 
                      transition-all duration-500 hover:scale-105 hover:shadow-xl"
           />
-        </div>
-        <div className="flex flex-col justify-center gap-8 lg:gap-10 order-1 lg:order-2 delay-300">
-          <h1 className="text-4xl lg:text-5xl font-semibold leading-tight animate-fade-in-up delay-500">
-            Share your culinary creation with others
-          </h1>
-          <p className="text-base lg:text-lg font-normal tracking-tight leading-7 opacity-90 animate-fade-in-up delay-600">
-            Showcase your recipes and culinary masterpieces. Inspire others and
-            receive feedback from a supportive community of fellow home cooks.
-          </p>
         </div>
       </div>
     </div>

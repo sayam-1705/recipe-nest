@@ -1,6 +1,6 @@
 const HowItWorks = () => {
   return (
-    <div className="bg-green-800 flex flex-col items-center text-neutral-100 py-16 pb-24 relative overflow-hidden">
+    <div className="bg-secondary-green-light flex flex-col items-center text-neutral-100 py-16 pb-24 relative overflow-hidden">
       {/* Subtle background animation */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 w-64 h-64 bg-neutral-100 rounded-full animate-subtle-pulse"></div>
