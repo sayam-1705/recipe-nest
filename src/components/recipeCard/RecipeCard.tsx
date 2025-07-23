@@ -11,13 +11,9 @@ interface User {
 const RecipeCard = ({ isModified = false }: { isModified?: boolean }) => {
   const recipe: Recipe = recipeData.recipes[0];
 
-  console.log(recipe.userId);
-
   // Use mock user data directly for now to avoid API issues
   const userData: User | null =
     usersData.users.find((user) => user._id === recipe.userId) || null;
-
-  console.log("userData", userData);
 
   return (
     <div className="recipe-card group flex flex-col w-80 bg-neutral-white shadow-sm hover:shadow-md transition-all duration-500 ease-smooth rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">

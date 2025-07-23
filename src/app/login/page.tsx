@@ -1,12 +1,47 @@
 "use client";
 
+import axios from "axios";
 import { useState } from "react";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { email, password } = formData;
+    if (!email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+    setError("");
+
+    axios
+      .post("/api/login", { email, password })
+      .then((response) => {
+        console.log(response.data);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        setError("Login failed. Please try again.");
+      });
   };
 
   return (
@@ -16,7 +51,10 @@ const Login = () => {
     >
       <div className="absolute inset-0 backdrop-blur-sm bg-black/20"></div>
 
-      <form className="flex flex-col items-center border border-white/30 rounded-xl p-10 backdrop-blur-lg bg-white/10 shadow-2xl animate-signup-fade-in max-w-md w-full transform transition-all duration-300 relative z-10">
+      <form
+        className="flex flex-col items-center border border-white/30 rounded-xl p-10 backdrop-blur-lg bg-white/10 shadow-2xl animate-signup-fade-in max-w-md w-full transform transition-all duration-300 relative z-10"
+        onSubmit={handleSubmit}
+      >
         <h1 className="text-4xl font-bold text-white mb-6 text-center animate-signup-slide-down">
           Log In
         </h1>
@@ -26,6 +64,7 @@ const Login = () => {
             type="email"
             name="email"
             placeholder="Enter your email"
+            onChange={handleInputChange}
           />
           <div className="relative">
             <input
@@ -33,6 +72,7 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
+              onChange={handleInputChange}
             />
             <button
               type="button"
