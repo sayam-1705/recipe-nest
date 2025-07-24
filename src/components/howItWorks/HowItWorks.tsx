@@ -1,7 +1,9 @@
 const HowItWorks = () => {
   return (
-    <div className="bg-secondary-green-light flex flex-col items-center text-neutral-100 py-16 pb-24 relative overflow-hidden">
-      {/* Subtle background animation */}
+    <div
+      id="how-it-works"
+      className="bg-secondary-green-light flex flex-col items-center text-neutral-100 py-16 pb-24 relative overflow-hidden"
+    >
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 w-64 h-64 bg-neutral-100 rounded-full animate-subtle-pulse"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 bg-neutral-100 rounded-full animate-subtle-pulse delay-1000"></div>
@@ -14,7 +16,6 @@ const HowItWorks = () => {
         </h1>
 
         <div className="flex justify-around gap-14 items-center pt-12 max-w-6xl mx-auto">
-          {/* Step 1 */}
           <div className="flex flex-col items-center text-center w-[300px] group hover:transform hover:-translate-y-2 transition-all duration-500 ease-out animate-fade-in-up delay-200">
             <div className="relative">
               <svg
@@ -37,7 +38,6 @@ const HowItWorks = () => {
             </p>
           </div>
 
-          {/* Step 2 */}
           <div className="flex flex-col items-center text-center w-[300px] group hover:transform hover:-translate-y-2 transition-all duration-500 ease-out animate-fade-in-up delay-400">
             <div className="relative">
               <svg
@@ -60,7 +60,6 @@ const HowItWorks = () => {
             </p>
           </div>
 
-          {/* Step 3 */}
           <div className="flex flex-col items-center text-center w-[300px] group hover:transform hover:-translate-y-2 transition-all duration-500 ease-out animate-fade-in-up delay-600">
             <div className="relative">
               <svg
