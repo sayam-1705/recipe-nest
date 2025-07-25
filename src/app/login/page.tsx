@@ -33,13 +33,13 @@ const Login = () => {
     axios
       .post("/api/login", { email, password })
       .then((response) => {
-        console.log(response.data);
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("token", response.data.token);
+        }
         window.location.href = "/";
       })
-      .catch((error) => {
+      .catch(() => {
         setError("Login failed. Please try again.");
       });
   };

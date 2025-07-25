@@ -17,6 +17,12 @@ const Profile = () => {
       scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    window.location.replace("/");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-6">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -31,7 +37,10 @@ const Profile = () => {
             </p>
           </div>
           <div className="animate-fade-in-up">
-            <button className="group relative overflow-hidden bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover-lift animate-glow min-w-[200px]">
+            <button
+              className="group relative overflow-hidden bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover-lift animate-glow min-w-[200px]"
+              onClick={handleLogOut}
+            >
               <span className="relative z-10">Sign Out</span>
             </button>
           </div>
