@@ -32,7 +32,10 @@ const Carousel = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100">
+    <div
+      className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100"
+      id="home"
+    >
       <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg transition-shadow duration-500 hover:shadow-3xl">
         <div
           className="h-[500px] flex transition-transform duration-1000 ease-out"

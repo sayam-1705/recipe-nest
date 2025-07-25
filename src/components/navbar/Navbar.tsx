@@ -23,19 +23,19 @@ const Navbar = () => {
         </span>
       </Link>
       <div className="flex gap-7 text-lg font-medium">
-        <NavLink href="/" delay={400}>
+        <NavLink href="#home" delay={400}>
           Home
         </NavLink>
-        <NavLink href="/" delay={500}>
+        <NavLink href="#how-it-works" delay={500}>
           How it works
         </NavLink>
-        <NavLink href="/" delay={600}>
+        <NavLink href="#menu" delay={600}>
           Menu
         </NavLink>
-        <NavLink href="/" delay={700}>
+        <NavLink href="#about" delay={700}>
           About
         </NavLink>
-        <NavLink href="/" delay={800}>
+        <NavLink href="#contact" delay={800}>
           Contact
         </NavLink>
       </div>

@@ -2,7 +2,10 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 
 const Menu = () => {
   return (
-    <div className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10">
+    <div
+      className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10"
+      id="menu"
+    >
       <div className="flex flex-col justify-center gap-6 pr-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-6xl font-bold text-gray-800 animate-fade-in-up">

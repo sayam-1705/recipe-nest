@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const About = () => {
   return (
-    <div className="relative">
+    <div className="relative" id="about">
       <div className="sticky top-0 bg-secondary-green-light text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 p-8 lg:p-14 h-screen z-10">
         <div className="relative flex justify-center items-center delay-300">
           <div
