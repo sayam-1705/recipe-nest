@@ -6,7 +6,7 @@
 
 /* Base styles */
 body {
-  background-color: theme('colors.primary.orange-bg');
+  background-color: theme("colors.primary.orange-bg");
   font-family: "Poppins", sans-serif;
 }
 
@@ -25,18 +25,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.primary.orange');
+  background: theme("colors.primary.orange");
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.primary.orange-hover');
-}
-
-/* Text selection */
-::selection {
-  background-color: theme('colors.primary.orange-light');
-  color: theme('colors.primary.orange');
+  background: theme("colors.primary.orange-hover");
 }
 
 /* Recipe card specific styles */
@@ -51,7 +45,7 @@ html {
 }
 
 .recipe-card:focus-within {
-  outline: 2px solid theme('colors.primary.orange');
+  outline: 2px solid theme("colors.primary.orange");
   outline-offset: 2px;
 }
 

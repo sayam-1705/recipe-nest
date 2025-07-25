@@ -9,7 +9,7 @@ const Navbar = () => {
         href="/"
       >
         <svg
-          className="transition-transform duration-500 group-hover:rotate-12"
+          className="transition-transform duration-500 fill-primary-orange group-hover:rotate-12"
           xmlns="http://www.w3.org/2000/svg"
           height="50px"
           viewBox="0 -960 960 960"
