@@ -23,21 +23,11 @@ const Navbar = () => {
         </span>
       </Link>
       <div className="flex gap-7 text-lg font-medium">
-        <NavLink href="#home" delay={400}>
-          Home
-        </NavLink>
-        <NavLink href="#how-it-works" delay={500}>
-          How it works
-        </NavLink>
-        <NavLink href="#menu" delay={600}>
-          Menu
-        </NavLink>
-        <NavLink href="#about" delay={700}>
-          About
-        </NavLink>
-        <NavLink href="#contact" delay={800}>
-          Contact
-        </NavLink>
+        <NavLink href="#home">Home</NavLink>
+        <NavLink href="#how-it-works">How it works</NavLink>
+        <NavLink href="#menu">Menu</NavLink>
+        <NavLink href="#about">About</NavLink>
+        <NavLink href="#contact">Contact</NavLink>
       </div>
       <div className="flex gap-4 font-medium text-base animate-fade-in-up delay-800">
         <Link
