@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Input from "./Input";
 import Select from "./Select";
+import axios from "axios";
 
 interface FormData {
   name: string;
@@ -16,7 +17,7 @@ interface FormData {
   servings: number;
   ingredients: { name: string; quantity: string }[];
   instructions: string[];
-  image: string;
+  image: File | null;
 }
 
 interface RecipeFormProps {
@@ -62,11 +63,19 @@ const RecipeForm = ({
     servings: initialData?.servings || 1,
     ingredients: initialData?.ingredients || [{ name: "", quantity: "" }],
     instructions: initialData?.instructions || [""],
-    image: initialData?.image || "",
+    image: initialData?.image instanceof File ? initialData.image : null,
   });
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [animationClass, setAnimationClass] = useState("animate-fadeIn");
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [animationClass, setAnimationClass] =
+    useState<string>("animate-fadeIn");
+  const [error, setError] = useState<string | null>(null);
+
+  const isLoggedIn: boolean = localStorage.getItem("isLoggedIn") === "true";
+
+  if (!isLoggedIn) {
+    window.location.href = "/login";
+  }
 
   // Simplified form data change handler
   useEffect(() => {
@@ -77,6 +86,42 @@ const RecipeForm = ({
 
   // Enhanced animation handler for step transitions
   const handleStepChange = (step: number) => {
+    if (
+      step === 2 &&
+      (!formData.name ||
+        !formData.dietaryType ||
+        !formData.type ||
+        !formData.meal)
+    ) {
+      setError("Please complete all fields in Recipe Essentials.");
+      return;
+    }
+
+    if (
+      step === 3 &&
+      (!formData.time ||
+        !formData.difficulty ||
+        !formData.season ||
+        !formData.occasion)
+    ) {
+      setError("Please complete all fields in Recipe Characteristics.");
+      return;
+    }
+
+    if (
+      step === 4 &&
+      (formData.servings < 1 ||
+        formData.ingredients.some(
+          (ingredient) => !ingredient.name || !ingredient.quantity
+        ))
+    ) {
+      setError(
+        "Please ensure all ingredients and instructions are filled out."
+      );
+      return;
+    }
+
+    setError(null);
     setAnimationClass("opacity-0 translate-y-8");
     setTimeout(() => {
       setCurrentStep(step);
@@ -89,6 +134,16 @@ const RecipeForm = ({
       ...prev,
       [field]: value,
     }));
+  };
+
+  // Add a handler for file input
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData((prev) => ({
+        ...prev,
+        image: e.target.files![0], // store the File object
+      }));
+    }
   };
 
   const handleIngredientChange = (
@@ -139,10 +194,49 @@ const RecipeForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Final Form Data:", formData);
-    if (onSubmit) {
-      onSubmit(formData);
+
+    if (
+      (formData.instructions.length <= 1 && formData.instructions[0] === "") ||
+      !formData.image // check for file object
+    ) {
+      setError(
+        "Please provide more detailed cooking instructions and an image."
+      );
+      return;
     }
+
+    setError(null);
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("type", formData.type);
+    data.append("meal", formData.meal);
+    data.append("time", formData.time);
+    data.append("difficulty", formData.difficulty);
+    data.append("season", formData.season);
+    data.append("occasion", formData.occasion);
+    data.append("dietaryType", formData.dietaryType);
+    data.append("servings", String(formData.servings));
+    data.append("ingredients", JSON.stringify(formData.ingredients));
+    data.append("instructions", JSON.stringify(formData.instructions));
+    if (formData.image) {
+      data.append("image", formData.image as File);
+    }
+
+    await axios
+      .post("/api/createRecipe", data, {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log("Recipe created successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error creating recipe:", error);
+        setError("An error occurred while creating the recipe.");
+      });
   };
 
   const renderStep1 = () => (
@@ -215,6 +309,7 @@ const RecipeForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Input
           label="Cooking Duration"
+          type="number"
           name="time"
           value={formData.time}
           onChange={(value) => handleInputChange("time", value as string)}
@@ -245,7 +340,7 @@ const RecipeForm = ({
           value={formData.occasion}
           onChange={(value) => handleInputChange("occasion", value)}
           options={staticData.occasions}
-          placeholder="What&apos;s the vibe?"
+          placeholder="What's the vibe?"
         />
       </div>
     </div>
@@ -440,9 +535,9 @@ const RecipeForm = ({
             <input
               id="image"
               name="image"
-              type="url"
-              value={formData.image}
-              onChange={(e) => handleInputChange("image", e.target.value)}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
               className="flex-1 px-4 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm active:border-orange-500 active:outline-none"
               placeholder="Share a beautiful photo URL of your dish"
             />
@@ -489,57 +584,62 @@ const RecipeForm = ({
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-12">
+          <form onSubmit={handleSubmit} className="space-y-10">
             {currentStep === 1 && renderStep1()}
             {currentStep === 2 && renderStep2()}
             {currentStep === 3 && renderStep3()}
             {currentStep === 4 && renderStep4()}
 
             {/* Enhanced Navigation Buttons */}
-            <div className="flex justify-between pt-12 border-t-2 border-orange-100">
-              <button
-                type="button"
-                onClick={() => handleStepChange(currentStep - 1)}
-                disabled={currentStep === 1}
-                className={`flex justify-center items-center gap-4 px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform ${
-                  currentStep === 1
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:scale-105 shadow-md"
-                }`}
-              >
-                <span>←</span>
-                <span>Previous</span>
-              </button>
-
-              {currentStep < 4 ? (
+            <div className="flex flex-col items-center">
+              {error && (
+                <p className="text-red-500 w-full text-center pb-10">{error}</p>
+              )}
+              <div className="flex justify-between pt-10 border-t-2 border-orange-100 w-full">
                 <button
                   type="button"
-                  onClick={() => handleStepChange(currentStep + 1)}
-                  className="flex justify-center items-center gap-4 px-8 py-4 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  onClick={() => handleStepChange(currentStep - 1)}
+                  disabled={currentStep === 1}
+                  className={`flex justify-center items-center gap-4 px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform ${
+                    currentStep === 1
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:scale-105 shadow-md"
+                  }`}
                 >
-                  <span>Next</span>
-                  <span>→</span>
+                  <span>←</span>
+                  <span>Previous</span>
                 </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`px-10 py-4 rounded-xl font-semibold  transition-all duration-300 transform ${
-                    isSubmitting
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:scale-105 shadow-lg hover:shadow-xl"
-                  } text-white`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Processing...
-                    </span>
-                  ) : (
-                    `✨ ${submitButtonText}`
-                  )}
-                </button>
-              )}
+
+                {currentStep < 4 ? (
+                  <button
+                    type="button"
+                    onClick={() => handleStepChange(currentStep + 1)}
+                    className="flex justify-center items-center gap-4 px-8 py-4 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    <span>Next</span>
+                    <span>→</span>
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`px-10 py-4 rounded-xl font-semibold  transition-all duration-300 transform ${
+                      isSubmitting
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:scale-105 shadow-lg hover:shadow-xl"
+                    } text-white`}
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Processing...
+                      </span>
+                    ) : (
+                      `✨ ${submitButtonText}`
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </form>
         </div>

@@ -1,30 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { z } from "zod";
-import { getNutritionInfo } from "../getNutritionInfo";
 import Recipe from "@/models/Recipe";
+import { getNutritionInfo } from "../getNutritionInfo";
+import { z } from "zod";
 import { auth } from "@/app/api/auth";
 
 const reqSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  type: z.string().min(1, "Type is required"),
-  meal: z.string().min(1, "Meal is required"),
-  time: z.string().min(1, "Time is required"),
-  difficulty: z.string().min(1, "Difficulty is required"),
-  season: z.string().min(1, "Season is required"),
-  occasion: z.string().min(1, "Occasion is required"),
-  dietaryType: z.enum(["Vegetarian", "Non-Vegetarian", "Vegan"], {
-    required_error: "Dietary type is required",
-  }),
-  servings: z.number().min(1, "Servings must be at least 1"),
-  ingredients: z.array(
-    z.object({
-      name: z.string().min(1, "Ingredient name is required"),
-      quantity: z.string().min(1, "Ingredient quantity is required"),
-    })
-  ),
-  instructions: z.array(z.string().min(1, "Instruction is required")),
-  image: z.string().url("Image must be a valid URL"),
+  name: z.string().min(1),
+  type: z.string().min(1),
+  meal: z.string().min(1),
+  time: z.string().min(1),
+  difficulty: z.string().min(1),
+  season: z.string().min(1),
+  occasion: z.string().min(1),
+  dietaryType: z.enum(["Vegetarian", "Non-Vegetarian", "Vegan"]),
+  servings: z.coerce.number().min(1),
+  ingredients: z.array(z.object({ name: z.string(), quantity: z.string() })),
+  instructions: z.array(z.string()),
+  image: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -39,11 +32,34 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json();
+    // For App Router, we handle FormData directly
+    const formData = await req.formData();
 
-    const bodyData = reqSchema.safeParse(body);
+    const getField = (key: string): string => {
+      const value = formData.get(key);
+      return value instanceof File ? "" : value?.toString() || "";
+    };
+
+    const parsedFields = {
+      name: getField("name"),
+      type: getField("type"),
+      meal: getField("meal"),
+      time: getField("time"),
+      difficulty: getField("difficulty"),
+      season: getField("season"),
+      occasion: getField("occasion"),
+      dietaryType: getField("dietaryType"),
+      servings: getField("servings"),
+      ingredients: JSON.parse(getField("ingredients") || "[]"),
+      instructions: JSON.parse(getField("instructions") || "[]"),
+    };
+
+    const bodyData = reqSchema.safeParse(parsedFields);
     if (!bodyData.success) {
-      return NextResponse.json({ error: bodyData.error }, { status: 400 });
+      return NextResponse.json(
+        { error: bodyData.error.format() },
+        { status: 400 }
+      );
     }
 
     const {
@@ -58,15 +74,26 @@ export async function POST(req: NextRequest) {
       servings,
       ingredients,
       instructions,
-      image,
     } = bodyData.data;
 
+    let imageBase64 = "";
+    const imageFile = formData.get("image") as File | null;
+
+    if (imageFile && imageFile.size > 0) {
+      const buffer = await imageFile.arrayBuffer();
+      const mimeType = imageFile.type || "image/png";
+      imageBase64 = `data:${mimeType};base64,${Buffer.from(buffer).toString(
+        "base64"
+      )}`;
+    }
+
+    // Nutrition logic
     let totalCalories = 0;
     let totalENERC_KCAL = 0;
     let totalPROCNT_KCAL = 0;
     let totalFAT_KCAL = 0;
     let totalCHOCDF_KCAL = 0;
-    const ingredientsWithNutrition: Ingredient[] = [];
+    const ingredientsWithNutrition: any[] = [];
 
     for (const ingredient of ingredients) {
       const nutritionData = await getNutritionInfo([
@@ -108,8 +135,9 @@ export async function POST(req: NextRequest) {
       ingredients: ingredientsWithNutrition,
       nutritionPerServing,
       instructions,
-      image,
+      image: imageBase64,
     });
+
     await newRecipe.save();
 
     return NextResponse.json(
@@ -120,7 +148,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Create recipe error:", error);
+    console.error(error);
     return NextResponse.json(
       { error: "An error occurred while creating the recipe" },
       { status: 500 }
