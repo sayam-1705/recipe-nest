@@ -33,8 +33,8 @@ const Carousel = () => {
 
   return (
     <div
-      id="home"
       className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100"
+      id="home"
     >
       <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg transition-shadow duration-500 hover:shadow-3xl">
         <div
@@ -43,10 +43,10 @@ const Carousel = () => {
         >
           {recipeData.recipes.map((recipe, index) => (
             <div key={index} className="w-full h-full flex-shrink-0 pl-24">
-              <div className="w-full h-full relative">
-                <div className="h-full flex flex-col justify-center absolute z-10 left-0">
+              <div className="w-full h-full flex items-center">
+                <div className="flex flex-col justify-center z-10 pr-8 max-w-xl">
                   <div className="transform transition-all duration-700 ease-out animate-fade-in-up delay-400">
-                    <h3 className="text-6xl font-bold mb-6 bg-gradient-to-l from-gray-300 to-secondary-green-dark bg-clip-text text-transparent leading-tight transition-all duration-500 hover:scale-105">
+                    <h3 className="text-6xl font-bold mb-6 text-secondary-green-dark bg-clip-text leading-tight transition-all duration-500 hover:scale-105 break-words">
                       {recipe.name}
                     </h3>
                     <button
@@ -60,7 +60,7 @@ const Carousel = () => {
                   </div>
                 </div>
 
-                <div className="w-2/3 h-[500px] absolute right-0 overflow-hidden rounded-l-2xl shadow-xl animate-fade-in-up delay-600">
+                <div className="w-2/3 h-[500px] relative overflow-hidden rounded-l-2xl shadow-xl animate-fade-in-up delay-600">
                   <Image
                     src={recipe.image}
                     alt={recipe.name}
@@ -75,7 +75,7 @@ const Carousel = () => {
           ))}
         </div>
 
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 animate-fade-in-up delay-1000">
+        <div className="absolute bottom-4 left-1/4 transform -translate-x-1/2 flex space-x-2 z-20 animate-fade-in-up delay-1000">
           {Array.from({ length: totalSlides }).map((_, dotIndex) => (
             <button
               key={dotIndex}

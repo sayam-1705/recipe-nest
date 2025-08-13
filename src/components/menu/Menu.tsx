@@ -3,8 +3,8 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 const Menu = () => {
   return (
     <div
-      id="menu"
       className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10"
+      id="menu"
     >
       <div className="flex flex-col justify-center gap-6 pr-10">
         <div className="flex flex-col gap-2">
@@ -16,7 +16,7 @@ const Menu = () => {
               Recipes
             </span>
             <svg
-              className="w-14 h-14 inline-block animate-bounce-horizontal transition-transform fill-primary-orange duration-300"
+              className="w-14 h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
               xmlns="http://www.w3.org/2000/svg"
               height="40px"
               viewBox="0 -960 960 960"
