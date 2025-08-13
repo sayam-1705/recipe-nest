@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import Image from "next/image";
-import recipeData from "@/mock/recipe.json";
-import userData from "@/mock/users.json";
 import NutritionChart from "@/components/nutritionChart/NutritionChart";
+import axios from "axios";
 
 const ShowRecipe = async ({
   params,
@@ -11,25 +10,30 @@ const ShowRecipe = async ({
 }) => {
   const { recipeId } = await params;
 
-  const recipe = recipeData.recipes.find((r) => r._id === recipeId.toString());
+  const recipe = await axios.get(
+    `http://localhost:3000/api/getRecipeById/${recipeId}`
+  );
 
-  if (!recipe) {
+  const recipeData = recipe.data.recipe;
+
+  if (!recipeData) {
     return <div>Recipe not found</div>;
   }
 
-  const user = userData.users.find((u) => u._id === recipe.userId);
+  const userId = recipeData.userId;
 
-  if (!user) {
-    return <div>User not found</div>;
-  }
+  const user = await axios.get(
+    `http://localhost:3000/api/getUserById/${userId}`
+  );
+
+  const userData = user.data.user;
 
   const recipeWithDate = {
-    ...recipe,
+    ...recipeData,
     createdAt: new Date().toISOString(),
   };
 
   console.log("Recipe Data:", recipeWithDate);
-  console.log("User Data:", user);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
@@ -58,11 +62,11 @@ const ShowRecipe = async ({
               <div className="flex items-center justify-between animate-fade-in-up delay-400">
                 <div className="flex items-center space-x-4 group cursor-pointer hover:scale-105 transition-transform duration-300">
                   <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-medium text-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
-                    {user.name.charAt(0).toUpperCase()}
+                    {userData.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <p className="text-gray-800 font-medium text-lg group-hover:text-orange-600 transition-colors duration-300">
-                      By {user.name}
+                      By {userData.name}
                     </p>
                     <p className="text-gray-500 text-sm">
                       {new Date(recipeWithDate.createdAt).toLocaleDateString()}
@@ -184,7 +188,7 @@ const ShowRecipe = async ({
           </div>
 
           <div className="grid grid-cols-6 gap-4">
-            {recipeWithDate.ingredients.map((ingr, idx) => (
+            {recipeWithDate.ingredients.map((ingr: Ingredient, idx: number) => (
               <div
                 className="group bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-500 cursor-pointer hover:-translate-y-1 animate-fade-in-up"
                 key={idx}
@@ -240,20 +244,22 @@ const ShowRecipe = async ({
               Cooking Directions
             </h2>
             <div className="space-y-6">
-              {recipeWithDate.instructions.map((instruction, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-orange-200 hover:shadow-md transition-all duration-300 animate-fade-in-up"
-                  style={{ animationDelay: `${1 + idx * 0.1}s` }}
-                >
-                  <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
-                    {idx + 1}
+              {recipeWithDate.instructions.map(
+                (instruction: string, idx: number) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-orange-200 hover:shadow-md transition-all duration-300 animate-fade-in-up"
+                    style={{ animationDelay: `${1 + idx * 0.1}s` }}
+                  >
+                    <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+                      {idx + 1}
+                    </div>
+                    <p className="text-gray-700 leading-relaxed hover:text-gray-900 transition-colors duration-300 font-medium">
+                      {instruction}
+                    </p>
                   </div>
-                  <p className="text-gray-700 leading-relaxed hover:text-gray-900 transition-colors duration-300 font-medium">
-                    {instruction}
-                  </p>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
         </div>
