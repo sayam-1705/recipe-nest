@@ -2,6 +2,7 @@ import recipeData from "@/mock/recipe.json";
 import usersData from "@/mock/users.json";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface User {
   name: string;
@@ -9,11 +10,16 @@ interface User {
 }
 
 const RecipeCard = ({ isModified = false }: { isModified?: boolean }) => {
+  const router = useRouter()
   const recipe: Recipe = recipeData.recipes[0];
 
   // Use mock user data directly for now to avoid API issues
   const userData: User | null =
     usersData.users.find((user) => user._id === recipe.userId) || null;
+
+  const editRecipeHandler = () => {
+    router.push(`/updateRecipe/${recipe._id}`)
+  }
 
   return (
     <div className="recipe-card group flex flex-col w-80 bg-neutral-white shadow-sm hover:shadow-md transition-all duration-500 ease-smooth rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
@@ -45,7 +51,7 @@ const RecipeCard = ({ isModified = false }: { isModified?: boolean }) => {
           {isModified && (
             <div className="flex items-center gap-1 animate-fade-in-left delay-300">
               {/* Edit Button */}
-              <button className="group/edit relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5">
+              <button className="group/edit relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5" onClick={editRecipeHandler}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="20px"

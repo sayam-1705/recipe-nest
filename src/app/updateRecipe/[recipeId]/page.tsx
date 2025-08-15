@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import recipeData from "@/mock/recipe.json";
+import axios from "axios";
 
 interface UpdateRecipeProps {
   params: Promise<{
@@ -21,34 +21,56 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
 
   // Static data for form options
   const staticFormData = {
-    dietaryTypes: ["Vegetarian", "Non-Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free"],
-    types: ["Appetizer", "Main Course", "Dessert", "Snack", "Beverage", "Salad", "Soup"],
+    dietaryTypes: [
+      "Vegetarian",
+      "Non-Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Dairy-Free",
+    ],
+    types: [
+      "Appetizer",
+      "Main Course",
+      "Dessert",
+      "Snack",
+      "Beverage",
+      "Salad",
+      "Soup",
+    ],
     meals: ["Breakfast", "Lunch", "Dinner", "Snack", "Brunch"],
     difficulties: ["Easy", "Medium", "Hard", "Expert"],
     seasons: ["Spring", "Summer", "Fall", "Winter", "All Seasons"],
-    occasions: ["Everyday", "Party", "Holiday", "Special", "Quick Meal", "Date Night", "Family Gathering"],
+    occasions: [
+      "Everyday",
+      "Party",
+      "Holiday",
+      "Special",
+      "Quick Meal",
+      "Date Night",
+      "Family Gathering",
+    ],
   };
 
   // Fetch recipe data from static JSON file
   useEffect(() => {
-    const fetchRecipeData = () => {
+    const fetchRecipeData = async () => {
       try {
         setLoading(true);
-        
-        // Find the recipe by ID from the static JSON data
-        const foundRecipe = recipeData.recipes.find(
-          (recipe: Recipe) => recipe._id === resolvedParams.recipeId
-        );
+
+        // Find the recipe by ID from the API
+        const response = await axios.get(`/api/getRecipeById/${resolvedParams.recipeId}`);
+        const foundRecipe = response.data.recipe; // The API returns { recipe: ... }
         
         if (!foundRecipe) {
-          setError('Recipe not found');
+          setError("Recipe not found");
           return;
         }
         
+        console.log("Fetched recipe data:", foundRecipe);
         setRecipe(foundRecipe);
       } catch (err) {
-        console.error('Error fetching recipe:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch recipe');
+        console.error("Error fetching recipe:", err);
+        setError(err instanceof Error ? err.message : "Failed to fetch recipe");
       } finally {
         setLoading(false);
       }
@@ -59,34 +81,74 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     }
   }, [resolvedParams.recipeId]);
 
-  const handleFormDataChange = (data: Partial<Recipe>) => {
-    console.log('Updated form data:', data);
-  };
+  const handleFormDataChange = useCallback((data: any) => {
+    console.log("Updated form data:", data);
+    // Remove the setState call that was causing infinite re-renders
+    // The form manages its own state, we don't need to sync it back to recipe
+  }, []);
 
-  const handleUpdateRecipe = async (formData: Partial<Recipe>) => {
+  const handleUpdateRecipe = useCallback(async (formData: any) => {
     try {
       setIsSubmitting(true);
-      
-      // Log the complete form data to console
-      console.log('=== RECIPE UPDATE SUBMISSION ===');
-      console.log('Recipe ID:', resolvedParams.recipeId);
-      console.log('Updated Form Data:', JSON.stringify(formData, null, 2));
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      alert('Recipe updated successfully! Check console for form data.');
-      // Optionally redirect
-      // router.push(`/showRecipe/${resolvedParams.recipeId}`);
-      
+
+      // Handle image data - keep existing or convert new file
+      let imageData = recipe?.image; // Keep existing image by default
+
+      // If a new image file is provided, convert it to base64
+      if (formData.image && formData.image instanceof File) {
+        const arrayBuffer = await formData.image.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const binaryString = uint8Array.reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        );
+        const base64String = btoa(binaryString);
+        const mimeType = formData.image.type || "image/png";
+        imageData = `data:${mimeType};base64,${base64String}`;
+      } else if (formData.image && typeof formData.image === 'string') {
+        // If existing image is being kept (string), use it
+        imageData = formData.image;
+      }
+
+      // Create JSON payload for update
+      const updateData = {
+        name: formData.name,
+        type: formData.type,
+        meal: formData.meal,
+        time: formData.time,
+        difficulty: formData.difficulty,
+        season: formData.season,
+        occasion: formData.occasion,
+        dietaryType: formData.dietaryType,
+        servings: formData.servings,
+        ingredients: formData.ingredients,
+        instructions: formData.instructions,
+        image: imageData,
+      };
+
+      const response = await axios.put(
+        `/api/updateRecipe/${resolvedParams.recipeId}`,
+        updateData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      console.log("Recipe updated successfully:", response.data);
+      alert("Recipe updated successfully!");
+
+      // Redirect to the recipe details page or home
+      router.push(`/showRecipe/${resolvedParams.recipeId}`);
     } catch (error) {
-      console.error('Error updating recipe:', error);
-      alert('An error occurred while updating the recipe');
+      console.error("Error updating recipe:", error);
+      alert("An error occurred while updating the recipe");
     } finally {
       setIsSubmitting(false);
     }
-  };
-
+  }, [recipe?.image, resolvedParams.recipeId, router]);
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
@@ -104,7 +166,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
         <div className="text-center">
           <div className="text-red-500 text-xl mb-4">⚠️</div>
           <p className="text-gray-600 mb-4">Error: {error}</p>
-          <button 
+          <button
             onClick={() => router.back()}
             className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
           >
@@ -121,7 +183,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
         <div className="text-center">
           <div className="text-gray-500 text-xl mb-4">🔍</div>
           <p className="text-gray-600 mb-4">Recipe not found</p>
-          <button 
+          <button
             onClick={() => router.back()}
             className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
           >
@@ -132,16 +194,20 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     );
   }
 
+  console.log("Current recipe state:", recipe);
+  
   return (
     <div>
-      <RecipeForm 
-        initialData={recipe}
-        staticData={staticFormData}
-        onFormDataChange={handleFormDataChange}
-        onSubmit={handleUpdateRecipe}
-        submitButtonText="Update Recipe"
-        isSubmitting={isSubmitting}
-      />
+      {recipe && (
+        <RecipeForm
+          initialData={recipe}
+          staticData={staticFormData}
+          onFormDataChange={handleFormDataChange}
+          onSubmit={handleUpdateRecipe}
+          submitButtonText="Update Recipe"
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
   );
 };

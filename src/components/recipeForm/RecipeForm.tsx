@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Input from "./Input";
 import Select from "./Select";
-import axios from "axios";
 
 interface FormData {
   name: string;
@@ -17,11 +16,11 @@ interface FormData {
   servings: number;
   ingredients: { name: string; quantity: string }[];
   instructions: string[];
-  image: File | null;
+  image: File | string | null; // Allow both File (new upload) and string (existing base64)
 }
 
 interface RecipeFormProps {
-  initialData?: Partial<FormData>;
+  initialData?: Partial<FormData> & { _id?: string }; // Add _id for update forms
   onFormDataChange?: (data: FormData) => void;
   onSubmit?: (data: FormData) => void;
   submitButtonText?: string;
@@ -63,7 +62,7 @@ const RecipeForm = ({
     servings: initialData?.servings || 1,
     ingredients: initialData?.ingredients || [{ name: "", quantity: "" }],
     instructions: initialData?.instructions || [""],
-    image: initialData?.image instanceof File ? initialData.image : null,
+    image: initialData?.image || null, // Keep existing image (string) or null for new upload
   });
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -71,18 +70,33 @@ const RecipeForm = ({
     useState<string>("animate-fadeIn");
   const [error, setError] = useState<string | null>(null);
 
-  const isLoggedIn: boolean = localStorage.getItem("isLoggedIn") === "true";
+  // Update form data when initialData changes (for update forms)
+  useEffect(() => {
+    if (initialData && initialData.name) { // Only update if initialData has actual content
+      console.log("Setting form data from initialData:", initialData);
+      setFormData({
+        name: initialData?.name || "",
+        type: initialData?.type || "",
+        meal: initialData?.meal || "",
+        time: initialData?.time || "",
+        difficulty: initialData?.difficulty || "",
+        season: initialData?.season || "",
+        occasion: initialData?.occasion || "",
+        dietaryType: initialData?.dietaryType || "",
+        servings: initialData?.servings || 1,
+        ingredients: initialData?.ingredients || [{ name: "", quantity: "" }],
+        instructions: initialData?.instructions || [""],
+        image: initialData?.image || null,
+      });
+    }
+  }, [initialData?.name, initialData?._id]); // Only depend on key fields that indicate the data has changed
 
-  if (!isLoggedIn) {
-    window.location.href = "/login";
-  }
-
-  // Simplified form data change handler
+  // Simplified form data change handler - only call when form data actually changes
   useEffect(() => {
     if (onFormDataChange) {
       onFormDataChange(formData);
     }
-  }, [formData, onFormDataChange]);
+  }, [formData, onFormDataChange]); // Now it's safe to include onFormDataChange since it's memoized
 
   // Enhanced animation handler for step transitions
   const handleStepChange = (step: number) => {
@@ -197,7 +211,7 @@ const RecipeForm = ({
 
     if (
       (formData.instructions.length <= 1 && formData.instructions[0] === "") ||
-      !formData.image // check for file object
+      (!formData.image) // Check if no image at all (neither File nor string)
     ) {
       setError(
         "Please provide more detailed cooking instructions and an image."
@@ -207,36 +221,10 @@ const RecipeForm = ({
 
     setError(null);
 
-    const data = new FormData();
-    data.append("name", formData.name);
-    data.append("type", formData.type);
-    data.append("meal", formData.meal);
-    data.append("time", formData.time);
-    data.append("difficulty", formData.difficulty);
-    data.append("season", formData.season);
-    data.append("occasion", formData.occasion);
-    data.append("dietaryType", formData.dietaryType);
-    data.append("servings", String(formData.servings));
-    data.append("ingredients", JSON.stringify(formData.ingredients));
-    data.append("instructions", JSON.stringify(formData.instructions));
-    if (formData.image) {
-      data.append("image", formData.image as File);
+    // Call the passed onSubmit function with the form data
+    if (onSubmit) {
+      onSubmit(formData);
     }
-
-    await axios
-      .post("/api/createRecipe", data, {
-        headers: {
-          "content-type": "multipart/form-data",
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      })
-      .then((response) => {
-        console.log("Recipe created successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error creating recipe:", error);
-        setError("An error occurred while creating the recipe.");
-      });
   };
 
   const renderStep1 = () => (
@@ -528,6 +516,20 @@ const RecipeForm = ({
           >
             Recipe Image
           </label>
+          
+          {/* Show existing image if it's a string (base64) */}
+          {formData.image && typeof formData.image === 'string' && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 mb-2">Current image:</p>
+              <img 
+                src={formData.image} 
+                alt="Current recipe" 
+                className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
+              />
+              <p className="text-xs text-gray-500 mt-1">Upload a new image to replace this one</p>
+            </div>
+          )}
+          
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-lg font-bold shadow-md">
               📷
@@ -539,7 +541,7 @@ const RecipeForm = ({
               accept="image/*"
               onChange={handleImageChange}
               className="flex-1 px-4 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-orange-500 focus:shadow-none outline-none transition-all duration-300 ease-out hover:border-orange-300 hover:shadow-md bg-white shadow-sm active:border-orange-500 active:outline-none"
-              placeholder="Share a beautiful photo URL of your dish"
+              placeholder="Share a beautiful photo of your dish"
             />
           </div>
         </div>
