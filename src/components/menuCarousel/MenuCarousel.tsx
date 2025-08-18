@@ -6,11 +6,13 @@ import { useState, useRef, useEffect, useCallback } from "react";
 interface MenuCarouselProps {
   totalCards?: number;
   cardWidth?: number;
+  recipes: Recipe[];
 }
 
 const MenuCarousel: React.FC<MenuCarouselProps> = ({ 
-  totalCards = 5, 
-  cardWidth = 320 
+  totalCards = 3, 
+  cardWidth = 320 ,
+  recipes
 }) => {
   // Configuration
   const middleCardIndex = Math.floor(totalCards / 2);
@@ -191,9 +193,9 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
       >
         {/* Left padding for centering */}
         <div className="flex-shrink-0" style={{ width: `calc(50% - ${cardWidth/2}px)` }} />
-        
-        {Array.from({ length: totalCards }).map((_, index) => (
-          <div 
+
+        {recipes.map((recipe, index) => (
+          <div
             key={index}
             className="flex-shrink-0 relative"
             style={{
@@ -202,7 +204,7 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
               scrollSnapAlign: 'center'
             }}
           >
-            <RecipeCard />
+            <RecipeCard recipe={recipe}/>
           </div>
         ))}
         

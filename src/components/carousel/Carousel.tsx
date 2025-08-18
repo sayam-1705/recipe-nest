@@ -1,14 +1,29 @@
 "use client";
 
-import recipeData from "@/mock/recipe.json";
+// import recipeData from "@/mock/recipe.json";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
-  const totalSlides = recipeData.recipes.length;
+
+  const [recipeData, setRecipeData] = useState([]);
+  const totalSlides = recipeData.length;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/getAllRecipes");
+        setRecipeData(response.data.recipes);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
@@ -41,7 +56,7 @@ const Carousel = () => {
           className="h-[500px] flex transition-transform duration-1000 ease-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {recipeData.recipes.map((recipe, index) => (
+          {recipeData.map((recipe: Recipe, index) => (
             <div key={index} className="w-full h-full flex-shrink-0 pl-24">
               <div className="w-full h-full flex items-center">
                 <div className="flex flex-col justify-center z-10 pr-8 max-w-xl">

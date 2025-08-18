@@ -53,7 +53,6 @@ const CreateRecipe = () => {
       });
 
       console.log("Recipe created successfully:", response.data);
-      alert('Recipe created successfully!');
       
       // Redirect to home page or recipe list
       router.push('/');

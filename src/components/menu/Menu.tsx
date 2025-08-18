@@ -1,6 +1,27 @@
+"use client"
+
+import { useEffect, useState } from "react";
 import MenuCarousel from "../menuCarousel/MenuCarousel";
+import axios from "axios";
 
 const Menu = () => {
+  const [recipeData, setRecipeData] = useState([]);
+  const [cardNum, setCardNum] = useState(3);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/getAllRecipes");
+        setRecipeData(response.data.recipes);
+        setCardNum(response.data.recipes.length)
+        console.log("Fetched recipes:", response.data);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div
       className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10"
@@ -34,7 +55,7 @@ const Menu = () => {
         </p>
       </div>
 
-      <MenuCarousel totalCards={5} cardWidth={320} />
+      <MenuCarousel totalCards={cardNum} cardWidth={320} recipes={recipeData}/>
     </div>
   );
 };

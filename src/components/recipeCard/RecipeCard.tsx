@@ -1,21 +1,32 @@
 import recipeData from "@/mock/recipe.json";
 import usersData from "@/mock/users.json";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface User {
   name: string;
   email: string;
 }
 
-const RecipeCard = ({ isModified = false }: { isModified?: boolean }) => {
+const RecipeCard = ({ isModified = false, recipe }: { isModified?: boolean, recipe: Recipe }) => {
   const router = useRouter()
-  const recipe: Recipe = recipeData.recipes[0];
 
-  // Use mock user data directly for now to avoid API issues
-  const userData: User | null =
-    usersData.users.find((user) => user._id === recipe.userId) || null;
+  const [userData, setUserData] = useState<User | null>(null)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/getUserById/${recipe.userId}`)
+        setUserData(response.data.user)
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+      }
+    }
+    fetchUserData()
+  }, [recipe.userId])
 
   const editRecipeHandler = () => {
     router.push(`/updateRecipe/${recipe._id}`)
