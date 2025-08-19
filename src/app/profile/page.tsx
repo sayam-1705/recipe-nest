@@ -1,10 +1,43 @@
 "use client";
 
 import RecipeCard from "@/components/recipeCard/RecipeCard";
-import { useRef } from "react";
+import axios from "axios";
+import { useRef, useState, useEffect } from "react";
 
 const Profile = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Get userId from localStorage (client-side)
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    const userId = userData ? JSON.parse(userData).id : null;
+    console.log(typeof userId);
+
+    if (!userId) {
+      setError("User not found. Please log in again.");
+      setLoading(false);
+      return;
+    }
+    const fetchRecipes = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:3000/api/getRecipeByUserId/${userId}`
+        );
+        console.log(response.data);
+        setRecipes(response.data.recipes || []);
+      } catch (err: any) {
+        setError("Failed to fetch recipes.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -99,17 +132,25 @@ const Profile = () => {
               ref={scrollContainerRef}
               className="flex overflow-x-auto scroll-smooth gap-6 py-4 px-2 scrollbar-hide"
             >
-              {[...Array(9)].map((_, index) => (
-                <div
-                  key={index}
-                  className={`flex-shrink-0 w-80 hover:scale-105 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 animate-scale-in`}
-                  style={{
-                    animationDelay: `${index * 100}ms`,
-                  }}
-                >
-                  <RecipeCard isModified={true} />
-                </div>
-              ))}
+              {loading ? (
+                <div className="text-gray-500 text-lg">Loading recipes...</div>
+              ) : error ? (
+                <div className="text-red-500 text-lg">{error}</div>
+              ) : recipes.length === 0 ? (
+                <div className="text-gray-500 text-lg">No recipes found.</div>
+              ) : (
+                recipes.map((recipe: Recipe, index: number) => (
+                  <div
+                    key={recipe._id || index}
+                    className={`flex-shrink-0 w-80 hover:scale-105 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 animate-scale-in`}
+                    style={{
+                      animationDelay: `${index * 100}ms`,
+                    }}
+                  >
+                    <RecipeCard isModified={true} recipe={recipe} />
+                  </div>
+                ))
+              )}
             </div>
 
             {/* Right Arrow */}
