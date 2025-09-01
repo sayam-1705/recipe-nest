@@ -51,7 +51,7 @@ const About = () => {
                        transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary-orange-hover 
                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2 
                        focus:ring-offset-secondary-green-dark"
-              href="/"
+              href="/signup"
             >
               Signup, its free
             </Link>

@@ -1,8 +1,5 @@
-import recipeData from "@/mock/recipe.json";
-import usersData from "@/mock/users.json";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -96,8 +93,8 @@ const RecipeCard = ({ isModified = false, recipe }: { isModified?: boolean, reci
         </h3>
 
         {/* View Recipe Button */}
-        <Link
-          href={`/showRecipe/${recipe._id}`}
+        <button
+          onClick={() => router.push(`/showRecipe/${recipe._id}`)}
           className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-primary-orange to-primary-orange-hover text-neutral-white font-semibold rounded-xl hover:from-primary-orange-hover hover:to-primary-orange hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600"
         >
           View Recipe
@@ -114,7 +111,7 @@ const RecipeCard = ({ isModified = false, recipe }: { isModified?: boolean, reci
               d="M9 5l7 7-7 7"
             />
           </svg>
-        </Link>
+        </button>
       </div>
     </div>
   );

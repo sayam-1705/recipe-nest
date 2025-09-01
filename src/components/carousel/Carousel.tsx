@@ -16,7 +16,9 @@ const Carousel = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/getAllRecipes");
+        const response = await axios.get(
+          "http://localhost:3000/api/getAllRecipes"
+        );
         setRecipeData(response.data.recipes);
       } catch (error) {
         console.error("Error fetching recipes:", error);
@@ -65,9 +67,7 @@ const Carousel = () => {
                       {recipe.name}
                     </h3>
                     <button
-                      onClick={() =>
-                        router.push(`/showRecipe/${recipe.userId}`)
-                      }
+                      onClick={() => router.push(`/showRecipe/${recipe._id}`)}
                       className="relative text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-primary-orange after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-orange after:transition-all after:duration-300 hover:after:w-full transform hover:scale-105 hover:translate-x-1"
                     >
                       View Recipe

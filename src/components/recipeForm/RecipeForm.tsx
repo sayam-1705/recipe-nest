@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Input from "./Input";
 import Select from "./Select";
 
@@ -521,9 +522,11 @@ const RecipeForm = ({
           {formData.image && typeof formData.image === 'string' && (
             <div className="mb-4">
               <p className="text-sm text-gray-600 mb-2">Current image:</p>
-              <img 
+              <Image
+                width={128}
+                height={128}
                 src={formData.image} 
-                alt="Current recipe" 
+                alt={formData.name || "Recipe Image"} 
                 className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
               />
               <p className="text-xs text-gray-500 mt-1">Upload a new image to replace this one</p>
