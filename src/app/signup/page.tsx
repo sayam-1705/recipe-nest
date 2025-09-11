@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { log } from "console";
 import { useState } from "react";
 
 const Signup = () => {
@@ -47,7 +48,9 @@ const Signup = () => {
         window.location.href = "/login";
       })
       .catch((error) => {
-        setError("Signup failed. Please try again.");
+        setError(
+          error.response?.data?.error || "An error occurred. Please try again."
+        );
       });
   };
 

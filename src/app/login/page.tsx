@@ -39,8 +39,10 @@ const Login = () => {
         }
         window.location.href = "/";
       })
-      .catch(() => {
-        setError("Login failed. Please try again.");
+      .catch((error) => {
+        setError(
+          error.response?.data?.error || "An error occurred. Please try again."
+        );
       });
   };
 
@@ -104,6 +106,9 @@ const Login = () => {
               )}
             </button>
           </div>
+          {error && (
+            <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+          )}
           <button
             type="submit"
             className="flex items-center justify-center gap-1 bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2"
