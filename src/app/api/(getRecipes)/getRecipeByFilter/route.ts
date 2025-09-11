@@ -63,9 +63,8 @@ export async function POST(req: NextRequest) {
     }
 
     const recipes = await Recipe.find(query);
-    const formattedRecipes = recipes.map((recipe) => ({ name: recipe.name }));
 
-    return NextResponse.json({ formattedRecipes }, { status: 200 });
+    return NextResponse.json({ recipes }, { status: 200 });
   } catch (error) {
     console.error("Error fetching recipes:", error);
     return NextResponse.json(

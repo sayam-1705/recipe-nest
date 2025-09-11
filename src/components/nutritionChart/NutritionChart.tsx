@@ -18,14 +18,27 @@ interface NutritionChartProps {
 }
 
 const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
+  // Ensure all values are numbers and provide fallbacks
+  const safeNutritionData = {
+    calories: nutritionData?.calories || 0,
+    ENERC_KCAL: nutritionData?.ENERC_KCAL || 0,
+    PROCNT_KCAL: nutritionData?.PROCNT_KCAL || 0,
+    FAT_KCAL: nutritionData?.FAT_KCAL || 0,
+    CHOCDF_KCAL: nutritionData?.CHOCDF_KCAL || 0,
+  };
+
+  // Check if we have any actual nutrition data
+  const hasNutritionData = safeNutritionData.PROCNT_KCAL > 0 || 
+                          safeNutritionData.FAT_KCAL > 0 || 
+                          safeNutritionData.CHOCDF_KCAL > 0;
   const data = {
     labels: ["Protein", "Fat", "Carbohydrates"],
     datasets: [
       {
         data: [
-          nutritionData.PROCNT_KCAL,
-          nutritionData.FAT_KCAL,
-          nutritionData.CHOCDF_KCAL,
+          safeNutritionData.PROCNT_KCAL,
+          safeNutritionData.FAT_KCAL,
+          safeNutritionData.CHOCDF_KCAL,
         ],
         backgroundColor: [
           "rgba(34, 197, 94, 0.8)", // Green for protein
@@ -80,7 +93,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
       },
       title: {
         display: true,
-        text: `Total: ${nutritionData.calories} calories`,
+        text: `Total: ${safeNutritionData.calories} calories`,
         font: {
           size: 18,
           weight: "normal" as const,
@@ -113,10 +126,10 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
             const label = context.label || "";
             const value = context.parsed || 0;
             const total =
-              nutritionData.PROCNT_KCAL +
-              nutritionData.FAT_KCAL +
-              nutritionData.CHOCDF_KCAL;
-            const percentage = ((value / total) * 100).toFixed(1);
+              safeNutritionData.PROCNT_KCAL +
+              safeNutritionData.FAT_KCAL +
+              safeNutritionData.CHOCDF_KCAL;
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0";
             return `${label}: ${value}g (${percentage}%)`;
           },
         },
@@ -147,7 +160,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
             Calories
           </div>
           <div className="text-3xl font-light text-orange-800 group-hover:text-orange-900 transition-colors duration-300">
-            {nutritionData.calories}
+            {safeNutritionData.calories}
           </div>
         </div>
         <div
@@ -158,7 +171,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
             Protein
           </div>
           <div className="text-3xl font-light text-emerald-800 group-hover:text-emerald-900 transition-colors duration-300">
-            {nutritionData.PROCNT_KCAL}g
+            {safeNutritionData.PROCNT_KCAL}g
           </div>
         </div>
         <div
@@ -169,7 +182,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
             Fat
           </div>
           <div className="text-3xl font-light text-amber-800 group-hover:text-amber-900 transition-colors duration-300">
-            {nutritionData.FAT_KCAL}g
+            {safeNutritionData.FAT_KCAL}g
           </div>
         </div>
         <div
@@ -180,7 +193,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
             Carbs
           </div>
           <div className="text-3xl font-light text-violet-800 group-hover:text-violet-900 transition-colors duration-300">
-            {nutritionData.CHOCDF_KCAL}g
+            {safeNutritionData.CHOCDF_KCAL}g
           </div>
         </div>
       </div>
@@ -189,12 +202,26 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         className="h-96 flex justify-center items-center animate-fade-in-up"
         style={{ animationDelay: "0.5s" }}
       >
-        <div className="w-80 h-80 transition-all duration-500 :scale-105 relative group">
-          <div className="absolute inset-0 bg-gradienthover-to-br from-orange-100/20 to-violet-100/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
-          <div className="relative z-10 w-full h-full p-4 bg-white/50 backdrop-blur-sm transition-all duration-500">
-            <Pie data={data} options={options} />
+        {hasNutritionData ? (
+          <div className="w-80 h-80 transition-all duration-500 hover:scale-105 relative group">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-100/20 to-violet-100/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+            <div className="relative z-10 w-full h-full p-4 bg-white/50 backdrop-blur-sm rounded-full transition-all duration-500">
+              <Pie data={data} options={options} />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-center justify-center h-64 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 w-full">
+            <div className="text-center">
+              <div className="text-4xl mb-4">📊</div>
+              <p className="text-gray-500 text-lg font-medium">
+                No nutrition breakdown available
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                Only total calories are shown
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

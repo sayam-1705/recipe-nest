@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /
+Allow: /showRecipe/*
+Allow: /login
+Allow: /signup
+
+# Disallow private/sensitive pages
+Disallow: /api/
+Disallow: /profile
+Disallow: /createRecipe
+Disallow: /updateRecipe
+
+# Sitemap
+Sitemap: /sitemap.xml

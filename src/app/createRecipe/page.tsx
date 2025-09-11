@@ -1,13 +1,14 @@
 'use client';
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
-import React, { useState } from "react";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import React from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useCreateRecipe } from "@/queries";
 
 const CreateRecipe = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const createRecipeMutation = useCreateRecipe();
 
   // Static data for form options
   const staticFormData = {
@@ -19,40 +20,58 @@ const CreateRecipe = () => {
     occasions: ["Everyday", "Party", "Holiday", "Special", "Quick Meal", "Date Night", "Family Gathering"],
   };
 
-  const handleFormDataChange = (data: any) => {
+  const handleFormDataChange = (data: unknown) => {
     // Optional: Handle form data changes if needed
     console.log('Form data changed:', data);
   };
 
-  const handleCreateRecipe = async (formData: any) => {
+  const handleCreateRecipe = async (formData: {
+    name: string;
+    type: string;
+    meal: string;
+    time: string;
+    difficulty: string;
+    season: string;
+    occasion: string;
+    dietaryType: string;
+    servings: number;
+    ingredients: Array<{ name: string; quantity: string }>;
+    instructions: string[];
+    image: string | File | null;
+  }) => {
     try {
-      setIsSubmitting(true);
+      // Handle image conversion to base64 if needed
+      let imageData = '';
       
-      // Create FormData object for file upload
-      const data = new FormData();
-      data.append("name", formData.name);
-      data.append("type", formData.type);
-      data.append("meal", formData.meal);
-      data.append("time", formData.time);
-      data.append("difficulty", formData.difficulty);
-      data.append("season", formData.season);
-      data.append("occasion", formData.occasion);
-      data.append("dietaryType", formData.dietaryType);
-      data.append("servings", String(formData.servings));
-      data.append("ingredients", JSON.stringify(formData.ingredients));
-      data.append("instructions", JSON.stringify(formData.instructions));
-      if (formData.image) {
-        data.append("image", formData.image as File);
+      if (formData.image && formData.image instanceof File) {
+        const arrayBuffer = await formData.image.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const binaryString = uint8Array.reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        );
+        const base64String = btoa(binaryString);
+        const mimeType = formData.image.type || "image/png";
+        imageData = `data:${mimeType};base64,${base64String}`;
       }
 
-      const response = await axios.post("/api/createRecipe", data, {
-        headers: {
-          "content-type": "multipart/form-data",
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      });
+      const recipeData = {
+        name: formData.name,
+        type: formData.type,
+        meal: formData.meal,
+        time: formData.time,
+        difficulty: formData.difficulty,
+        season: formData.season,
+        occasion: formData.occasion,
+        dietaryType: formData.dietaryType,
+        servings: Number(formData.servings),
+        ingredients: formData.ingredients,
+        instructions: formData.instructions,
+        image: imageData,
+      };
 
-      console.log("Recipe created successfully:", response.data);
+      await createRecipeMutation.mutateAsync(recipeData);
+      console.log("Recipe created successfully");
       
       // Redirect to home page or recipe list
       router.push('/');
@@ -60,21 +79,21 @@ const CreateRecipe = () => {
     } catch (error) {
       console.error('Error creating recipe:', error);
       alert('An error occurred while creating the recipe');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <div>
-      <RecipeForm 
-        staticData={staticFormData}
-        onFormDataChange={handleFormDataChange}
-        onSubmit={handleCreateRecipe}
-        submitButtonText="Create Recipe"
-        isSubmitting={isSubmitting}
-      />
-    </div>
+    <ProtectedRoute>
+      <div>
+        <RecipeForm 
+          staticData={staticFormData}
+          onFormDataChange={handleFormDataChange}
+          onSubmit={handleCreateRecipe}
+          submitButtonText="Create Recipe"
+          isSubmitting={createRecipeMutation.isPending}
+        />
+      </div>
+    </ProtectedRoute>
   );
 };
 

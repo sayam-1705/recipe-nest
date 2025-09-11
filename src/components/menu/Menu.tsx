@@ -1,62 +1,138 @@
 "use client"
 
-import { useEffect, useState } from "react";
 import MenuCarousel from "../menuCarousel/MenuCarousel";
-import axios from "axios";
+import { useGetAllRecipes } from "@/queries";
+import { Skeleton } from "../common/Loading";
+import ErrorMessage from "../common/Error";
+import { Recipe } from "@/types/global";
 
-const Menu = () => {
-  const [recipeData, setRecipeData] = useState([]);
-  const [cardNum, setCardNum] = useState(3);
+interface MenuProps {
+  initialRecipes?: Recipe[];
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/getAllRecipes");
-        setRecipeData(response.data.recipes);
-        setCardNum(response.data.recipes.length)
-        console.log("Fetched recipes:", response.data);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-    fetchData();
-  }, []);
+const MenuSkeleton = () => (
+  <div className="space-y-4">
+    <Skeleton variant="rectangular" height={200} className="w-full" />
+    <div className="space-y-2">
+      <Skeleton variant="text" className="w-3/4" />
+      <Skeleton variant="text" className="w-1/2" />
+    </div>
+  </div>
+);
+
+const Menu = ({ initialRecipes = [] }: MenuProps) => {
+  const { 
+    data: recipes = initialRecipes, 
+    isLoading, 
+    error,
+    refetch 
+  } = useGetAllRecipes();
+
+  const renderContent = () => {
+    if (isLoading && !initialRecipes.length) {
+      return (
+        <div className="flex items-center justify-center">
+          <MenuSkeleton />
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex items-center justify-center">
+          <ErrorMessage
+            title="Failed to load recipes"
+            message="We couldn't load the recipes. Please try again."
+            onAction={() => refetch()}
+            variant="error"
+            className="max-w-md"
+          />
+        </div>
+      );
+    }
+
+    if (!recipes.length) {
+      return (
+        <div className="flex items-center justify-center">
+          <div className="text-center py-12">
+            <svg
+              className="mx-auto h-16 w-16 text-gray-400 mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No recipes found</h3>
+            <p className="text-gray-600">Be the first to share a delicious recipe with our community!</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <MenuCarousel 
+        totalCards={recipes.length} 
+        cardWidth={320} 
+        recipes={recipes}
+      />
+    );
+  };
 
   return (
-    <div
-      className="bg-primary-orange-bg grid grid-cols-2 p-10 gap-10"
+    <section
+      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-6 md:p-10 gap-10"
       id="menu"
+      role="region"
+      aria-labelledby="menu-title"
     >
-      <div className="flex flex-col justify-center gap-6 pr-10">
+      <div className="flex flex-col justify-center gap-6 lg:pr-10">
         <div className="flex flex-col gap-2">
-          <h1 className="text-6xl font-bold text-gray-800 animate-fade-in-up">
+          <h2 
+            id="menu-title"
+            className="text-4xl md:text-6xl font-bold text-gray-800 animate-fade-in-up"
+          >
             Discover Amazing
-          </h1>
-          <h1 className="text-6xl font-bold animate-fade-in-up">
+          </h2>
+          <h2 className="text-4xl md:text-6xl font-bold animate-fade-in-up">
             <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-primary-orange-hover bg-clip-text text-transparent mr-2">
               Recipes
             </span>
             <svg
-              className="w-14 h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
+              className="w-10 h-10 md:w-14 md:h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
               xmlns="http://www.w3.org/2000/svg"
               height="40px"
               viewBox="0 -960 960 960"
               width="40px"
               fill="currentColor"
+              aria-hidden="true"
             >
               <path d="M673-446.67H160v-66.66h513l-240-240L480-800l320 320-320 320-47-46.67 240-240Z" />
             </svg>
-          </h1>
+          </h2>
         </div>
 
         <p className="text-gray-600 text-lg leading-8 animate-fade-in-up delay-200">
           Explore our curated collection of delicious recipes from talented home
-          cooks around the world
+          cooks around the world. Find the perfect dish for any occasion.
         </p>
+
+        {recipes.length > 0 && (
+          <div className="text-sm text-gray-500 animate-fade-in-up delay-300">
+            Showing {recipes.length} recipe{recipes.length !== 1 ? 's' : ''}
+          </div>
+        )}
       </div>
 
-      <MenuCarousel totalCards={cardNum} cardWidth={320} recipes={recipeData}/>
-    </div>
+      <div className="min-h-[300px]">
+        {renderContent()}
+      </div>
+    </section>
   );
 };
 

@@ -1,12 +1,8 @@
-import axios from "axios";
+"use client";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
-interface User {
-  name: string;
-  email: string;
-}
+import { useGetUserById, useDeleteRecipe } from "@/queries";
 
 const RecipeCard = ({
   isModified = false,
@@ -17,41 +13,25 @@ const RecipeCard = ({
 }) => {
   const router = useRouter();
 
-  const [userData, setUserData] = useState<User | null>(null);
+  // Fetch user data using React Query
+  const { data: userData } = useGetUserById(recipe.userId, !!recipe.userId);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/getUserById/${recipe.userId}`
-        );
-        setUserData(response.data.user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUserData();
-  }, [recipe.userId]);
+  // Delete recipe mutation
+  const deleteRecipeMutation = useDeleteRecipe();
 
   const editRecipeHandler = () => {
     router.push(`/updateRecipe/${recipe._id}`);
   };
 
   const deleteRecipeHandler = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:3000/api/deleteRecipe/${recipe._id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      router.refresh()
-      router.push("/profile");
-    } catch (error) {
-      console.error("Error deleting recipe:", error);
+    if (window.confirm("Are you sure you want to delete this recipe?")) {
+      try {
+        await deleteRecipeMutation.mutateAsync(recipe._id);
+        router.push("/profile");
+      } catch (error) {
+        console.error("Error deleting recipe:", error);
+        alert("Failed to delete recipe. Please try again.");
+      }
     }
   };
 
@@ -79,7 +59,7 @@ const RecipeCard = ({
               </span>
             </div>
             <p className="text-sm text-gray-600 font-medium tracking-wide">
-              {userData?.name || "Unknown User"}
+              {userData?.name || "Loading..."}
             </p>
           </div>
           {isModified && (
@@ -102,8 +82,9 @@ const RecipeCard = ({
 
               {/* Delete Button */}
               <button
-                className="group/delete relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
+                className="group/delete relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={deleteRecipeHandler}
+                disabled={deleteRecipeMutation.isPending}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

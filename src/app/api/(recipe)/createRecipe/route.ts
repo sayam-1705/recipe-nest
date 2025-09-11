@@ -93,7 +93,17 @@ export async function POST(req: NextRequest) {
     let totalPROCNT_KCAL = 0;
     let totalFAT_KCAL = 0;
     let totalCHOCDF_KCAL = 0;
-    const ingredientsWithNutrition: any[] = [];
+    const ingredientsWithNutrition: Array<{
+      name: string;
+      quantity: string;
+      nutrition?: {
+        calories?: number;
+        protein?: number;
+        carbs?: number;
+        fat?: number;
+        [key: string]: unknown;
+      };
+    }> = [];
 
     for (const ingredient of ingredients) {
       const nutritionData = await getNutritionInfo([

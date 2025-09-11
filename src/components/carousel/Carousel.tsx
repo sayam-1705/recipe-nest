@@ -1,31 +1,93 @@
 "use client";
 
-// import recipeData from "@/mock/recipe.json";
 import Image from "next/image";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useGetRecipesByWeather, useGetRecipesByWeatherMutation } from "@/queries";
+
+interface WeatherInfo {
+  temperature: number;
+  place: string;
+  description: string;
+  details: string;
+  humidity: number;
+  windSpeed: number;
+  cloudCover: number;
+  recommendedType: string;
+  recommendedMeal: string;
+  recommendedDifficulty: string;
+  season: string;
+}
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
 
-  const [recipeData, setRecipeData] = useState([]);
-  const totalSlides = recipeData.length;
+  const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
+  const [weatherInfo, setWeatherInfo] = useState<WeatherInfo | null>(null);
+  const hasInitialized = useRef(false);
 
+  // Use the query hook for initial data fetching
+  const { data: weatherData, isLoading: isLoadingWeather, error } = useGetRecipesByWeather(
+    coordinates?.lat, 
+    coordinates?.lon, 
+    !!coordinates
+  );
+
+  // Use mutation for manual refreshes
+  const weatherRecipesMutation = useGetRecipesByWeatherMutation();
+
+  const recipeData = weatherData?.recipes || [];
+  const totalSlides = Array.isArray(recipeData) ? recipeData.length : 0;
+
+  // Get coordinates on mount
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/getAllRecipes"
-        );
-        setRecipeData(response.data.recipes);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-    fetchData();
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCoordinates({ lat: latitude, lon: longitude });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          // Fallback: use London coordinates
+          setCoordinates({ lat: 51.5074, lon: -0.1278 });
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      // Fallback: use London coordinates
+      setCoordinates({ lat: 51.5074, lon: -0.1278 });
+    }
   }, []);
+
+  // Update weather info when data changes
+  useEffect(() => {
+    if (weatherData?.weather) {
+      setWeatherInfo(weatherData.weather);
+    }
+  }, [weatherData]);
+
+  const refreshWeatherRecipes = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCoordinates({ lat: latitude, lon: longitude });
+          setCurrentIndex(0); // Reset carousel to first slide
+        },
+        (error) => {
+          console.error("Error getting location for refresh:", error);
+          // Fallback: use London coordinates
+          setCoordinates({ lat: 51.5074, lon: -0.1278 });
+          setCurrentIndex(0);
+        }
+      );
+    }
+  };
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
@@ -53,12 +115,55 @@ const Carousel = () => {
       className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100"
       id="home"
     >
-      <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg transition-shadow duration-500 hover:shadow-3xl">
+      {/* Weather Information Banner */}
+      {weatherInfo && (
+        <div className="bg-gradient-to-r from-blue-500 to-teal-500 text-white py-2 px-4 text-center text-sm relative">
+          <span className="font-medium">
+            Weather in {weatherInfo.place}: {weatherInfo.temperature}°C, {weatherInfo.description}
+          </span>
+          <span className="ml-4 opacity-80">
+            Recipes recommended for {weatherInfo.recommendedType} • {weatherInfo.recommendedMeal}
+          </span>
+          <button
+            onClick={refreshWeatherRecipes}
+            disabled={isLoadingWeather}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {isLoadingWeather ? 'Updating...' : 'Refresh'}
+          </button>
+        </div>
+      )}
+      
+      {isLoadingWeather ? (
+        <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-orange mx-auto mb-4"></div>
+            <p className="text-secondary-green-dark text-lg font-medium">
+              Finding recipes perfect for your weather...
+            </p>
+          </div>
+        </div>
+      ) : !Array.isArray(recipeData) || recipeData.length === 0 ? (
+        <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-secondary-green-dark text-xl font-medium mb-2">
+              No recipes found for current weather conditions
+            </p>
+            <p className="text-gray-600">
+              Try allowing location access or check back later
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg transition-shadow duration-500 hover:shadow-3xl">
         <div
           className="h-[500px] flex transition-transform duration-1000 ease-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {recipeData.map((recipe: Recipe, index) => (
+          {Array.isArray(recipeData) && recipeData.map((recipe: Recipe, index) => (
             <div key={index} className="w-full h-full flex-shrink-0 pl-24">
               <div className="w-full h-full flex items-center">
                 <div className="flex flex-col justify-center z-10 pr-8 max-w-xl">
@@ -145,6 +250,7 @@ const Carousel = () => {
           </svg>
         </button>
       </div>
+      )}
     </div>
   );
 };

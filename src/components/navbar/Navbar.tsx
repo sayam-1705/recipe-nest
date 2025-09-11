@@ -29,7 +29,7 @@ const Navbar = () => {
         <NavLink href="#about">About</NavLink>
         <NavLink href="#contact">Contact</NavLink>
       </div>
-      <div className="flex gap-4 font-medium text-base animate-fade-in-up delay-800">
+      <div className="relative z-50 flex gap-4 font-medium text-base animate-fade-in-up delay-800">
         <AuthLinks />
       </div>
     </nav>

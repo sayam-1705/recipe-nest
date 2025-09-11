@@ -1,15 +1,21 @@
 "use client";
 
-import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useLogin } from "@/queries";
 
 const Login = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || '/';
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  
+  const loginMutation = useLogin();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,30 +26,22 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { email, password } = formData;
     if (!email || !password) {
-      setError("All fields are required.");
       return;
     }
-    setError("");
 
-    axios
-      .post("/api/login", { email, password })
-      .then((response) => {
-        if (response.data) {
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          localStorage.setItem("token", response.data.token);
-        }
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        setError(
-          error.response?.data?.error || "An error occurred. Please try again."
-        );
-      });
+    try {
+      await loginMutation.mutateAsync({ email, password });
+      // Successful login - redirect to intended page or home
+      router.push(redirectPath);
+    } catch (error) {
+      // Error is already handled by the mutation
+      console.error('Login failed:', error);
+    }
   };
 
   return (
@@ -66,7 +64,9 @@ const Login = () => {
             type="email"
             name="email"
             placeholder="Enter your email"
+            value={formData.email}
             onChange={handleInputChange}
+            required
           />
           <div className="relative">
             <input
@@ -74,7 +74,9 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
+              value={formData.password}
               onChange={handleInputChange}
+              required
             />
             <button
               type="button"
@@ -106,14 +108,20 @@ const Login = () => {
               )}
             </button>
           </div>
-          {error && (
-            <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+          {loginMutation.isError && (
+            <p className="text-red-500 text-sm mt-2 text-center">
+              {loginMutation.error instanceof Error 
+                ? loginMutation.error.message 
+                : "Login failed. Please try again."
+              }
+            </p>
           )}
           <button
             type="submit"
-            className="flex items-center justify-center gap-1 bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2"
+            disabled={loginMutation.isPending}
+            className="flex items-center justify-center gap-1 bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            Log In
+            {loginMutation.isPending ? "Logging In..." : "Log In"}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"

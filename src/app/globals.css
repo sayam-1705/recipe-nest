@@ -58,3 +58,44 @@ html {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Loading page specific animations */
+.bg-200% {
+  background-size: 200% 100%;
+}
+
+.bg-300% {
+  background-size: 300% 100%;
+}
+
+/* Custom keyframes for loading animations */
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.animate-float-up {
+  animation: floatUp 3s ease-out infinite;
+}

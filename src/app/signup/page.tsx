@@ -1,8 +1,7 @@
 "use client";
 
-import axios from "axios";
-import { log } from "console";
 import { useState } from "react";
+import { useSignup } from "@/queries";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +12,15 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [validationError, setValidationError] = useState("");
+
+  const signupMutation = useSignup();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear validation error when user starts typing
+    if (validationError) setValidationError("");
   };
 
   const togglePasswordVisibility = () => {
@@ -28,31 +31,44 @@ const Signup = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, password, confirmPassword } = formData;
+    
+    // Validation
     if (!name || !email || !password || !confirmPassword) {
-      setError("All fields are required.");
+      setValidationError("All fields are required.");
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setValidationError("Passwords do not match.");
       return;
     }
-    setError("");
+    
+    setValidationError("");
 
-    axios
-      .post("/api/signup", { name, email, password })
-      .then((response) => {
-        window.location.href = "/login";
-      })
-      .catch((error) => {
-        setError(
-          error.response?.data?.error || "An error occurred. Please try again."
-        );
+    try {
+      await signupMutation.mutateAsync({
+        email,
+        password,
+        confirmPassword,
       });
+      // Successful signup will be handled by the mutation's onSuccess callback
+      window.location.href = "/login";
+    } catch (error) {
+      // Error is already handled by the mutation
+      console.error('Signup failed:', error);
+    }
   };
+
+  const displayError = validationError || (
+    signupMutation.isError 
+      ? (signupMutation.error instanceof Error 
+          ? signupMutation.error.message 
+          : "Signup failed. Please try again.")
+      : ""
+  );
 
   return (
     <div
@@ -74,14 +90,18 @@ const Signup = () => {
             type="text"
             name="name"
             placeholder="Enter your name"
+            value={formData.name}
             onChange={handleInputChange}
+            required
           />
           <input
             className="bg-white/20 backdrop-blur-md px-4 py-3 border border-white/30 rounded-lg text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50"
             type="email"
             name="email"
             placeholder="Enter your email"
+            value={formData.email}
             onChange={handleInputChange}
+            required
           />
           <div className="relative">
             <input
@@ -89,7 +109,9 @@ const Signup = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
+              value={formData.password}
               onChange={handleInputChange}
+              required
             />
             <button
               type="button"
@@ -127,7 +149,9 @@ const Signup = () => {
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm your password"
+              value={formData.confirmPassword}
               onChange={handleInputChange}
+              required
             />
             <button
               type="button"
@@ -159,14 +183,15 @@ const Signup = () => {
               )}
             </button>
           </div>
-          {error && (
-            <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+          {displayError && (
+            <p className="text-red-500 text-sm mt-2 text-center">{displayError}</p>
           )}
           <button
             type="submit"
-            className="bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2"
+            disabled={signupMutation.isPending}
+            className="bg-gradient-to-r bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            Sign Up
+            {signupMutation.isPending ? "Creating Account..." : "Sign Up"}
           </button>
         </div>
         <p className="text-white/80 mt-6 text-center">

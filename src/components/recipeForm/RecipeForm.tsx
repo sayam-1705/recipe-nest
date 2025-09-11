@@ -90,7 +90,22 @@ const RecipeForm = ({
         image: initialData?.image || null,
       });
     }
-  }, [initialData?.name, initialData?._id]); // Only depend on key fields that indicate the data has changed
+  }, [
+    initialData,
+    initialData?.name, 
+    initialData?._id,
+    initialData?.type,
+    initialData?.meal,
+    initialData?.time,
+    initialData?.difficulty,
+    initialData?.season,
+    initialData?.occasion,
+    initialData?.dietaryType,
+    initialData?.servings,
+    initialData?.ingredients,
+    initialData?.instructions,
+    initialData?.image
+  ]); // Depend on all the fields we actually use
 
   // Simplified form data change handler - only call when form data actually changes
   useEffect(() => {

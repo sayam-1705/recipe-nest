@@ -173,7 +173,7 @@ export async function POST(req: NextRequest) {
     );
 
     return NextResponse.json({
-      recipes: recipesResponse.data,
+      recipes: recipesResponse.data.recipes,
       weather: {
         temperature: temperature,
         place,

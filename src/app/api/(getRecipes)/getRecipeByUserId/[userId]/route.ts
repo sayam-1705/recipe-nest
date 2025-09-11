@@ -2,7 +2,6 @@ import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../auth";
 
 export async function GET(
   req: NextRequest,
@@ -22,14 +21,7 @@ export async function GET(
 
     const recipes = await Recipe.find({ userId: userId });
 
-    if (!recipes || recipes.length === 0) {
-      return NextResponse.json(
-        { error: "No recipes found for this user" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ recipes }, { status: 200 });
+    return NextResponse.json({ recipes: recipes || [] }, { status: 200 });
   } catch (error) {
     console.error("Error fetching recipes:", error);
     return NextResponse.json(

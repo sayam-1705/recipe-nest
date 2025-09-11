@@ -1,9 +1,11 @@
 "use client";
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
-import React, { useState, useEffect, use, useCallback } from "react";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useRecipeOwnership } from "@/hooks/useProtectedRoute";
+import React, { use, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useGetRecipeById, useUpdateRecipe, useCurrentUser } from "@/queries";
 
 interface UpdateRecipeProps {
   params: Promise<{
@@ -13,11 +15,45 @@ interface UpdateRecipeProps {
 
 const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   const resolvedParams = use(params);
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  // Get current user
+  const { data: currentUser } = useCurrentUser();
+
+  // Fetch recipe data using React Query
+  const { 
+    data: recipe, 
+    isLoading: loading, 
+    error,
+    isError 
+  } = useGetRecipeById(resolvedParams.recipeId, !!resolvedParams.recipeId);
+
+  // Check if current user owns this recipe
+  const canAccess = useRecipeOwnership(recipe?.userId);
+
+  // Update recipe mutation
+  const updateRecipeMutation = useUpdateRecipe();
+
+  // Show ownership check
+  if (recipe && canAccess === false) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-500 text-4xl mb-4">🚫</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-6">You can only edit your own recipes.</p>
+            <button
+              onClick={() => router.push('/profile')}
+              className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            >
+              Go to Profile
+            </button>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
 
   // Static data for form options
   const staticFormData = {
@@ -51,46 +87,25 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     ],
   };
 
-  // Fetch recipe data from static JSON file
-  useEffect(() => {
-    const fetchRecipeData = async () => {
-      try {
-        setLoading(true);
-
-        // Find the recipe by ID from the API
-        const response = await axios.get(`/api/getRecipeById/${resolvedParams.recipeId}`);
-        const foundRecipe = response.data.recipe; // The API returns { recipe: ... }
-        
-        if (!foundRecipe) {
-          setError("Recipe not found");
-          return;
-        }
-        
-        console.log("Fetched recipe data:", foundRecipe);
-        setRecipe(foundRecipe);
-      } catch (err) {
-        console.error("Error fetching recipe:", err);
-        setError(err instanceof Error ? err.message : "Failed to fetch recipe");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (resolvedParams.recipeId) {
-      fetchRecipeData();
-    }
-  }, [resolvedParams.recipeId]);
-
-  const handleFormDataChange = useCallback((data: any) => {
+  const handleFormDataChange = useCallback((data: unknown) => {
     console.log("Updated form data:", data);
-    // Remove the setState call that was causing infinite re-renders
-    // The form manages its own state, we don't need to sync it back to recipe
   }, []);
 
-  const handleUpdateRecipe = useCallback(async (formData: any) => {
+  const handleUpdateRecipe = useCallback(async (formData: {
+    name: string;
+    type: string;
+    meal: string;
+    time: string;
+    difficulty: string;
+    season: string;
+    occasion: string;
+    dietaryType: string;
+    servings: number;
+    ingredients: Array<{ name: string; quantity: string }>;
+    instructions: string[];
+    image: File | string | null;
+  }) => {
     try {
-      setIsSubmitting(true);
-
       // Handle image data - keep existing or convert new file
       let imageData = recipe?.image; // Keep existing image by default
 
@@ -110,7 +125,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
         imageData = formData.image;
       }
 
-      // Create JSON payload for update
+      // Create update payload
       const updateData = {
         name: formData.name,
         type: formData.type,
@@ -126,89 +141,90 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
         image: imageData,
       };
 
-      const response = await axios.put(
-        `/api/updateRecipe/${resolvedParams.recipeId}`,
-        updateData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await updateRecipeMutation.mutateAsync({
+        recipeId: resolvedParams.recipeId,
+        recipeData: updateData
+      });
 
-      console.log("Recipe updated successfully:", response.data);
+      console.log("Recipe updated successfully");
       alert("Recipe updated successfully!");
 
-      // Redirect to the recipe details page or home
+      // Redirect to the recipe details page
       router.push(`/showRecipe/${resolvedParams.recipeId}`);
     } catch (error) {
       console.error("Error updating recipe:", error);
       alert("An error occurred while updating the recipe");
-    } finally {
-      setIsSubmitting(false);
     }
-  }, [recipe?.image, resolvedParams.recipeId, router]);
+  }, [recipe?.image, resolvedParams.recipeId, router, updateRecipeMutation]);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading recipe...</p>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading recipe...</p>
+          </div>
         </div>
-      </div>
+      </ProtectedRoute>
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">⚠️</div>
-          <p className="text-gray-600 mb-4">Error: {error}</p>
-          <button
-            onClick={() => router.back()}
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-          >
-            Go Back
-          </button>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-500 text-xl mb-4">⚠️</div>
+            <p className="text-gray-600 mb-4">
+              Error: {error instanceof Error ? error.message : "Failed to load recipe"}
+            </p>
+            <button
+              onClick={() => router.back()}
+              className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
-      </div>
+      </ProtectedRoute>
     );
   }
 
   if (!recipe) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-gray-500 text-xl mb-4">🔍</div>
-          <p className="text-gray-600 mb-4">Recipe not found</p>
-          <button
-            onClick={() => router.back()}
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-          >
-            Go Back
-          </button>
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-gray-500 text-xl mb-4">🔍</div>
+            <p className="text-gray-600 mb-4">Recipe not found</p>
+            <button
+              onClick={() => router.back()}
+              className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
-      </div>
+      </ProtectedRoute>
     );
   }
 
   console.log("Current recipe state:", recipe);
   
   return (
-    <div>
-      {recipe && (
+    <ProtectedRoute>
+      <div>
         <RecipeForm
           initialData={recipe}
           staticData={staticFormData}
           onFormDataChange={handleFormDataChange}
           onSubmit={handleUpdateRecipe}
           submitButtonText="Update Recipe"
-          isSubmitting={isSubmitting}
+          isSubmitting={updateRecipeMutation.isPending}
         />
-      )}
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 };
 
