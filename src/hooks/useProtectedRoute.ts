@@ -9,10 +9,17 @@ interface UseProtectedRouteOptions {
   redirectDelay?: number;
 }
 
+interface User {
+  _id?: string;
+  id?: string;
+  email?: string;
+  name?: string;
+}
+
 interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
-  user: any;
+  user: User | null;
 }
 
 export const useProtectedRoute = ({

@@ -7,16 +7,16 @@ const Loading = () => {
   const [progress, setProgress] = useState(0);
   const [showChef, setShowChef] = useState(false);
 
-  const loadingSteps = [
-    'Preparing ingredients...',
-    'Heating the pan...',
-    'Mixing the batter...',
-    'Seasoning to taste...',
-    'Almost ready...',
-    'Plating the dish...'
-  ];
-
   useEffect(() => {
+    const loadingSteps = [
+      'Preparing ingredients...',
+      'Heating the pan...',
+      'Mixing the batter...',
+      'Seasoning to taste...',
+      'Almost ready...',
+      'Plating the dish...'
+    ];
+
     const textInterval = setInterval(() => {
       setLoadingText(prev => {
         const currentIndex = loadingSteps.indexOf(prev);

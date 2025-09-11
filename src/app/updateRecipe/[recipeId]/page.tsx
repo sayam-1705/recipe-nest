@@ -5,7 +5,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRecipeOwnership } from "@/hooks/useProtectedRoute";
 import React, { use, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useGetRecipeById, useUpdateRecipe, useCurrentUser } from "@/queries";
+import { useGetRecipeById, useUpdateRecipe } from "@/queries";
 
 interface UpdateRecipeProps {
   params: Promise<{
@@ -16,9 +16,6 @@ interface UpdateRecipeProps {
 const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   const resolvedParams = use(params);
   const router = useRouter();
-
-  // Get current user
-  const { data: currentUser } = useCurrentUser();
 
   // Fetch recipe data using React Query
   const { 
@@ -33,27 +30,6 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
 
   // Update recipe mutation
   const updateRecipeMutation = useUpdateRecipe();
-
-  // Show ownership check
-  if (recipe && canAccess === false) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-red-500 text-4xl mb-4">🚫</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h2>
-            <p className="text-gray-600 mb-6">You can only edit your own recipes.</p>
-            <button
-              onClick={() => router.push('/profile')}
-              className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-            >
-              Go to Profile
-            </button>
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
 
   // Static data for form options
   const staticFormData = {
@@ -156,6 +132,27 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
       alert("An error occurred while updating the recipe");
     }
   }, [recipe?.image, resolvedParams.recipeId, router, updateRecipeMutation]);
+
+  // Show ownership check
+  if (recipe && canAccess === false) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-500 text-4xl mb-4">🚫</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-6">You can only edit your own recipes.</p>
+            <button
+              onClick={() => router.push('/profile')}
+              className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            >
+              Go to Profile
+            </button>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
 
   if (loading) {
     return (

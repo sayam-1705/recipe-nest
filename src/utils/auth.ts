@@ -1,3 +1,10 @@
+interface User {
+  _id?: string;
+  id?: string;
+  email?: string;
+  name?: string;
+}
+
 export const isAuthenticated = () => {
   if (typeof window === "undefined") return false;
   const token = localStorage.getItem("authToken");
@@ -22,7 +29,7 @@ export const logout = () => {
 };
 
 // Helper function to set both localStorage and cookies
-export const setAuthData = (token: string, user: any) => {
+export const setAuthData = (token: string, user: User | null) => {
   if (typeof window !== "undefined") {
     // Set localStorage
     localStorage.setItem("authToken", token);
@@ -48,7 +55,7 @@ export const getTokenFromCookies = (cookieString: string): string | null => {
 };
 
 // Helper function to get user from cookies (for server-side)
-export const getUserFromCookies = (cookieString: string): any | null => {
+export const getUserFromCookies = (cookieString: string): User | null => {
   const cookies = cookieString.split(';');
   for (const cookie of cookies) {
     const [name, value] = cookie.trim().split('=');
