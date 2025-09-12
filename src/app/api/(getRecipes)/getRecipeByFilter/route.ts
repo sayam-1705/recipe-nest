@@ -47,13 +47,13 @@ export async function POST(req: NextRequest) {
     const query: Record<string, unknown> = {};
 
     if (name) query.name = { $regex: name, $options: "i" };
-    if (type) query.type = type;
-    if (meal) query.meal = meal;
-    if (time) query.time = time;
-    if (difficulty) query.difficulty = difficulty;
-    if (season) query.season = season;
-    if (occasion) query.occasion = occasion;
-    if (dietaryType) query.dietaryType = dietaryType;
+    if (type) query.type = { $regex: type, $options: "i" };
+    if (meal) query.meal = { $regex: meal, $options: "i" };
+    if (time) query.time = { $regex: time, $options: "i" };
+    if (difficulty) query.difficulty = { $regex: difficulty, $options: "i" };
+    if (season) query.season = { $regex: season, $options: "i" };
+    if (occasion) query.occasion = { $regex: occasion, $options: "i" };
+    if (dietaryType) query.dietaryType = { $regex: dietaryType, $options: "i" };
     if (ingredients && ingredients.length > 0) {
       query.ingredients = {
         $elemMatch: {

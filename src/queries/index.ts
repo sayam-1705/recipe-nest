@@ -112,7 +112,12 @@ const recipeApi = {
     return response.data.recipes;
   },
 
-  getRecipesByWeather: async (lat: number, lon: number): Promise<{ recipes: Recipe[], weather: WeatherInfo }> => {
+  getRecipesByWeather: async (lat: number, lon: number): Promise<{ 
+    recipes: Recipe[], 
+    weather: WeatherInfo,
+    searchStrategy?: string,
+    totalRecipes?: number
+  }> => {
     const response = await apiClient.post('/api/getRecipeBasedOnWeather', { lat, lon });
     return response.data;
   },

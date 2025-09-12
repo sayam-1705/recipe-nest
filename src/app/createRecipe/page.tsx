@@ -59,7 +59,7 @@ const CreateRecipe = () => {
         name: formData.name,
         type: formData.type,
         meal: formData.meal,
-        time: formData.time,
+        time: String(formData.time),
         difficulty: formData.difficulty,
         season: formData.season,
         occasion: formData.occasion,
@@ -78,7 +78,6 @@ const CreateRecipe = () => {
       
     } catch (error) {
       console.error('Error creating recipe:', error);
-      // alert('An error occurred while creating the recipe');
     }
   };
 
