@@ -78,7 +78,7 @@ const CreateRecipe = () => {
       
     } catch (error) {
       console.error('Error creating recipe:', error);
-      alert('An error occurred while creating the recipe');
+      // alert('An error occurred while creating the recipe');
     }
   };
 
