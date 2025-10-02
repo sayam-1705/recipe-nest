@@ -40,7 +40,20 @@ export async function POST(req: NextRequest) {
     const contentType = req.headers.get("content-type");
     let parsedFields;
     let imageFile: File | null = null;
-    let body: any = null;
+    let body: {
+      name?: string;
+      type?: string;
+      meal?: string;
+      time?: string;
+      difficulty?: string;
+      season?: string;
+      occasion?: string;
+      dietaryType?: string;
+      servings?: number;
+      ingredients?: Array<{ name: string; quantity: string }>;
+      instructions?: string[];
+      image?: string;
+    } | null = null;
 
     if (contentType && contentType.includes("multipart/form-data")) {
       // Handle FormData (for file uploads)
@@ -112,17 +125,17 @@ export async function POST(req: NextRequest) {
       // Handle JSON request
       body = await req.json();
       parsedFields = {
-        name: body.name,
-        type: body.type,
-        meal: body.meal,
-        time: body.time,
-        difficulty: body.difficulty,
-        season: body.season,
-        occasion: body.occasion,
-        dietaryType: body.dietaryType,
-        servings: body.servings,
-        ingredients: body.ingredients || [],
-        instructions: body.instructions || [],
+        name: body?.name,
+        type: body?.type,
+        meal: body?.meal,
+        time: body?.time,
+        difficulty: body?.difficulty,
+        season: body?.season,
+        occasion: body?.occasion,
+        dietaryType: body?.dietaryType,
+        servings: body?.servings,
+        ingredients: body?.ingredients || [],
+        instructions: body?.instructions || [],
       };
       // For JSON requests, the image is already a base64 string
     }

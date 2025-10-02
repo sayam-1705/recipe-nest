@@ -163,16 +163,8 @@ export async function POST(req: NextRequest) {
       season = baseSeason;
     }
 
-    // Create filter object with all determined criteria
-    const filterParams = {
-      type,
-      meal,
-      difficulty,
-      season,
-    };
-
     // Build MongoDB query with progressive fallback strategy
-    let recipes: any[] = [];
+    let recipes: Recipe[] = [];
     let searchStrategy = "exact";
     
     // Strategy 1: Try with all criteria (AND)

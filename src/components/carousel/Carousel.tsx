@@ -11,21 +11,46 @@ const Carousel = () => {
     lat: number;
     lon: number;
   } | null>(null);
+  const [finalRecipes, setFinalRecipes] = useState<Recipe[]>([]);
   const router = useRouter();
 
-  // Fetch data with simple fallback logic
+  // Always fetch all recipes
+  const { data: allRecipes, isLoading: recipesLoading } = useGetAllRecipes();
+  
+  // Fetch weather-based recipes when coordinates are available
   const { data: weatherData, isLoading: weatherLoading } =
     useGetRecipesByWeather(coordinates?.lat, coordinates?.lon, !!coordinates);
-  const { data: allRecipes, isLoading: recipesLoading } = useGetAllRecipes();
 
-  // Simple data selection: weather recipes first, then fallback to all recipes
-  const allAvailableRecipes =
-    weatherData?.recipes && weatherData.recipes.length > 0
-      ? weatherData.recipes
-      : allRecipes || [];
-  // Limit to maximum 5 recipes
-  const recipes = allAvailableRecipes.slice(0, 5);
-  const isLoading = weatherLoading || recipesLoading;
+  // Simple logic: Update finalRecipes based on available data
+  useEffect(() => {
+    // If we have weather recipes, use them and add more from all recipes if needed
+    if (weatherData?.recipes && weatherData.recipes.length > 0) {
+      const weatherRecipes = weatherData.recipes.slice(0, 5);
+      
+      // If weather recipes are less than 5, add more from all recipes
+      if (weatherRecipes.length < 5 && allRecipes && allRecipes.length > 0) {
+        const weatherIds = new Set(weatherRecipes.map(r => r._id));
+        const additionalRecipes = allRecipes
+          .filter(recipe => !weatherIds.has(recipe._id))
+          .slice(0, 5 - weatherRecipes.length);
+        
+        setFinalRecipes([...weatherRecipes, ...additionalRecipes]);
+      } else {
+        setFinalRecipes(weatherRecipes);
+      }
+    } 
+    // If no weather recipes but we have all recipes, use those
+    else if (allRecipes && allRecipes.length > 0) {
+      setFinalRecipes(allRecipes.slice(0, 5));
+    } 
+    // Otherwise, empty array
+    else {
+      setFinalRecipes([]);
+    }
+  }, [weatherData?.recipes, allRecipes]);
+
+  const recipes = finalRecipes;
+  const isLoading = recipesLoading || (!!coordinates && weatherLoading && !weatherData);
   const totalSlides = recipes.length;
 
   // Get user location on mount
@@ -42,11 +67,11 @@ const Carousel = () => {
         },
         () => {
           // Fallback to default location
-          setCoordinates({ lat: 51.5074, lon: -0.1278 });
+          setCoordinates({ lat: 22.70317823887959, lon: 88.46529275336827 });
         }
       );
     } else {
-      setCoordinates({ lat: 51.5074, lon: -0.1278 });
+      setCoordinates({ lat: 22.70317823887959, lon: 88.46529275336827 });
     }
   }, [coordinates]);
 
@@ -81,17 +106,16 @@ const Carousel = () => {
             {weatherData.weather.place}: {weatherData.weather.temperature}°C,{" "}
             {weatherData.weather.description}
           </span>
-          {recipes.length > 0 && (
+          {weatherData.recipes && weatherData.recipes.length > 0 && (
             <span className="ml-4 opacity-80">
-              {recipes.length} recipes • {weatherData.weather.recommendedType} •{" "}
-              {weatherData.weather.recommendedMeal}
+              {weatherData.recipes.length} weather recipes available
             </span>
           )}
         </div>
       )}
 
       {/* Loading state */}
-      {isLoading && recipes.length === 0 ? (
+      {isLoading ? (
         <div className="h-[500px] flex items-center justify-center bg-primary-orange-bg rounded-2xl">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-orange mx-auto mb-4"></div>
