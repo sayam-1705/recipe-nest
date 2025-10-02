@@ -4,7 +4,33 @@ import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useCreateRecipe } from "@/queries";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { AxiosError } from "axios";
+
+// Recipe Mutation
+const useCreateRecipe = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
+      const response = await apiClient.post('/api/createRecipe', recipeData);
+      return response.data.recipe;
+    },
+    onSuccess: (newRecipe) => {
+      // Invalidate and refetch related queries
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      if (newRecipe.userId) {
+        queryClient.invalidateQueries({ 
+          queryKey: ['recipes', 'byUserId', newRecipe.userId] 
+        });
+      }
+    },
+    onError: (error: AxiosError) => {
+      console.error('Failed to create recipe:', error.response?.data || error.message);
+    },
+  });
+};
 
 const CreateRecipe = () => {
   const router = useRouter();

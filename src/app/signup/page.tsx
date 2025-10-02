@@ -1,7 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { useSignup } from "@/queries";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { setAuthData } from "@/utils/auth";
+import { AxiosError } from "axios";
+
+// Auth Mutation
+const useSignup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (signupData: SignupData): Promise<{ token: string; user: { name: string; email: string; _id: string } }> => {
+      const response = await apiClient.post('/api/signup', signupData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      // Store auth data using the new helper function
+      setAuthData(data.token, data.user);
+      // Invalidate auth queries
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+    },
+    onError: (error: AxiosError) => {
+      console.error('Signup failed:', error.response?.data || error.message);
+    },
+  });
+};
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -50,6 +74,7 @@ const Signup = () => {
 
     try {
       await signupMutation.mutateAsync({
+        name,
         email,
         password,
         confirmPassword,

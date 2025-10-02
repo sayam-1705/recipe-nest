@@ -1,14 +1,5 @@
 import React from 'react';
 
-interface ErrorMessageProps {
-  title?: string;
-  message: string;
-  actionLabel?: string;
-  onAction?: () => void;
-  variant?: 'error' | 'warning' | 'info';
-  className?: string;
-}
-
 const ErrorMessage: React.FC<ErrorMessageProps> = ({
   title = 'Something went wrong',
   message,
@@ -83,14 +74,6 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
     </div>
   );
 };
-
-interface NotFoundProps {
-  title?: string;
-  message?: string;
-  actionLabel?: string;
-  onAction?: () => void;
-  showHome?: boolean;
-}
 
 const NotFound: React.FC<NotFoundProps> = ({
   title = '404 - Page Not Found',

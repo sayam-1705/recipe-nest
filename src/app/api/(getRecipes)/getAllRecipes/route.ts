@@ -1,19 +1,13 @@
-import { NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
+import { apiResponse } from "@/utils/api";
 
 export async function GET() {
   try {
     await dbConnect();
-
     const recipes = await Recipe.find();
-
-    return NextResponse.json({ recipes }, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching recipes:", error);
-    return NextResponse.json(
-      { error: "An error occurred while fetching recipes" },
-      { status: 500 }
-    );
+    return apiResponse.success({ recipes });
+  } catch {
+    return apiResponse.error("Failed to fetch recipes");
   }
 }

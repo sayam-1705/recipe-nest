@@ -1,8 +1,72 @@
 "use client";
 
-import { useCurrentUser, useLogout } from "@/queries";
 import Link from "next/link";
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+
+// Custom hook for getting current user data from localStorage
+const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ['auth', 'me'],
+    queryFn: () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const userData = localStorage.getItem('user');
+          const token = localStorage.getItem('authToken');
+          
+          // If no token, user is not authenticated
+          if (!token) {
+            return null;
+          }
+          
+          // If no user data but token exists, clear everything
+          if (!userData) {
+            localStorage.removeItem('authToken');
+            return null;
+          }
+          
+          // Try to parse user data
+          return JSON.parse(userData);
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          // Clear corrupted data
+          localStorage.removeItem('user');
+          localStorage.removeItem('authToken');
+          return null;
+        }
+      }
+      return null;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - allow some staleness but refresh periodically
+    retry: false, // Don't retry on error, just return null
+  });
+};
+
+const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      // Clear local storage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+      }
+    },
+    onSuccess: () => {
+      // Clear all cached data
+      queryClient.clear();
+      // Redirect to home page
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
+    },
+    onError: (error: AxiosError) => {
+      console.error('Logout failed:', error);
+    },
+  });
+};
 
 const AuthLinks = () => {
   const { data: user } = useCurrentUser();

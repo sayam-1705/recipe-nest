@@ -1,14 +1,46 @@
 'use client';
 
 import React from 'react';
-import { useCurrentUser } from '@/queries';
 import { useRouter } from 'next/navigation';
+import { useQuery } from "@tanstack/react-query";
 
-interface AuthGuardProps {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-  requireAuth?: boolean;
-}
+// Custom hook for getting current user data from localStorage
+const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ['auth', 'me'],
+    queryFn: () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const userData = localStorage.getItem('user');
+          const token = localStorage.getItem('authToken');
+          
+          // If no token, user is not authenticated
+          if (!token) {
+            return null;
+          }
+          
+          // If no user data but token exists, clear everything
+          if (!userData) {
+            localStorage.removeItem('authToken');
+            return null;
+          }
+          
+          // Try to parse user data
+          return JSON.parse(userData);
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          // Clear corrupted data
+          localStorage.removeItem('user');
+          localStorage.removeItem('authToken');
+          return null;
+        }
+      }
+      return null;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - allow some staleness but refresh periodically
+    retry: false, // Don't retry on error, just return null
+  });
+};
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ 
   children, 

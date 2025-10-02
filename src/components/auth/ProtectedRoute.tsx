@@ -4,12 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated, getUser } from '@/utils/auth';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  redirectTo?: string;
-  showFallback?: boolean;
-}
-
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   redirectTo = '/login',

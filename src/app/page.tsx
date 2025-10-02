@@ -4,8 +4,40 @@ import Carousel from "@/components/carousel/Carousel";
 import Footer from "@/components/footer/Footer";
 import HowItWorks from "@/components/howItWorks/HowItWorks";
 import Menu from "@/components/menu/Menu";
-import { serverApi } from "@/lib/server-api";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+// Helper function to handle API requests
+const fetchWithErrorHandling = async (
+  url: string,
+  options: RequestInit = {},
+  fallbackValue: Recipe[] = []
+) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${url}`, options);
+    
+    if (!response.ok) {
+      if (response.status === 404 && fallbackValue === null) return null;
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.recipes || data.recipe || fallbackValue;
+  } catch (error) {
+    console.error(`API Error for ${url}:`, error);
+    return fallbackValue;
+  }
+};
+
+// Server-side API functions for SSR
+const serverApi = {
+  getAllRecipes: (): Promise<Recipe[]> =>
+    fetchWithErrorHandling("/api/getAllRecipes", {
+      cache: "force-cache",
+      next: { revalidate: 300 },
+    }),
+};
 
 export const metadata: Metadata = {
   title: "RecipeNest - Discover Amazing Recipes",
@@ -20,30 +52,19 @@ export const metadata: Metadata = {
 export const revalidate = 300; // Revalidate every 5 minutes
 
 export default async function Home() {
-  // Fetch initial data for SSR
   const initialRecipes = await serverApi.getAllRecipes();
 
+  const components = [
+    <Carousel key="carousel" />,
+    <HowItWorks key="howItWorks" />,
+    <Menu key="menu" initialRecipes={initialRecipes} />,
+    <About key="about" />,
+    <Footer key="footer" />
+  ];
+
   return (
-    <>
-      <ErrorBoundary>
-        <Carousel />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <HowItWorks />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <Menu initialRecipes={initialRecipes} />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <About />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <Footer />
-      </ErrorBoundary>
-    </>
+    <ErrorBoundary>
+      {components}
+    </ErrorBoundary>
   );
 }

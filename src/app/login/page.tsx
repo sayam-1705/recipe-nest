@@ -2,7 +2,31 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useLogin } from "@/queries";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { setAuthData } from "@/utils/auth";
+import { AxiosError } from "axios";
+
+// Auth Mutation
+const useLogin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (loginData: LoginData): Promise<{ token: string; user: { name: string; email: string; _id: string } }> => {
+      const response = await apiClient.post('/api/login', loginData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      // Store auth data using the new helper function
+      setAuthData(data.token, data.user);
+      // Invalidate auth queries
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+    },
+    onError: (error: AxiosError) => {
+      console.error('Login failed:', error.response?.data || error.message);
+    },
+  });
+};
 
 const Login = () => {
   const router = useRouter();

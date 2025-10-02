@@ -2,7 +2,44 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useGetUserById, useDeleteRecipe } from "@/queries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { AxiosError } from "axios";
+
+// User Query
+const useGetUserById = (userId: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ['users', 'byId', userId],
+    queryFn: async (): Promise<{ name: string; email: string; _id: string }> => {
+      const response = await apiClient.get(`/api/getUserById/${userId}`);
+      return response.data.user;
+    },
+    enabled: enabled && !!userId,
+  });
+};
+
+// Recipe Mutation
+const useDeleteRecipe = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (recipeId: string): Promise<void> => {
+      await apiClient.delete(`/api/deleteRecipe/${recipeId}`);
+    },
+    onSuccess: (_, recipeId) => {
+      // Remove the recipe from cache
+      queryClient.removeQueries({ queryKey: ['recipes', 'byId', recipeId] });
+      // Invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === 'recipes'
+      });
+    },
+    onError: (error: AxiosError) => {
+      console.error('Failed to delete recipe:', error.response?.data || error.message);
+    },
+  });
+};
 
 const RecipeCard = ({
   isModified = false,

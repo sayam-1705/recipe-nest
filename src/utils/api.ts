@@ -1,58 +1,50 @@
 import axios from "axios";
+import { NextResponse } from "next/server";
 
-// Get the base URL for client-side API calls
-function getClientBaseUrl() {
-  // In production on Vercel, use the current origin
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  
-  // For SSR, use the environment variable
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL;
-  }
-  
-  // Fallback to localhost for development
-  return 'http://localhost:3000';
-}
-
-// Create axios instance with base configuration
 export const apiClient = axios.create({
-  baseURL: getClientBaseUrl(),
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10 second timeout for Vercel
+  baseURL: '/api',
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 10000,
 });
 
-// Request interceptor to add auth token if available
-apiClient.interceptors.request.use(
-  (config) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+apiClient.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('authToken');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+});
 
-// Response interceptor for global error handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
-      }
+    if (error.response?.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
+
+export const apiResponse = {
+  success: (data: unknown, status: number = 200) => 
+    NextResponse.json(data, { status }),
+  
+  error: (message: string, status: number = 500) => {
+    console.error(`API Error (${status}):`, message);
+    return NextResponse.json({ error: message }, { status });
+  },
+  
+  notFound: (resource: string = "Resource") => 
+    NextResponse.json({ error: `${resource} not found` }, { status: 404 }),
+  
+  badRequest: (message: string = "Invalid request") => 
+    NextResponse.json({ error: message }, { status: 400 }),
+  
+  unauthorized: (message: string = "Authentication required") => 
+    NextResponse.json({ error: message }, { status: 401 }),
+  
+  forbidden: (message: string = "Access denied") => 
+    NextResponse.json({ error: message }, { status: 403 })
+};

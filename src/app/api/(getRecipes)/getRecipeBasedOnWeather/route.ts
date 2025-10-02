@@ -3,6 +3,68 @@ import { getWeatherResponse } from "./getWeatherResponse";
 import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
 
+// Weather condition helpers
+const isRainy = (desc: string, details: string) => 
+  ['rain', 'drizzle', 'shower'].some(term => 
+    desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
+  );
+
+const isClear = (desc: string) => 
+  ['clear', 'sun'].some(term => desc.toLowerCase().includes(term));
+
+const isSnowy = (desc: string, details: string) =>
+  ['snow', 'blizzard'].some(term => 
+    desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
+  );
+
+// Recipe recommendation logic
+const getRecipeTypeFromWeather = (temp: number, desc: string, details: string): string => {
+  if (isRainy(desc, details)) return "Soup";
+  if (temp > 30) return "Beverage";
+  if (temp > 25) return "Salad";
+  if (temp < 5) return "Stew";
+  if (temp < 10) return "Soup";
+  if (isClear(desc)) return "Grilled";
+  if (isSnowy(desc, details)) return "Stew";
+  return "Main Course";
+};
+
+const getMealByCurrentTime = (): string => {
+  const hour = new Date().getHours();
+  if (hour >= 8 && hour < 11) return "Breakfast";
+  if (hour >= 11 && hour < 16) return "Lunch";
+  if (hour >= 16 && hour < 20) return "Tea Time";
+  if (hour >= 20 && hour < 23) return "Dinner";
+  if (hour >= 23 || hour < 1) return "Supper";
+  return "Late Night";
+};
+
+const getDifficultyFromWeather = (temp: number, desc: string): string => {
+  if (isClear(desc) && temp > 20) return "Hard";
+  if (isRainy(desc, "") || isSnowy(desc, "") || temp < 10) return "Easy";
+  return "Medium";
+};
+
+const getSeasonFromWeather = (temp: number, humidity: number): string => {
+  let baseSeason = "";
+  if (temp < 5) baseSeason = "Winter";
+  else if (temp < 15) baseSeason = "Spring";
+  else if (temp < 25) baseSeason = "Summer";
+  else baseSeason = "Autumn";
+
+  if (humidity > 80) return temp > 10 ? "Summer" : baseSeason;
+  if (humidity < 30) {
+    if (temp > 20) return "Summer";
+    if (temp > 10) return "Spring";
+    return "Winter";
+  }
+  return baseSeason;
+};
+
+// MongoDB query helpers
+const buildRegexFilter = (field: string, value: string) => 
+  ({ [field]: { $regex: value, $options: "i" } });
+
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
@@ -31,211 +93,79 @@ export async function POST(req: NextRequest) {
 
     console.log(`Weather data received: ${temperature}°C, ${weatherDescription} in ${place}`);
 
-    // Determine recipe type based on weather condition
-    let type = "";
-    // Rain conditions suggest warm, comforting foods
-    if (
-      weatherDescription.toLowerCase().includes("rain") ||
-      weatherDetails.toLowerCase().includes("rain") ||
-      weatherDescription.toLowerCase().includes("drizzle")
-    ) {
-      type = "Soup"; // Comfort food for rainy days
-    }
-    // Hot weather suggests cool, refreshing foods
-    else if (temperature > 30) {
-      type = "Beverage"; // Cold drinks for very hot days
-    }
-    // Warm weather suggests light foods
-    else if (temperature > 25) {
-      type = "Salad"; // Light food for hot days
-    }
-    // Cold weather suggests hearty, warming foods
-    else if (temperature < 5) {
-      type = "Stew"; // Warm, hearty food for very cold days
-    }
-    // Cool weather suggests warming foods
-    else if (temperature < 10) {
-      type = "Soup"; // Warm food for cold days
-    }
-    // Moderate temperature with clear skies - good for outdoor activities
-    else if (
-      weatherDescription.toLowerCase().includes("clear") ||
-      weatherDescription.toLowerCase().includes("sun")
-    ) {
-      type = "Main Course"; // Good weather for proper meals
-    }
-    // Cloudy but mild weather - good for comfort foods
-    else if (
-      weatherDescription.toLowerCase().includes("cloud") &&
-      temperature > 15
-    ) {
-      type = "Bread & Bakery"; // Baking is nice on cloudy days
-    }
-    // Special cases for certain weathers
-    else if (
-      weatherDescription.toLowerCase().includes("fog") ||
-      weatherDescription.toLowerCase().includes("mist")
-    ) {
-      type = "Dessert"; // Sweet comfort for gloomy weather
-    } else if (weatherDescription.toLowerCase().includes("snow")) {
-      type = "Beverage"; // Warm drinks for snowy days
-    }
-    // For humid conditions
-    else if (humidity > 80) {
-      type = "Appetizer"; // Light starters for humid weather
-    }
-    // For windy conditions
-    else if (windSpeed > 20) {
-      type = "Side Dish"; // Simpler foods for windy days
-    }
-    // Default option
-    else {
-      type = "Snack"; // Default for moderate weather
-    }
+    // Get recipe recommendations based on weather
+    const type = getRecipeTypeFromWeather(temperature, weatherDescription, weatherDetails);
+    const meal = getMealByCurrentTime();
+    const difficulty = getDifficultyFromWeather(temperature, weatherDescription);
+    const season = getSeasonFromWeather(temperature, humidity);
 
-    // Get current hour to determine meal time
-    const currentHour = new Date().getHours();
-    let meal = "";
-    if (currentHour >= 8 && currentHour < 11) {
-      meal = "Breakfast";
-    } else if (currentHour >= 11 && currentHour < 16) {
-      meal = "Lunch";
-    } else if (currentHour >= 16 && currentHour < 20) {
-      meal = "Tea Time";
-    } else if (currentHour >= 20 && currentHour < 23) {
-      meal = "Dinner";
-    } else if (currentHour >= 23 && currentHour < 1) {
-      meal = "Supper";
-    } else {
-      meal = "Late Night";
-    }
+    console.log(`Recipe recommendations: type=${type}, meal=${meal}, difficulty=${difficulty}, season=${season}`);
 
-    // Determine recipe difficulty based on weather conditions
-    let difficulty = "";
-    if (
-      weatherDescription.toLowerCase().includes("clear") &&
-      temperature > 20
-    ) {
-      difficulty = "Hard"; // Nice weather for trying challenging recipes
-    } else if (
-      weatherDescription.toLowerCase().includes("rain") ||
-      weatherDescription.toLowerCase().includes("snow") ||
-      temperature < 10
-    ) {
-      difficulty = "Easy"; // Simple comfort food for bad weather
-    } else {
-      difficulty = "Medium";
-    }
-
-    // Better season determination
-    let season = "";
-    // Base season determination on temperature
-    let baseSeason = "";
-    if (temperature < 5) {
-      baseSeason = "Winter";
-    } else if (temperature >= 5 && temperature < 15) {
-      baseSeason = "Spring";
-    } else if (temperature >= 15 && temperature < 25) {
-      baseSeason = "Summer";
-    } else {
-      baseSeason = "Autumn";
-    }
-
-    // Adjust season based on humidity
-    if (humidity > 80) {
-      // High humidity makes it feel more like summer/rainy season
-      if (temperature > 10) {
-        season = "Summer";
-      } else {
-        season = baseSeason; // Keep winter for cold temperatures
-      }
-    } else if (humidity < 30) {
-      // Very dry conditions
-      if (temperature > 20) {
-        season = "Summer"; // Hot and dry stays summer
-      } else if (temperature > 10) {
-        season = "Spring"; // Mild and dry feels like spring
-      } else {
-        season = "Winter"; // Cold and dry feels like winter
-      }
-    } else {
-      // Moderate humidity, use base temperature season
-      season = baseSeason;
-    }
-
-    // Build MongoDB query with progressive fallback strategy
+    // Progressive recipe search with fallback strategies
     let recipes: Recipe[] = [];
     let searchStrategy = "exact";
-    
-    // Strategy 1: Try with all criteria (AND)
-    const exactQuery: Record<string, unknown> = {};
-    if (type) exactQuery.type = { $regex: type, $options: "i" };
-    if (meal) exactQuery.meal = { $regex: meal, $options: "i" };
-    if (difficulty) exactQuery.difficulty = { $regex: difficulty, $options: "i" };
-    if (season) exactQuery.season = { $regex: season, $options: "i" };
 
-    recipes = await Recipe.find(exactQuery).limit(20); // Increased limit to 20
-    console.log(`Strategy 1 - Found ${recipes.length} recipes with exact criteria: type=${type}, meal=${meal}, difficulty=${difficulty}, season=${season}`);
+    // Strategy 1: Exact match with all criteria
+    const exactQuery = {
+      ...(type && buildRegexFilter("type", type)),
+      ...(meal && buildRegexFilter("meal", meal)),
+      ...(difficulty && buildRegexFilter("difficulty", difficulty)),
+      ...(season && buildRegexFilter("season", season)),
+    };
+    recipes = await Recipe.find(exactQuery).limit(20);
+    console.log(`Strategy 1 - Found ${recipes.length} recipes with exact criteria`);
 
-    // Strategy 2: If few results, try with OR conditions for main criteria
+    // Strategy 2: Flexible search with OR conditions
     if (recipes.length < 5) {
-      console.log("Few exact matches found, trying OR strategy...");
+      console.log("Trying flexible OR strategy...");
       searchStrategy = "flexible";
       
       const orConditions = [
-        ...(type ? [{ type: { $regex: type, $options: "i" } }] : []),
-        ...(season ? [{ season: { $regex: season, $options: "i" } }] : []),
-        ...(meal ? [{ meal: { $regex: meal, $options: "i" } }] : []),
+        ...(type ? [buildRegexFilter("type", type)] : []),
+        ...(season ? [buildRegexFilter("season", season)] : []),
+        ...(meal ? [buildRegexFilter("meal", meal)] : []),
       ];
       
-      const orQuery: Record<string, unknown> = {
-        $or: orConditions
+      const orQuery = {
+        ...(orConditions.length > 0 && { $or: orConditions }),
+        ...(difficulty && orConditions.length > 0 && buildRegexFilter("difficulty", difficulty))
       };
       
-      // Add difficulty as a secondary filter if we have OR matches
-      if (difficulty && orConditions.length > 0) {
-        orQuery.difficulty = { $regex: difficulty, $options: "i" };
-      }
-      
       const flexibleRecipes = await Recipe.find(orQuery).limit(20);
-      console.log(`Strategy 2 - Found ${flexibleRecipes.length} recipes with flexible criteria`);
       
-      // Merge results, prioritizing exact matches
-      const exactIds = recipes.map(r => r._id.toString());
-      const additionalRecipes = flexibleRecipes.filter(r => !exactIds.includes(r._id.toString()));
-      recipes = [...recipes, ...additionalRecipes].slice(0, 20);
+      const existingIds = new Set(recipes.map(r => r._id.toString()));
+      const newRecipes = flexibleRecipes.filter(r => !existingIds.has(r._id.toString()));
+      recipes = [...recipes, ...newRecipes].slice(0, 20);
+      console.log(`Strategy 2 - Total: ${recipes.length} recipes with flexible criteria`);
     }
 
-    // Strategy 3: If still few results, try just type OR season
+    // Strategy 3: Broad search with main criteria only
     if (recipes.length < 3) {
-      console.log("Still few matches, trying broader search...");
+      console.log("Trying broad search...");
       searchStrategy = "broad";
       
-      const broadQuery: Record<string, unknown> = {
+      const broadQuery = {
         $or: [
-          ...(type ? [{ type: { $regex: type, $options: "i" } }] : []),
-          ...(season ? [{ season: { $regex: season, $options: "i" } }] : []),
+          ...(type ? [buildRegexFilter("type", type)] : []),
+          ...(season ? [buildRegexFilter("season", season)] : []),
         ]
       };
       
       const broadRecipes = await Recipe.find(broadQuery).limit(20);
-      console.log(`Strategy 3 - Found ${broadRecipes.length} recipes with broad criteria`);
       
-      // Merge results, prioritizing more specific matches
-      const existingIds = recipes.map(r => r._id.toString());
-      const additionalRecipes = broadRecipes.filter(r => !existingIds.includes(r._id.toString()));
-      recipes = [...recipes, ...additionalRecipes].slice(0, 20);
+      const existingIds = new Set(recipes.map(r => r._id.toString()));
+      const newRecipes = broadRecipes.filter(r => !existingIds.has(r._id.toString()));
+      recipes = [...recipes, ...newRecipes].slice(0, 20);
+      console.log(`Strategy 3 - Total: ${recipes.length} recipes with broad criteria`);
     }
 
-    // Strategy 4: If still no results, get random recipes
+    // Strategy 4: Random fallback
     if (recipes.length === 0) {
-      console.log("No matches found with any criteria, getting random recipes...");
+      console.log("Getting random recipes as fallback...");
       searchStrategy = "random";
       recipes = await Recipe.aggregate([{ $sample: { size: 10 } }]);
-      console.log(`Strategy 4 - Found ${recipes.length} random recipes as fallback`);
+      console.log(`Strategy 4 - Found ${recipes.length} random recipes`);
     }
-
-    console.log(`Final result: ${recipes.length} recipes using ${searchStrategy} strategy`);
 
     return NextResponse.json({
       recipes: recipes,

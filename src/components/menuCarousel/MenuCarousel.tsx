@@ -3,12 +3,6 @@
 import RecipeCard from "../recipeCard/RecipeCard";
 import { useState, useRef, useEffect, useCallback } from "react";
 
-interface MenuCarouselProps {
-  totalCards?: number;
-  cardWidth?: number;
-  recipes: Recipe[];
-}
-
 const MenuCarousel: React.FC<MenuCarouselProps> = ({ 
   totalCards = 3, 
   cardWidth = 320 ,

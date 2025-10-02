@@ -3,7 +3,82 @@
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRef } from "react";
-import { useGetRecipesByUserId, useCurrentUser, useDeleteUser } from "@/queries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { AxiosError } from "axios";
+
+// Recipe Query
+const useGetRecipesByUserId = (userId: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ['recipes', 'byUserId', userId],
+    queryFn: async (): Promise<Recipe[]> => {
+      const response = await apiClient.get(`/api/getRecipeByUserId/${userId}`);
+      return response.data.recipes;
+    },
+    enabled: enabled && !!userId,
+  });
+};
+
+// Custom hook for getting current user data from localStorage
+const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ['auth', 'me'],
+    queryFn: () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const userData = localStorage.getItem('user');
+          const token = localStorage.getItem('authToken');
+          
+          // If no token, user is not authenticated
+          if (!token) {
+            return null;
+          }
+          
+          // If no user data but token exists, clear everything
+          if (!userData) {
+            localStorage.removeItem('authToken');
+            return null;
+          }
+          
+          // Try to parse user data
+          return JSON.parse(userData);
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          // Clear corrupted data
+          localStorage.removeItem('user');
+          localStorage.removeItem('authToken');
+          return null;
+        }
+      }
+      return null;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - allow some staleness but refresh periodically
+    retry: false, // Don't retry on error, just return null
+  });
+};
+
+// User Mutation
+const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (email: string): Promise<void> => {
+      await apiClient.delete(`/api/delete/${email}`);
+    },
+    onSuccess: () => {
+      // Clear auth data
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+      }
+      // Clear all queries
+      queryClient.clear();
+    },
+    onError: (error: AxiosError) => {
+      console.error('Failed to delete user:', error.response?.data || error.message);
+    },
+  });
+};
 
 const Profile = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);

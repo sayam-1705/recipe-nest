@@ -1,62 +1,38 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { z } from "zod";
-import { validatePassword } from "../validations";
+import { schemas } from "../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-
-const reqSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-});
+import { apiResponse } from "@/utils/api";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
 
     const body = await req.json();
-
-    const bodyData = reqSchema.safeParse(body);
-    if (!bodyData.success) {
-      return NextResponse.json({ error: bodyData.error }, { status: 400 });
+    const result = schemas.signupSchema.safeParse(body);
+    
+    if (!result.success) {
+      return apiResponse.badRequest(result.error.errors[0].message);
     }
 
-    const { name, email, password } = bodyData.data;
+    const { name, email, password } = result.data;
 
-    if (!validatePassword(password)) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
-    }
-
-    const userExists = await User.findOne({ email: email });
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
     if (userExists) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 }
-      );
+      return apiResponse.badRequest("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-    return NextResponse.json(
-      {
-        message: "User created successfully",
-        user: { name: newUser.name, email: newUser.email },
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Signup error:", error);
-    return NextResponse.json(
-      { error: "An error occurred during signup" },
-      { status: 500 }
-    );
+    return apiResponse.success({
+      message: "User created successfully",
+      user: { name: newUser.name, email: newUser.email },
+    }, 201);
+  } catch {
+    return apiResponse.error("Signup failed");
   }
 }

@@ -1,13 +1,81 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Recipe } from "@/types/global";
 import NutritionChart from "@/components/nutritionChart/NutritionChart";
-import { serverApi, generateRecipeJsonLd } from "@/lib/server-api";
 
-interface PageProps {
-  params: Promise<{ recipeId: string }>;
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+// Helper function to handle API requests
+const fetchWithErrorHandling = async (
+  url: string,
+  options: RequestInit = {},
+  fallbackValue: Recipe[] | Recipe | null = []
+) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${url}`, options);
+    
+    if (!response.ok) {
+      if (response.status === 404 && fallbackValue === null) return null;
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.recipes || data.recipe || fallbackValue;
+  } catch (error) {
+    console.error(`API Error for ${url}:`, error);
+    return fallbackValue;
+  }
+};
+
+// Server-side API functions for SSR
+const serverApi = {
+  getAllRecipes: (): Promise<Recipe[]> =>
+    fetchWithErrorHandling("/api/getAllRecipes", {
+      cache: "force-cache",
+      next: { revalidate: 300 },
+    }),
+
+  getRecipeById: (recipeId: string): Promise<Recipe | null> =>
+    fetchWithErrorHandling(
+      `/api/getRecipeById/${recipeId}`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 300 },
+      },
+      null
+    ),
+};
+
+// JSON-LD structured data for SEO
+const generateRecipeJsonLd = (recipe: Recipe) => ({
+  "@context": "https://schema.org/",
+  "@type": "Recipe",
+  name: recipe.name,
+  image: recipe.image,
+  description: `A delicious ${recipe.type} recipe perfect for ${recipe.meal}`,
+  recipeCategory: recipe.type,
+  recipeCuisine: recipe.dietaryType,
+  prepTime: recipe.time,
+  recipeYield: `${recipe.servings} servings`,
+  difficulty: recipe.difficulty,
+  recipeIngredient: recipe.ingredients.map(
+    (ing) => `${ing.quantity} ${ing.name}`
+  ),
+  recipeInstructions: recipe.instructions.map((instruction, index) => ({
+    "@type": "HowToStep",
+    name: `Step ${index + 1}`,
+    text: instruction,
+  })),
+  ...(recipe.nutritionPerServing && {
+    nutrition: {
+      "@type": "NutritionInformation",
+      calories: recipe.nutritionPerServing.calories || recipe.nutritionPerServing.ENERC_KCAL,
+      proteinContent: recipe.nutritionPerServing.PROCNT_KCAL,
+      fatContent: recipe.nutritionPerServing.FAT_KCAL,
+      carbohydrateContent: recipe.nutritionPerServing.CHOCDF_KCAL,
+    },
+  }),
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { recipeId } = await params;

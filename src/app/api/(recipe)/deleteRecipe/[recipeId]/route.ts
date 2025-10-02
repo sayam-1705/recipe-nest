@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
-import mongoose from "mongoose";
 import { auth } from "@/app/api/auth";
+import { apiResponse } from "@/utils/api";
+import { validate } from "@/utils/auth";
 
 export async function DELETE(
   req: NextRequest,
@@ -13,44 +14,27 @@ export async function DELETE(
 
     const authData = await auth(req);
     if (!authData) {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      );
+      return apiResponse.unauthorized();
     }
 
     const { recipeId } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
-      return NextResponse.json(
-        { error: "Invalid recipe ID format" },
-        { status: 400 }
-      );
+    if (!validate.objectId(recipeId)) {
+      return apiResponse.badRequest("Invalid recipe ID format");
     }
 
     const existingRecipe = await Recipe.findById(recipeId);
     if (!existingRecipe) {
-      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+      return apiResponse.notFound("Recipe");
     }
 
     if (existingRecipe.userId.toString() !== authData.userId) {
-      return NextResponse.json(
-        { error: "You can only delete your own recipes" },
-        { status: 403 }
-      );
+      return apiResponse.forbidden("You can only delete your own recipes");
     }
 
     await Recipe.deleteOne({ _id: recipeId });
-
-    return NextResponse.json(
-      { message: "Recipe deleted successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Delete recipe error:", error);
-    return NextResponse.json(
-      { error: "An error occurred while deleting the recipe" },
-      { status: 500 }
-    );
+    return apiResponse.success({ message: "Recipe deleted successfully" });
+  } catch {
+    return apiResponse.error("Failed to delete recipe");
   }
 }

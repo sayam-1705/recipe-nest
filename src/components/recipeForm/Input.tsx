@@ -1,20 +1,5 @@
 import React from "react";
 
-interface InputProps {
-  label: string;
-  value: string | number;
-  onChange: (value: string | number) => void;
-  type?: "text" | "number" | "email" | "password" | "url" | "tel";
-  placeholder?: string;
-  className?: string;
-  containerClassName?: string;
-  disabled?: boolean;
-  required?: boolean;
-  min?: number;
-  max?: number;
-  name?: string;
-}
-
 const Input: React.FC<InputProps> = ({
   label,
   value,

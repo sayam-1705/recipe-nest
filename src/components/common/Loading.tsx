@@ -1,11 +1,5 @@
 import React from 'react';
 
-interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  color?: string;
-  className?: string;
-}
-
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   color = 'text-primary-orange',
@@ -44,12 +38,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-interface LoadingSectionProps {
-  message?: string;
-  fullPage?: boolean;
-  children?: React.ReactNode;
-}
-
 const LoadingSection: React.FC<LoadingSectionProps> = ({
   message = 'Loading...',
   fullPage = false,
@@ -72,14 +60,6 @@ const LoadingSection: React.FC<LoadingSectionProps> = ({
     </div>
   );
 };
-
-interface SkeletonProps {
-  className?: string;
-  variant?: 'text' | 'rectangular' | 'circular';
-  width?: string | number;
-  height?: string | number;
-  animation?: 'pulse' | 'wave';
-}
 
 const Skeleton: React.FC<SkeletonProps> = ({
   className = '',

@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-// This endpoint can be called to revalidate specific paths
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { path, tag, secret } = body;
 
-    // Verify the secret token to prevent unauthorized revalidation
     if (secret !== process.env.REVALIDATION_SECRET) {
       return NextResponse.json(
         { message: 'Invalid secret' },
@@ -16,7 +14,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (path) {
-      // Revalidate specific path
       revalidatePath(path);
       return NextResponse.json({ 
         message: `Path ${path} revalidated successfully`,
@@ -26,7 +23,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (tag) {
-      // Revalidate by tag
       revalidateTag(tag);
       return NextResponse.json({ 
         message: `Tag ${tag} revalidated successfully`,
@@ -35,7 +31,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Revalidate common paths
     const pathsToRevalidate = [
       '/',
       '/api/getAllRecipes',
@@ -64,10 +59,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Cron job endpoint for periodic revalidation
 export async function GET() {
   try {
-    // This will run every 6 hours as configured in vercel.json
     const pathsToRevalidate = [
       '/',
       '/api/getAllRecipes',

@@ -1,61 +1,42 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { z } from "zod";
-import { validatePassword } from "../validations";
+import { schemas } from "../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { createJwt } from "../helpers";
-
-const reqSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-});
+import { apiResponse } from "@/utils/api";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
 
     const body = await req.json();
-
-    const bodyData = reqSchema.safeParse(body);
-    if (!bodyData.success) {
-      return NextResponse.json({ error: bodyData.error }, { status: 400 });
+    const result = schemas.loginSchema.safeParse(body);
+    
+    if (!result.success) {
+      return apiResponse.badRequest(result.error.errors[0].message);
     }
 
-    const { email, password } = bodyData.data;
+    const { email, password } = result.data;
 
-    if (!validatePassword(password)) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
-    }
-
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return apiResponse.notFound("User");
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return NextResponse.json(
-        { error: "Invalid Credentials" },
-        { status: 401 }
-      );
+      return apiResponse.unauthorized("Invalid credentials");
     }
 
     const token = createJwt(user._id, email);
 
-    return NextResponse.json(
-      {
-        message: "Login successful",
-        user: { id: user._id, name: user.name, email: user.email },
-        token,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Login error:", error);
-    return NextResponse.json(
-      { error: "An error occurred during login" },
-      { status: 500 }
-    );
+    return apiResponse.success({
+      message: "Login successful",
+      user: { id: user._id, name: user.name, email: user.email },
+      token,
+    });
+  } catch {
+    return apiResponse.error("Login failed");
   }
 }

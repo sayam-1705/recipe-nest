@@ -5,38 +5,7 @@ import Image from "next/image";
 import Input from "./Input";
 import Select from "./Select";
 
-interface FormData {
-  name: string;
-  type: string;
-  meal: string;
-  time: string;
-  difficulty: string;
-  season: string;
-  occasion: string;
-  dietaryType: string;
-  servings: number;
-  ingredients: { name: string; quantity: string }[];
-  instructions: string[];
-  image: File | string | null; // Allow both File (new upload) and string (existing base64)
-}
-
-interface RecipeFormProps {
-  initialData?: Partial<FormData> & { _id?: string }; // Add _id for update forms
-  onFormDataChange?: (data: FormData) => void;
-  onSubmit?: (data: FormData) => void;
-  submitButtonText?: string;
-  isSubmitting?: boolean;
-  staticData?: {
-    dietaryTypes: string[];
-    types: string[];
-    meals: string[];
-    difficulties: string[];
-    seasons: string[];
-    occasions: string[];
-  };
-}
-
-const RecipeForm = ({
+const RecipeForm: React.FC<RecipeFormProps> = ({
   initialData,
   onFormDataChange,
   onSubmit,
@@ -50,8 +19,8 @@ const RecipeForm = ({
     seasons: ["Spring", "Summer", "Fall", "Winter", "All Seasons"],
     occasions: ["Everyday", "Party", "Holiday", "Special", "Quick Meal"],
   },
-}: RecipeFormProps) => {
-  const [formData, setFormData] = useState<FormData>({
+}) => {
+  const [formData, setFormData] = useState<RecipeFormData>({
     name: initialData?.name || "",
     type: initialData?.type || "",
     meal: initialData?.meal || "",
@@ -159,7 +128,7 @@ const RecipeForm = ({
     }, 150);
   };
 
-  const handleInputChange = (field: keyof FormData, value: string | number) => {
+  const handleInputChange = (field: keyof RecipeFormData, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

@@ -5,18 +5,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, ChartEvent, Activ
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
-interface NutritionData {
-  calories: number;
-  ENERC_KCAL: number;
-  PROCNT_KCAL: number;
-  FAT_KCAL: number;
-  CHOCDF_KCAL: number;
-}
-
-interface NutritionChartProps {
-  nutritionData: NutritionData;
-}
-
 const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
   // Ensure all values are numbers and provide fallbacks
   const safeNutritionData = {

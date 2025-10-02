@@ -5,13 +5,50 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRecipeOwnership } from "@/hooks/useProtectedRoute";
 import React, { use, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useGetRecipeById, useUpdateRecipe } from "@/queries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+import { AxiosError } from "axios";
 
-interface UpdateRecipeProps {
-  params: Promise<{
-    recipeId: string;
-  }>;
-}
+// Recipe Query
+const useGetRecipeById = (recipeId: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ['recipes', 'byId', recipeId],
+    queryFn: async (): Promise<Recipe> => {
+      const response = await apiClient.get(`/api/getRecipeById/${recipeId}`);
+      return response.data.recipe;
+    },
+    enabled: enabled && !!recipeId,
+  });
+};
+
+// Recipe Mutation
+const useUpdateRecipe = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ recipeId, recipeData }: { recipeId: string; recipeData: UpdateRecipeData }): Promise<Recipe> => {
+      const response = await apiClient.put(`/api/updateRecipe/${recipeId}`, recipeData);
+      return response.data.recipe;
+    },
+    onSuccess: (updatedRecipe, variables) => {
+      // Update the specific recipe in cache
+      queryClient.setQueryData(
+        ['recipes', 'byId', variables.recipeId],
+        updatedRecipe
+      );
+      // Invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      if (updatedRecipe.userId) {
+        queryClient.invalidateQueries({ 
+          queryKey: ['recipes', 'byUserId', updatedRecipe.userId] 
+        });
+      }
+    },
+    onError: (error: AxiosError) => {
+      console.error('Failed to update recipe:', error.response?.data || error.message);
+    },
+  });
+};
 
 const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   const resolvedParams = use(params);

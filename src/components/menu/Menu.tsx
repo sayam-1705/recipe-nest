@@ -1,14 +1,22 @@
 "use client"
 
 import MenuCarousel from "../menuCarousel/MenuCarousel";
-import { useGetAllRecipes } from "@/queries";
 import { Skeleton } from "../common/Loading";
 import ErrorMessage from "../common/Error";
-import { Recipe } from "@/types/global";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
 
-interface MenuProps {
-  initialRecipes?: Recipe[];
-}
+// Recipe Query
+const useGetAllRecipes = () => {
+  return useQuery({
+    queryKey: ['recipes'],
+    queryFn: async (): Promise<Recipe[]> => {
+      const response = await apiClient.get('/api/getAllRecipes');
+      return response.data.recipes;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
 
 const MenuSkeleton = () => (
   <div className="space-y-4">

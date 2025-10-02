@@ -1,18 +1,5 @@
 import axios from "axios";
 
-type WeatherResponseProps = (
-  lat: number,
-  lon: number
-) => Promise<{
-  temperature: number;
-  place: string;
-  weatherDescription: string;
-  weatherDetails: string;
-  humidity: number;
-  windSpeed: number;
-  clouds: number;
-}>;
-
 export const getWeatherResponse: WeatherResponseProps = async (lat, lon) => {
   try {
     if (!process.env.WEATHER_API_KEY)

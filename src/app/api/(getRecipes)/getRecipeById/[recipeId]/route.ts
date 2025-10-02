@@ -1,7 +1,8 @@
 import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
-import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { apiResponse } from "@/utils/api";
+import { validate } from "@/utils/auth";
 
 export async function GET(
   req: NextRequest,
@@ -9,27 +10,19 @@ export async function GET(
 ) {
   try {
     await dbConnect();
-
     const { recipeId } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
-      return NextResponse.json(
-        { error: "Invalid recipe ID format" },
-        { status: 400 }
-      );
+    if (!validate.objectId(recipeId)) {
+      return apiResponse.badRequest("Invalid recipe ID format");
     }
 
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
-      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+      return apiResponse.notFound("Recipe");
     }
 
-    return NextResponse.json({ recipe }, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching recipe:", error);
-    return NextResponse.json(
-      { error: "An error occurred while fetching the recipe" },
-      { status: 500 }
-    );
+    return apiResponse.success({ recipe });
+  } catch {
+    return apiResponse.error("Failed to fetch recipe");
   }
 }

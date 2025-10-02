@@ -3,7 +3,37 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useGetRecipesByWeather, useGetAllRecipes } from "@/queries";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/utils/api";
+
+// Recipe Queries
+const useGetAllRecipes = () => {
+  return useQuery({
+    queryKey: ['recipes'],
+    queryFn: async (): Promise<Recipe[]> => {
+      const response = await apiClient.get('/api/getAllRecipes');
+      return response.data.recipes;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+const useGetRecipesByWeather = (lat?: number, lon?: number, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ['recipes', 'byWeather', lat, lon],
+    queryFn: async (): Promise<{ 
+      recipes: Recipe[], 
+      weather: WeatherInfo,
+      searchStrategy?: string,
+      totalRecipes?: number
+    }> => {
+      const response = await apiClient.post('/api/getRecipeBasedOnWeather', { lat, lon });
+      return response.data;
+    },
+    enabled: enabled && lat !== undefined && lon !== undefined,
+    staleTime: 10 * 60 * 1000, // 10 minutes - weather recipes don't change frequently
+  });
+};
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
