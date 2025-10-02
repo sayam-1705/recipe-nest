@@ -5,41 +5,36 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-// Custom hook for getting current user data from localStorage
 const useCurrentUser = () => {
   return useQuery({
-    queryKey: ['auth', 'me'],
+    queryKey: ["auth", "me"],
     queryFn: () => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         try {
-          const userData = localStorage.getItem('user');
-          const token = localStorage.getItem('authToken');
-          
-          // If no token, user is not authenticated
+          const userData = localStorage.getItem("user");
+          const token = localStorage.getItem("authToken");
+
           if (!token) {
             return null;
           }
-          
-          // If no user data but token exists, clear everything
+
           if (!userData) {
-            localStorage.removeItem('authToken');
+            localStorage.removeItem("authToken");
             return null;
           }
-          
-          // Try to parse user data
+
           return JSON.parse(userData);
         } catch (error) {
-          console.error('Error parsing user data from localStorage:', error);
-          // Clear corrupted data
-          localStorage.removeItem('user');
-          localStorage.removeItem('authToken');
+          console.error("Error parsing user data from localStorage:", error);
+          localStorage.removeItem("user");
+          localStorage.removeItem("authToken");
           return null;
         }
       }
       return null;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes - allow some staleness but refresh periodically
-    retry: false, // Don't retry on error, just return null
+    staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };
 
@@ -48,22 +43,19 @@ const useLogout = () => {
 
   return useMutation({
     mutationFn: async () => {
-      // Clear local storage
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
       }
     },
     onSuccess: () => {
-      // Clear all cached data
       queryClient.clear();
-      // Redirect to home page
-      if (typeof window !== 'undefined') {
-        window.location.href = '/';
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
       }
     },
     onError: (error: AxiosError) => {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     },
   });
 };
@@ -96,8 +88,7 @@ const AuthLinks = () => {
                 </span>
               </div>
             </button>
-            
-            {/* Dropdown Menu */}
+
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <Link
@@ -106,8 +97,18 @@ const AuthLinks = () => {
                   onClick={() => setShowDropdown(false)}
                 >
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                     Profile
                   </div>
@@ -118,8 +119,18 @@ const AuthLinks = () => {
                   onClick={() => setShowDropdown(false)}
                 >
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
                     </svg>
                     Create Recipe
                   </div>
@@ -134,17 +145,26 @@ const AuthLinks = () => {
                     {logoutMutation.isPending ? (
                       <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
                       </svg>
                     )}
-                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                    {logoutMutation.isPending ? "Logging out..." : "Logout"}
                   </div>
                 </button>
               </div>
             )}
-            
-            {/* Click outside to close dropdown */}
+
             {showDropdown && (
               <div
                 className="fixed inset-0 z-40"

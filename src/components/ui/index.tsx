@@ -1,33 +1,35 @@
-import React from 'react';
+import React from "react";
 
 export const Button: React.FC<{
   children: React.ReactNode;
   onClick?: () => void;
-  type?: 'button' | 'submit';
-  variant?: 'primary' | 'secondary' | 'danger';
+  type?: "button" | "submit";
+  variant?: "primary" | "secondary" | "danger";
   disabled?: boolean;
   loading?: boolean;
   className?: string;
 }> = ({
   children,
   onClick,
-  type = 'button',
-  variant = 'primary',
+  type = "button",
+  variant = "primary",
   disabled = false,
   loading = false,
-  className = ''
+  className = "",
 }) => {
-  const baseClasses = 'px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+  const baseClasses =
+    "px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+
   const variantClasses = {
-    primary: 'bg-primary-orange hover:bg-primary-orange-dark text-white focus:ring-primary-orange',
-    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-300',
-    danger: 'bg-red-500 hover:bg-red-600 text-white focus:ring-red-500'
+    primary:
+      "bg-primary-orange hover:bg-primary-orange-dark text-white focus:ring-primary-orange",
+    secondary:
+      "bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-300",
+    danger: "bg-red-500 hover:bg-red-600 text-white focus:ring-red-500",
   };
 
-  const disabledClasses = disabled || loading 
-    ? 'opacity-50 cursor-not-allowed' 
-    : 'cursor-pointer';
+  const disabledClasses =
+    disabled || loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer";
 
   return (
     <button
@@ -41,7 +43,9 @@ export const Button: React.FC<{
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           Loading...
         </span>
-      ) : children}
+      ) : (
+        children
+      )}
     </button>
   );
 };
@@ -59,11 +63,11 @@ export const Input: React.FC<{
   label,
   value,
   onChange,
-  type = 'text',
+  type = "text",
   placeholder,
   required = false,
   error,
-  className = ''
+  className = "",
 }) => {
   return (
     <div className={`space-y-1 ${className}`}>
@@ -79,7 +83,7 @@ export const Input: React.FC<{
         placeholder={placeholder}
         required={required}
         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-primary-orange ${
-          error ? 'border-red-500' : 'border-gray-300'
+          error ? "border-red-500" : "border-gray-300"
         }`}
       />
       {error && <p className="text-sm text-red-500">{error}</p>}
@@ -90,16 +94,18 @@ export const Input: React.FC<{
 export const Card: React.FC<{
   children: React.ReactNode;
   className?: string;
-  padding?: 'sm' | 'md' | 'lg';
-}> = ({ children, className = '', padding = 'md' }) => {
+  padding?: "sm" | "md" | "lg";
+}> = ({ children, className = "", padding = "md" }) => {
   const paddingClasses = {
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8'
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8",
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-md border border-gray-200 ${paddingClasses[padding]} ${className}`}>
+    <div
+      className={`bg-white rounded-lg shadow-md border border-gray-200 ${paddingClasses[padding]} ${className}`}
+    >
       {children}
     </div>
   );
@@ -132,15 +138,19 @@ export const Modal: React.FC<{
   );
 };
 
-export const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ size = 'md' }) => {
+export const LoadingSpinner: React.FC<{ size?: "sm" | "md" | "lg" }> = ({
+  size = "md",
+}) => {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8', 
-    lg: 'w-12 h-12'
+    sm: "w-4 h-4",
+    md: "w-8 h-8",
+    lg: "w-12 h-12",
   };
 
   return (
-    <div className={`${sizeClasses[size]} border-2 border-gray-200 border-t-primary-orange rounded-full animate-spin`} />
+    <div
+      className={`${sizeClasses[size]} border-2 border-gray-200 border-t-primary-orange rounded-full animate-spin`}
+    />
   );
 };
 

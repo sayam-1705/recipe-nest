@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Link from 'next/link';
+import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Error({
   error,
@@ -32,7 +32,9 @@ export default function Error({
             />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Something went wrong!</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          Something went wrong!
+        </h2>
         <p className="text-gray-600 mb-6">
           We apologize for the inconvenience. Please try again.
         </p>

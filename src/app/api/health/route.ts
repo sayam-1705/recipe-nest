@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const healthCheck = {
-    status: 'OK',
+    status: "OK",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV,
-    version: process.env.npm_package_version || '1.0.0',
+    version: process.env.npm_package_version || "1.0.0",
     vercel: {
-      region: process.env.VERCEL_REGION || 'local',
-      url: process.env.VERCEL_URL || 'localhost',
-    }
+      region: process.env.VERCEL_REGION || "local",
+      url: process.env.VERCEL_URL || "localhost",
+    },
   };
 
   return NextResponse.json(healthCheck);

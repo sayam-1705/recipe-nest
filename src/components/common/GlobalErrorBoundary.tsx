@@ -11,7 +11,10 @@ interface ErrorBoundaryState {
   error?: Error;
 }
 
-class GlobalErrorBoundary extends React.Component<GlobalErrorBoundaryProps, ErrorBoundaryState> {
+class GlobalErrorBoundary extends React.Component<
+  GlobalErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: GlobalErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -22,7 +25,7 @@ class GlobalErrorBoundary extends React.Component<GlobalErrorBoundaryProps, Erro
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Global Error Boundary caught an error:', error, errorInfo);
+    console.error("Global Error Boundary caught an error:", error, errorInfo);
   }
 
   render() {
@@ -31,7 +34,9 @@ class GlobalErrorBoundary extends React.Component<GlobalErrorBoundaryProps, Erro
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="max-w-md mx-auto text-center p-6">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">Something went wrong</h1>
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              Something went wrong
+            </h1>
             <p className="text-gray-600 mb-4">
               {this.state.error?.message || "An unexpected error occurred"}
             </p>

@@ -8,7 +8,6 @@ import ErrorBoundary from "@/components/common/ErrorBoundary";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-// Helper function to handle API requests
 const fetchWithErrorHandling = async (
   url: string,
   options: RequestInit = {},
@@ -16,7 +15,7 @@ const fetchWithErrorHandling = async (
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}${url}`, options);
-    
+
     if (!response.ok) {
       if (response.status === 404 && fallbackValue === null) return null;
       throw new Error(`HTTP ${response.status}`);
@@ -30,7 +29,6 @@ const fetchWithErrorHandling = async (
   }
 };
 
-// Server-side API functions for SSR
 const serverApi = {
   getAllRecipes: (): Promise<Recipe[]> =>
     fetchWithErrorHandling("/api/getAllRecipes", {
@@ -41,7 +39,8 @@ const serverApi = {
 
 export const metadata: Metadata = {
   title: "RecipeNest - Discover Amazing Recipes",
-  description: "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more from our community of food enthusiasts.",
+  description:
+    "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more from our community of food enthusiasts.",
   openGraph: {
     title: "RecipeNest - Discover Amazing Recipes",
     description: "Discover and share amazing recipes with RecipeNest.",
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 300; // Revalidate every 5 minutes
+export const revalidate = 300;
 
 export default async function Home() {
   const initialRecipes = await serverApi.getAllRecipes();
@@ -59,12 +58,8 @@ export default async function Home() {
     <HowItWorks key="howItWorks" />,
     <Menu key="menu" initialRecipes={initialRecipes} />,
     <About key="about" />,
-    <Footer key="footer" />
+    <Footer key="footer" />,
   ];
 
-  return (
-    <ErrorBoundary>
-      {components}
-    </ErrorBoundary>
-  );
+  return <ErrorBoundary>{components}</ErrorBoundary>;
 }

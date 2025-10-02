@@ -11,14 +11,13 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const result = schemas.signupSchema.safeParse(body);
-    
+
     if (!result.success) {
       return apiResponse.badRequest(result.error.errors[0].message);
     }
 
     const { name, email, password } = result.data;
 
-    // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return apiResponse.badRequest("User already exists");
@@ -28,10 +27,13 @@ export async function POST(req: NextRequest) {
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-    return apiResponse.success({
-      message: "User created successfully",
-      user: { name: newUser.name, email: newUser.email },
-    }, 201);
+    return apiResponse.success(
+      {
+        message: "User created successfully",
+        user: { name: newUser.name, email: newUser.email },
+      },
+      201
+    );
   } catch {
     return apiResponse.error("Signup failed");
   }

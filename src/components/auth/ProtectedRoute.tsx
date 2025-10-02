@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { isAuthenticated, getUser } from '@/utils/auth';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isAuthenticated, getUser } from "@/utils/auth";
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  redirectTo = '/login',
+  redirectTo = "/login",
   showFallback = true,
 }) => {
   const router = useRouter();
@@ -19,9 +19,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       const user = getUser();
 
       if (!authenticated || !user) {
-        // Get current path and pass as redirect parameter
         const currentPath = window.location.pathname;
-        const loginUrl = `${redirectTo}?redirect=${encodeURIComponent(currentPath)}`;
+        const loginUrl = `${redirectTo}?redirect=${encodeURIComponent(
+          currentPath
+        )}`;
         router.push(loginUrl);
         return;
       }
@@ -35,7 +36,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (isLoading) {
     if (!showFallback) return null;
-    
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
         <div className="text-center">
@@ -48,13 +49,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!isAuthorized) {
     if (!showFallback) return null;
-    
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
         <div className="text-center">
           <div className="text-orange-500 text-4xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Authentication Required</h2>
-          <p className="text-gray-600 mb-6">Please log in to access this page.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Authentication Required
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please log in to access this page.
+          </p>
           <button
             onClick={() => router.push(redirectTo)}
             className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"

@@ -32,7 +32,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     servings: initialData?.servings || 1,
     ingredients: initialData?.ingredients || [{ name: "", quantity: "" }],
     instructions: initialData?.instructions || [""],
-    image: initialData?.image || null, // Keep existing image (string) or null for new upload
+    image: initialData?.image || null,
   });
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -40,9 +40,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     useState<string>("animate-fadeIn");
   const [error, setError] = useState<string | null>(null);
 
-  // Update form data when initialData changes (for update forms)
   useEffect(() => {
-    if (initialData && initialData.name) { // Only update if initialData has actual content
+    if (initialData && initialData.name) {
       console.log("Setting form data from initialData:", initialData);
       setFormData({
         name: initialData?.name || "",
@@ -61,7 +60,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     }
   }, [
     initialData,
-    initialData?.name, 
+    initialData?.name,
     initialData?._id,
     initialData?.type,
     initialData?.meal,
@@ -73,17 +72,15 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     initialData?.servings,
     initialData?.ingredients,
     initialData?.instructions,
-    initialData?.image
-  ]); // Depend on all the fields we actually use
+    initialData?.image,
+  ]);
 
-  // Simplified form data change handler - only call when form data actually changes
   useEffect(() => {
     if (onFormDataChange) {
       onFormDataChange(formData);
     }
-  }, [formData, onFormDataChange]); // Now it's safe to include onFormDataChange since it's memoized
+  }, [formData, onFormDataChange]);
 
-  // Enhanced animation handler for step transitions
   const handleStepChange = (step: number) => {
     if (
       step === 2 &&
@@ -128,19 +125,21 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     }, 150);
   };
 
-  const handleInputChange = (field: keyof RecipeFormData, value: string | number) => {
+  const handleInputChange = (
+    field: keyof RecipeFormData,
+    value: string | number
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  // Add a handler for file input
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFormData((prev) => ({
         ...prev,
-        image: e.target.files![0], // store the File object
+        image: e.target.files![0],
       }));
     }
   };
@@ -196,7 +195,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
     if (
       (formData.instructions.length <= 1 && formData.instructions[0] === "") ||
-      (!formData.image) // Check if no image at all (neither File nor string)
+      !formData.image
     ) {
       setError(
         "Please provide more detailed cooking instructions and an image."
@@ -206,7 +205,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
     setError(null);
 
-    // Call the passed onSubmit function with the form data
     if (onSubmit) {
       onSubmit(formData);
     }
@@ -501,22 +499,23 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           >
             Recipe Image
           </label>
-          
-          {/* Show existing image if it's a string (base64) */}
-          {formData.image && typeof formData.image === 'string' && (
+
+          {formData.image && typeof formData.image === "string" && (
             <div className="mb-4">
               <p className="text-sm text-gray-600 mb-2">Current image:</p>
               <Image
                 width={128}
                 height={128}
-                src={formData.image} 
-                alt={formData.name || "Recipe Image"} 
+                src={formData.image}
+                alt={formData.name || "Recipe Image"}
                 className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
               />
-              <p className="text-xs text-gray-500 mt-1">Upload a new image to replace this one</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Upload a new image to replace this one
+              </p>
             </div>
           )}
-          
+
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full flex items-center justify-center text-lg font-bold shadow-md">
               📷
@@ -540,7 +539,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl p-12 border border-orange-100">
-          {/* Enhanced Progress Bar */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               {[1, 2, 3, 4].map((step) => (
@@ -579,7 +577,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             {currentStep === 3 && renderStep3()}
             {currentStep === 4 && renderStep4()}
 
-            {/* Enhanced Navigation Buttons */}
             <div className="flex flex-col items-center">
               {error && (
                 <p className="text-red-500 w-full text-center pb-10">{error}</p>

@@ -17,7 +17,7 @@ export default {
         },
         secondary: {
           "green-light": "#184F4F",
-          "green-medium": "#0E4343", 
+          "green-medium": "#0E4343",
           "green-dark": "#003B36",
           "green-darker": "#00312d",
         },
@@ -32,11 +32,11 @@ export default {
         "fade-in": "fadeIn 0.8s ease-out forwards",
         "gentle-float": "gentleFloat 6s ease-in-out infinite",
         "subtle-pulse": "subtlePulse 4s ease-in-out infinite",
-        "shimmer": "shimmer 1.5s ease-in-out infinite",
+        shimmer: "shimmer 1.5s ease-in-out infinite",
         "scale-in": "scaleIn 0.5s ease-out forwards",
         "bounce-horizontal": "bounceHorizontal 1s ease-in-out infinite",
         "slide-up": "slideUp 0.5s ease-out forwards",
-        "glow": "glow 3s ease-in-out infinite",
+        glow: "glow 3s ease-in-out infinite",
         "signup-fade-in": "signupFadeIn 0.6s ease-out",
         "signup-slide-down": "signupSlideDown 0.4s ease-out 0.2s both",
       },
@@ -87,7 +87,7 @@ export default {
         },
       },
       transitionTimingFunction: {
-        "smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+        smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
         "bounce-smooth": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
       },
       transitionDelay: {
@@ -153,7 +153,8 @@ export default {
           border: "1px solid rgba(255, 255, 255, 0.2)",
         },
         ".shimmer-text": {
-          background: "linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%)",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%)",
           backgroundSize: "200% 100%",
           animation: "shimmer 1.5s ease-in-out infinite",
         },

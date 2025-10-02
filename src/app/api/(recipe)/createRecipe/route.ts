@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
 
     console.log("Authentication successful for user:", authData.userId);
 
-    // Check content type and handle accordingly
     const contentType = req.headers.get("content-type");
     let parsedFields;
     let imageFile: File | null = null;
@@ -56,7 +55,6 @@ export async function POST(req: NextRequest) {
     } | null = null;
 
     if (contentType && contentType.includes("multipart/form-data")) {
-      // Handle FormData (for file uploads)
       const formData = await req.formData();
 
       const getField = (key: string): string => {
@@ -66,8 +64,7 @@ export async function POST(req: NextRequest) {
 
       const servingsValue = getField("servings");
       const servingsNumber = parseInt(servingsValue);
-      
-      // Validate servings conversion
+
       if (isNaN(servingsNumber) || servingsNumber < 1) {
         console.error("Invalid servings value:", servingsValue);
         return NextResponse.json(
@@ -76,10 +73,9 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Parse and validate ingredients and instructions
       let ingredients: Array<{ name: string; quantity: string }> = [];
       let instructions: string[] = [];
-      
+
       try {
         ingredients = JSON.parse(getField("ingredients") || "[]");
         if (!Array.isArray(ingredients)) {
@@ -122,7 +118,6 @@ export async function POST(req: NextRequest) {
 
       imageFile = formData.get("image") as File | null;
     } else {
-      // Handle JSON request
       body = await req.json();
       parsedFields = {
         name: body?.name,
@@ -137,7 +132,6 @@ export async function POST(req: NextRequest) {
         ingredients: body?.ingredients || [],
         instructions: body?.instructions || [],
       };
-      // For JSON requests, the image is already a base64 string
     }
 
     const bodyData = reqSchema.safeParse(parsedFields);
@@ -165,9 +159,8 @@ export async function POST(req: NextRequest) {
     } = bodyData.data;
 
     let imageBase64 = "";
-    
+
     if (contentType && contentType.includes("multipart/form-data")) {
-      // Handle file upload from FormData
       if (imageFile && imageFile.size > 0) {
         const buffer = await imageFile.arrayBuffer();
         const mimeType = imageFile.type || "image/png";
@@ -176,13 +169,11 @@ export async function POST(req: NextRequest) {
         )}`;
       }
     } else {
-      // Handle base64 image from JSON
-      if (body && body.image && typeof body.image === 'string') {
+      if (body && body.image && typeof body.image === "string") {
         imageBase64 = body.image;
       }
     }
 
-    // Nutrition logic
     let totalCalories = 0;
     let totalENERC_KCAL = 0;
     let totalPROCNT_KCAL = 0;

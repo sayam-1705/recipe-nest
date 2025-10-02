@@ -1,4 +1,3 @@
-// Conditional import for server-side only
 const getMongoose = async () => {
   if (typeof window === "undefined") {
     const { default: mongoose } = await import("mongoose");
@@ -9,7 +8,7 @@ const getMongoose = async () => {
 
 const isBrowser = () => typeof window !== "undefined";
 
-export const isAuthenticated = (): boolean => 
+export const isAuthenticated = (): boolean =>
   isBrowser() && !!localStorage.getItem("authToken");
 
 export const getUser = (): User | null => {
@@ -35,21 +34,26 @@ export const setAuthData = (token: string, user: User | null): void => {
 
 export const validate = {
   objectId: async (id: string) => {
-    if (isBrowser()) return true; // Skip validation on client-side
+    if (isBrowser()) return true;
     const mongoose = await getMongoose();
     if (!mongoose) return true;
     return mongoose.Types.ObjectId.isValid(id);
   },
   email: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-  password: (password: string) => 
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password),
+  password: (password: string) =>
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(
+      password
+    ),
   required: (value: unknown) => value != null && value !== "",
-  positiveNumber: (value: unknown) => !isNaN(Number(value)) && Number(value) > 0,
-  arrayNotEmpty: (arr: unknown[]) => Array.isArray(arr) && arr.length > 0
+  positiveNumber: (value: unknown) =>
+    !isNaN(Number(value)) && Number(value) > 0,
+  arrayNotEmpty: (arr: unknown[]) => Array.isArray(arr) && arr.length > 0,
 };
 
 export const dbHelpers = {
-  regexFilter: (field: string, value: string) => ({ [field]: { $regex: value, $options: "i" } }),
+  regexFilter: (field: string, value: string) => ({
+    [field]: { $regex: value, $options: "i" },
+  }),
   buildQuery: (filters: Record<string, unknown>) => {
     return Object.entries(filters).reduce((query, [key, value]) => {
       if (value) {
@@ -57,5 +61,5 @@ export const dbHelpers = {
       }
       return query;
     }, {} as Record<string, unknown>);
-  }
+  },
 };

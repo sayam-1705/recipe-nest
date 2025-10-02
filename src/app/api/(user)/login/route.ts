@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const result = schemas.loginSchema.safeParse(body);
-    
+
     if (!result.success) {
       return apiResponse.badRequest(result.error.errors[0].message);
     }

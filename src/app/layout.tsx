@@ -7,23 +7,34 @@ import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
 export const metadata: Metadata = {
   title: {
     default: "RecipeNest - Discover Amazing Recipes",
-    template: "%s | RecipeNest"
+    template: "%s | RecipeNest",
   },
-  description: "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more. Join our community of food enthusiasts.",
-  keywords: ["recipes", "cooking", "food", "culinary", "ingredients", "meal planning"],
+  description:
+    "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more. Join our community of food enthusiasts.",
+  keywords: [
+    "recipes",
+    "cooking",
+    "food",
+    "culinary",
+    "ingredients",
+    "meal planning",
+  ],
   authors: [{ name: "RecipeNest Team" }],
   creator: "RecipeNest",
   publisher: "RecipeNest",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || 
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+    process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000")
   ),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
     title: "RecipeNest - Discover Amazing Recipes",
-    description: "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more.",
+    description:
+      "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more.",
     siteName: "RecipeNest",
     images: [
       {
@@ -37,7 +48,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "RecipeNest - Discover Amazing Recipes",
-    description: "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more.",
+    description:
+      "Discover and share amazing recipes with RecipeNest. Find recipes based on weather, dietary preferences, and more.",
     images: ["/images/og-image.jpg"],
   },
   robots: {
@@ -46,9 +58,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
@@ -73,9 +85,7 @@ export default function RootLayout({
         <GlobalErrorBoundary>
           <QueryProvider>
             <Navbar />
-            <main className="min-h-screen">
-              {children}
-            </main>
+            <main className="min-h-screen">{children}</main>
           </QueryProvider>
         </GlobalErrorBoundary>
       </body>

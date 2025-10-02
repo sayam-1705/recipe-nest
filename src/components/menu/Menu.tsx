@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import MenuCarousel from "../menuCarousel/MenuCarousel";
 import { Skeleton } from "../common/Loading";
@@ -6,15 +6,14 @@ import ErrorMessage from "../common/Error";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
 
-// Recipe Query
 const useGetAllRecipes = () => {
   return useQuery({
-    queryKey: ['recipes'],
+    queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get('/getAllRecipes');
+      const response = await apiClient.get("/getAllRecipes");
       return response.data.recipes;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 };
 
@@ -29,11 +28,11 @@ const MenuSkeleton = () => (
 );
 
 const Menu = ({ initialRecipes = [] }: MenuProps) => {
-  const { 
-    data: recipes = initialRecipes, 
-    isLoading, 
+  const {
+    data: recipes = initialRecipes,
+    isLoading,
     error,
-    refetch 
+    refetch,
   } = useGetAllRecipes();
 
   const renderContent = () => {
@@ -76,17 +75,21 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No recipes found</h3>
-            <p className="text-gray-600">Be the first to share a delicious recipe with our community!</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No recipes found
+            </h3>
+            <p className="text-gray-600">
+              Be the first to share a delicious recipe with our community!
+            </p>
           </div>
         </div>
       );
     }
 
     return (
-      <MenuCarousel 
-        totalCards={recipes.length} 
-        cardWidth={320} 
+      <MenuCarousel
+        totalCards={recipes.length}
+        cardWidth={320}
         recipes={recipes}
       />
     );
@@ -101,7 +104,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
     >
       <div className="flex flex-col justify-center gap-6 lg:pr-10">
         <div className="flex flex-col gap-2">
-          <h2 
+          <h2
             id="menu-title"
             className="text-4xl md:text-6xl font-bold text-gray-800 animate-fade-in-up"
           >
@@ -132,14 +135,12 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
         {recipes.length > 0 && (
           <div className="text-sm text-gray-500 animate-fade-in-up delay-300">
-            Showing {recipes.length} recipe{recipes.length !== 1 ? 's' : ''}
+            Showing {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
           </div>
         )}
       </div>
 
-      <div className="min-h-[300px]">
-        {renderContent()}
-      </div>
+      <div className="min-h-[300px]">{renderContent()}</div>
     </section>
   );
 };

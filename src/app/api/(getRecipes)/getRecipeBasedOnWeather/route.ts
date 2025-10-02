@@ -3,22 +3,26 @@ import { getWeatherResponse } from "./getWeatherResponse";
 import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
 
-// Weather condition helpers
-const isRainy = (desc: string, details: string) => 
-  ['rain', 'drizzle', 'shower'].some(term => 
-    desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
+const isRainy = (desc: string, details: string) =>
+  ["rain", "drizzle", "shower"].some(
+    (term) =>
+      desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
   );
 
-const isClear = (desc: string) => 
-  ['clear', 'sun'].some(term => desc.toLowerCase().includes(term));
+const isClear = (desc: string) =>
+  ["clear", "sun"].some((term) => desc.toLowerCase().includes(term));
 
 const isSnowy = (desc: string, details: string) =>
-  ['snow', 'blizzard'].some(term => 
-    desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
+  ["snow", "blizzard"].some(
+    (term) =>
+      desc.toLowerCase().includes(term) || details.toLowerCase().includes(term)
   );
 
-// Recipe recommendation logic
-const getRecipeTypeFromWeather = (temp: number, desc: string, details: string): string => {
+const getRecipeTypeFromWeather = (
+  temp: number,
+  desc: string,
+  details: string
+): string => {
   if (isRainy(desc, details)) return "Soup";
   if (temp > 30) return "Beverage";
   if (temp > 25) return "Salad";
@@ -61,9 +65,9 @@ const getSeasonFromWeather = (temp: number, humidity: number): string => {
   return baseSeason;
 };
 
-// MongoDB query helpers
-const buildRegexFilter = (field: string, value: string) => 
-  ({ [field]: { $regex: value, $options: "i" } });
+const buildRegexFilter = (field: string, value: string) => ({
+  [field]: { $regex: value, $options: "i" },
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -91,21 +95,29 @@ export async function POST(req: NextRequest) {
       clouds,
     } = weatherResponse;
 
-    console.log(`Weather data received: ${temperature}°C, ${weatherDescription} in ${place}`);
+    console.log(
+      `Weather data received: ${temperature}°C, ${weatherDescription} in ${place}`
+    );
 
-    // Get recipe recommendations based on weather
-    const type = getRecipeTypeFromWeather(temperature, weatherDescription, weatherDetails);
+    const type = getRecipeTypeFromWeather(
+      temperature,
+      weatherDescription,
+      weatherDetails
+    );
     const meal = getMealByCurrentTime();
-    const difficulty = getDifficultyFromWeather(temperature, weatherDescription);
+    const difficulty = getDifficultyFromWeather(
+      temperature,
+      weatherDescription
+    );
     const season = getSeasonFromWeather(temperature, humidity);
 
-    console.log(`Recipe recommendations: type=${type}, meal=${meal}, difficulty=${difficulty}, season=${season}`);
+    console.log(
+      `Recipe recommendations: type=${type}, meal=${meal}, difficulty=${difficulty}, season=${season}`
+    );
 
-    // Progressive recipe search with fallback strategies
     let recipes: Recipe[] = [];
     let searchStrategy = "exact";
 
-    // Strategy 1: Exact match with all criteria
     const exactQuery = {
       ...(type && buildRegexFilter("type", type)),
       ...(meal && buildRegexFilter("meal", meal)),
@@ -113,53 +125,62 @@ export async function POST(req: NextRequest) {
       ...(season && buildRegexFilter("season", season)),
     };
     recipes = await Recipe.find(exactQuery).limit(20);
-    console.log(`Strategy 1 - Found ${recipes.length} recipes with exact criteria`);
+    console.log(
+      `Strategy 1 - Found ${recipes.length} recipes with exact criteria`
+    );
 
-    // Strategy 2: Flexible search with OR conditions
     if (recipes.length < 5) {
       console.log("Trying flexible OR strategy...");
       searchStrategy = "flexible";
-      
+
       const orConditions = [
         ...(type ? [buildRegexFilter("type", type)] : []),
         ...(season ? [buildRegexFilter("season", season)] : []),
         ...(meal ? [buildRegexFilter("meal", meal)] : []),
       ];
-      
+
       const orQuery = {
         ...(orConditions.length > 0 && { $or: orConditions }),
-        ...(difficulty && orConditions.length > 0 && buildRegexFilter("difficulty", difficulty))
+        ...(difficulty &&
+          orConditions.length > 0 &&
+          buildRegexFilter("difficulty", difficulty)),
       };
-      
+
       const flexibleRecipes = await Recipe.find(orQuery).limit(20);
-      
-      const existingIds = new Set(recipes.map(r => r._id.toString()));
-      const newRecipes = flexibleRecipes.filter(r => !existingIds.has(r._id.toString()));
+
+      const existingIds = new Set(recipes.map((r) => r._id.toString()));
+      const newRecipes = flexibleRecipes.filter(
+        (r) => !existingIds.has(r._id.toString())
+      );
       recipes = [...recipes, ...newRecipes].slice(0, 20);
-      console.log(`Strategy 2 - Total: ${recipes.length} recipes with flexible criteria`);
+      console.log(
+        `Strategy 2 - Total: ${recipes.length} recipes with flexible criteria`
+      );
     }
 
-    // Strategy 3: Broad search with main criteria only
     if (recipes.length < 3) {
       console.log("Trying broad search...");
       searchStrategy = "broad";
-      
+
       const broadQuery = {
         $or: [
           ...(type ? [buildRegexFilter("type", type)] : []),
           ...(season ? [buildRegexFilter("season", season)] : []),
-        ]
+        ],
       };
-      
+
       const broadRecipes = await Recipe.find(broadQuery).limit(20);
-      
-      const existingIds = new Set(recipes.map(r => r._id.toString()));
-      const newRecipes = broadRecipes.filter(r => !existingIds.has(r._id.toString()));
+
+      const existingIds = new Set(recipes.map((r) => r._id.toString()));
+      const newRecipes = broadRecipes.filter(
+        (r) => !existingIds.has(r._id.toString())
+      );
       recipes = [...recipes, ...newRecipes].slice(0, 20);
-      console.log(`Strategy 3 - Total: ${recipes.length} recipes with broad criteria`);
+      console.log(
+        `Strategy 3 - Total: ${recipes.length} recipes with broad criteria`
+      );
     }
 
-    // Strategy 4: Random fallback
     if (recipes.length === 0) {
       console.log("Getting random recipes as fallback...");
       searchStrategy = "random";
@@ -187,22 +208,27 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error fetching recipes based on weather:", error);
-    
-    // Provide more specific error information
+
     if (error instanceof Error) {
       if (error.message.includes("weather")) {
         return NextResponse.json(
-          { error: "Failed to fetch weather data. Please check your coordinates and try again." },
+          {
+            error:
+              "Failed to fetch weather data. Please check your coordinates and try again.",
+          },
           { status: 500 }
         );
-      } else if (error.message.includes("MongoDB") || error.message.includes("database")) {
+      } else if (
+        error.message.includes("MongoDB") ||
+        error.message.includes("database")
+      ) {
         return NextResponse.json(
           { error: "Database connection error. Please try again later." },
           { status: 500 }
         );
       }
     }
-    
+
     return NextResponse.json(
       { error: "Failed to fetch recipes based on weather. Please try again." },
       { status: 500 }

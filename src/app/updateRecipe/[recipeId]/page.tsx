@@ -9,10 +9,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
 import { AxiosError } from "axios";
 
-// Recipe Query
 const useGetRecipeById = (recipeId: string, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['recipes', 'byId', recipeId],
+    queryKey: ["recipes", "byId", recipeId],
     queryFn: async (): Promise<Recipe> => {
       const response = await apiClient.get(`/getRecipeById/${recipeId}`);
       return response.data.recipe;
@@ -21,31 +20,40 @@ const useGetRecipeById = (recipeId: string, enabled: boolean = true) => {
   });
 };
 
-// Recipe Mutation
 const useUpdateRecipe = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ recipeId, recipeData }: { recipeId: string; recipeData: UpdateRecipeData }): Promise<Recipe> => {
-      const response = await apiClient.put(`/updateRecipe/${recipeId}`, recipeData);
+    mutationFn: async ({
+      recipeId,
+      recipeData,
+    }: {
+      recipeId: string;
+      recipeData: UpdateRecipeData;
+    }): Promise<Recipe> => {
+      const response = await apiClient.put(
+        `/updateRecipe/${recipeId}`,
+        recipeData
+      );
       return response.data.recipe;
     },
     onSuccess: (updatedRecipe, variables) => {
-      // Update the specific recipe in cache
       queryClient.setQueryData(
-        ['recipes', 'byId', variables.recipeId],
+        ["recipes", "byId", variables.recipeId],
         updatedRecipe
       );
-      // Invalidate related queries
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
       if (updatedRecipe.userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: ['recipes', 'byUserId', updatedRecipe.userId] 
+        queryClient.invalidateQueries({
+          queryKey: ["recipes", "byUserId", updatedRecipe.userId],
         });
       }
     },
     onError: (error: AxiosError) => {
-      console.error('Failed to update recipe:', error.response?.data || error.message);
+      console.error(
+        "Failed to update recipe:",
+        error.response?.data || error.message
+      );
     },
   });
 };
@@ -54,21 +62,17 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   const resolvedParams = use(params);
   const router = useRouter();
 
-  // Fetch recipe data using React Query
-  const { 
-    data: recipe, 
-    isLoading: loading, 
+  const {
+    data: recipe,
+    isLoading: loading,
     error,
-    isError 
+    isError,
   } = useGetRecipeById(resolvedParams.recipeId, !!resolvedParams.recipeId);
 
-  // Check if current user owns this recipe
   const canAccess = useRecipeOwnership(recipe?.userId);
 
-  // Update recipe mutation
   const updateRecipeMutation = useUpdateRecipe();
 
-  // Static data for form options
   const staticFormData = {
     dietaryTypes: [
       "Vegetarian",
@@ -104,83 +108,84 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     console.log("Updated form data:", data);
   }, []);
 
-  const handleUpdateRecipe = useCallback(async (formData: {
-    name: string;
-    type: string;
-    meal: string;
-    time: string;
-    difficulty: string;
-    season: string;
-    occasion: string;
-    dietaryType: string;
-    servings: number;
-    ingredients: Array<{ name: string; quantity: string }>;
-    instructions: string[];
-    image: File | string | null;
-  }) => {
-    try {
-      // Handle image data - keep existing or convert new file
-      let imageData = recipe?.image; // Keep existing image by default
+  const handleUpdateRecipe = useCallback(
+    async (formData: {
+      name: string;
+      type: string;
+      meal: string;
+      time: string;
+      difficulty: string;
+      season: string;
+      occasion: string;
+      dietaryType: string;
+      servings: number;
+      ingredients: Array<{ name: string; quantity: string }>;
+      instructions: string[];
+      image: File | string | null;
+    }) => {
+      try {
+        let imageData = recipe?.image;
 
-      // If a new image file is provided, convert it to base64
-      if (formData.image && formData.image instanceof File) {
-        const arrayBuffer = await formData.image.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-        const binaryString = uint8Array.reduce(
-          (data, byte) => data + String.fromCharCode(byte),
-          ""
-        );
-        const base64String = btoa(binaryString);
-        const mimeType = formData.image.type || "image/png";
-        imageData = `data:${mimeType};base64,${base64String}`;
-      } else if (formData.image && typeof formData.image === 'string') {
-        // If existing image is being kept (string), use it
-        imageData = formData.image;
+        if (formData.image && formData.image instanceof File) {
+          const arrayBuffer = await formData.image.arrayBuffer();
+          const uint8Array = new Uint8Array(arrayBuffer);
+          const binaryString = uint8Array.reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ""
+          );
+          const base64String = btoa(binaryString);
+          const mimeType = formData.image.type || "image/png";
+          imageData = `data:${mimeType};base64,${base64String}`;
+        } else if (formData.image && typeof formData.image === "string") {
+          imageData = formData.image;
+        }
+
+        const updateData = {
+          name: formData.name,
+          type: formData.type,
+          meal: formData.meal,
+          time: formData.time,
+          difficulty: formData.difficulty,
+          season: formData.season,
+          occasion: formData.occasion,
+          dietaryType: formData.dietaryType,
+          servings: formData.servings,
+          ingredients: formData.ingredients,
+          instructions: formData.instructions,
+          image: imageData,
+        };
+
+        await updateRecipeMutation.mutateAsync({
+          recipeId: resolvedParams.recipeId,
+          recipeData: updateData,
+        });
+
+        console.log("Recipe updated successfully");
+        alert("Recipe updated successfully!");
+
+        router.push(`/showRecipe/${resolvedParams.recipeId}`);
+      } catch (error) {
+        console.error("Error updating recipe:", error);
+        alert("An error occurred while updating the recipe");
       }
+    },
+    [recipe?.image, resolvedParams.recipeId, router, updateRecipeMutation]
+  );
 
-      // Create update payload
-      const updateData = {
-        name: formData.name,
-        type: formData.type,
-        meal: formData.meal,
-        time: formData.time,
-        difficulty: formData.difficulty,
-        season: formData.season,
-        occasion: formData.occasion,
-        dietaryType: formData.dietaryType,
-        servings: formData.servings,
-        ingredients: formData.ingredients,
-        instructions: formData.instructions,
-        image: imageData,
-      };
-
-      await updateRecipeMutation.mutateAsync({
-        recipeId: resolvedParams.recipeId,
-        recipeData: updateData
-      });
-
-      console.log("Recipe updated successfully");
-      alert("Recipe updated successfully!");
-
-      // Redirect to the recipe details page
-      router.push(`/showRecipe/${resolvedParams.recipeId}`);
-    } catch (error) {
-      console.error("Error updating recipe:", error);
-      alert("An error occurred while updating the recipe");
-    }
-  }, [recipe?.image, resolvedParams.recipeId, router, updateRecipeMutation]);
-
-  // Show ownership check
   if (recipe && canAccess === false) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
           <div className="text-center">
             <div className="text-red-500 text-4xl mb-4">🚫</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h2>
-            <p className="text-gray-600 mb-6">You can only edit your own recipes.</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Access Denied
+            </h2>
+            <p className="text-gray-600 mb-6">
+              You can only edit your own recipes.
+            </p>
             <button
-              onClick={() => router.push('/profile')}
+              onClick={() => router.push("/profile")}
               className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
             >
               Go to Profile
@@ -211,7 +216,8 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
           <div className="text-center">
             <div className="text-red-500 text-xl mb-4">⚠️</div>
             <p className="text-gray-600 mb-4">
-              Error: {error instanceof Error ? error.message : "Failed to load recipe"}
+              Error:{" "}
+              {error instanceof Error ? error.message : "Failed to load recipe"}
             </p>
             <button
               onClick={() => router.back()}
@@ -245,7 +251,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
   }
 
   console.log("Current recipe state:", recipe);
-  
+
   return (
     <ProtectedRoute>
       <div>

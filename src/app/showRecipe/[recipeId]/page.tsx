@@ -5,7 +5,6 @@ import NutritionChart from "@/components/nutritionChart/NutritionChart";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-// Helper function to handle API requests
 const fetchWithErrorHandling = async (
   url: string,
   options: RequestInit = {},
@@ -13,7 +12,7 @@ const fetchWithErrorHandling = async (
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}${url}`, options);
-    
+
     if (!response.ok) {
       if (response.status === 404 && fallbackValue === null) return null;
       throw new Error(`HTTP ${response.status}`);
@@ -27,7 +26,6 @@ const fetchWithErrorHandling = async (
   }
 };
 
-// Server-side API functions for SSR
 const serverApi = {
   getAllRecipes: (): Promise<Recipe[]> =>
     fetchWithErrorHandling("/api/getAllRecipes", {
@@ -46,7 +44,6 @@ const serverApi = {
     ),
 };
 
-// JSON-LD structured data for SEO
 const generateRecipeJsonLd = (recipe: Recipe) => ({
   "@context": "https://schema.org/",
   "@type": "Recipe",
@@ -69,7 +66,9 @@ const generateRecipeJsonLd = (recipe: Recipe) => ({
   ...(recipe.nutritionPerServing && {
     nutrition: {
       "@type": "NutritionInformation",
-      calories: recipe.nutritionPerServing.calories || recipe.nutritionPerServing.ENERC_KCAL,
+      calories:
+        recipe.nutritionPerServing.calories ||
+        recipe.nutritionPerServing.ENERC_KCAL,
       proteinContent: recipe.nutritionPerServing.PROCNT_KCAL,
       fatContent: recipe.nutritionPerServing.FAT_KCAL,
       carbohydrateContent: recipe.nutritionPerServing.CHOCDF_KCAL,
@@ -77,7 +76,9 @@ const generateRecipeJsonLd = (recipe: Recipe) => ({
   }),
 });
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { recipeId } = await params;
   const recipe = await serverApi.getRecipeById(recipeId);
 
@@ -90,7 +91,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${recipe.name} - RecipeNest`,
     description: `Learn how to make ${recipe.name}. A delicious ${recipe.type} recipe perfect for ${recipe.meal}. Difficulty: ${recipe.difficulty}`,
-    keywords: [recipe.name, recipe.type, recipe.meal, recipe.dietaryType, "recipe", "cooking"],
+    keywords: [
+      recipe.name,
+      recipe.type,
+      recipe.meal,
+      recipe.dietaryType,
+      "recipe",
+      "cooking",
+    ],
     openGraph: {
       title: recipe.name,
       description: `A delicious ${recipe.type} recipe perfect for ${recipe.meal}`,
@@ -122,7 +130,7 @@ export async function generateStaticParams() {
 
 const ShowRecipe = async ({ params }: PageProps) => {
   const { recipeId } = await params;
-  
+
   try {
     const recipe = await serverApi.getRecipeById(recipeId);
 
@@ -130,7 +138,6 @@ const ShowRecipe = async ({ params }: PageProps) => {
       notFound();
     }
 
-    // For now, use a default user structure
     const userData = { name: "Recipe Creator" };
 
     const jsonLd = generateRecipeJsonLd(recipe);
@@ -141,7 +148,7 @@ const ShowRecipe = async ({ params }: PageProps) => {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        
+
         <article className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
           <div className="max-w-7xl mx-auto px-4 py-12">
             <header className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -188,7 +195,7 @@ const ShowRecipe = async ({ params }: PageProps) => {
             </header>
 
             <IngredientsSection recipe={recipe} />
-            
+
             <div className="grid lg:grid-cols-2 gap-10">
               <NutritionSection recipe={recipe} />
               <InstructionsSection recipe={recipe} />
@@ -217,8 +224,18 @@ const RecipeTags = ({ recipe }: { recipe: Recipe }) => (
   </div>
 );
 
-const TagBadge = ({ icon, label, color }: { icon: string; label: string; color: string }) => (
-  <span className={`px-4 py-2 bg-${color}-50 text-${color}-700 rounded-full text-sm font-medium border border-${color}-200 hover:bg-${color}-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2`}>
+const TagBadge = ({
+  icon,
+  label,
+  color,
+}: {
+  icon: string;
+  label: string;
+  color: string;
+}) => (
+  <span
+    className={`px-4 py-2 bg-${color}-50 text-${color}-700 rounded-full text-sm font-medium border border-${color}-200 hover:bg-${color}-100 hover:scale-105 transform transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2`}
+  >
     <span>{icon}</span>
     {label}
   </span>
@@ -258,20 +275,27 @@ const IngredientsSection = ({ recipe }: { recipe: Recipe }) => (
 );
 
 const NutritionSection = ({ recipe }: { recipe: Recipe }) => {
-  // Provide fallback nutrition data if not available
-  const nutritionData = recipe.nutritionPerServing ? {
-    calories: recipe.nutritionPerServing.calories || recipe.nutritionPerServing.ENERC_KCAL || 0,
-    ENERC_KCAL: recipe.nutritionPerServing.ENERC_KCAL || recipe.nutritionPerServing.calories || 0,
-    PROCNT_KCAL: recipe.nutritionPerServing.PROCNT_KCAL || 0,
-    FAT_KCAL: recipe.nutritionPerServing.FAT_KCAL || 0,
-    CHOCDF_KCAL: recipe.nutritionPerServing.CHOCDF_KCAL || 0,
-  } : {
-    calories: 0,
-    ENERC_KCAL: 0,
-    PROCNT_KCAL: 0,
-    FAT_KCAL: 0,
-    CHOCDF_KCAL: 0,
-  };
+  const nutritionData = recipe.nutritionPerServing
+    ? {
+        calories:
+          recipe.nutritionPerServing.calories ||
+          recipe.nutritionPerServing.ENERC_KCAL ||
+          0,
+        ENERC_KCAL:
+          recipe.nutritionPerServing.ENERC_KCAL ||
+          recipe.nutritionPerServing.calories ||
+          0,
+        PROCNT_KCAL: recipe.nutritionPerServing.PROCNT_KCAL || 0,
+        FAT_KCAL: recipe.nutritionPerServing.FAT_KCAL || 0,
+        CHOCDF_KCAL: recipe.nutritionPerServing.CHOCDF_KCAL || 0,
+      }
+    : {
+        calories: 0,
+        ENERC_KCAL: 0,
+        PROCNT_KCAL: 0,
+        FAT_KCAL: 0,
+        CHOCDF_KCAL: 0,
+      };
 
   return (
     <section className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-6 md:p-10 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up delay-800 border border-gray-100">

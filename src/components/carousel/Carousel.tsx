@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
 
-// Recipe Queries
 const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ["recipes"],
@@ -14,7 +13,7 @@ const useGetAllRecipes = () => {
       const response = await apiClient.get("/getAllRecipes");
       return response.data.recipes;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 };
 
@@ -38,7 +37,7 @@ const useGetRecipesByWeather = (
       return response.data;
     },
     enabled: enabled && lat !== undefined && lon !== undefined,
-    staleTime: 10 * 60 * 1000, // 10 minutes - weather recipes don't change frequently
+    staleTime: 10 * 60 * 1000,
   });
 };
 
@@ -51,24 +50,18 @@ const Carousel = () => {
   const [finalRecipes, setFinalRecipes] = useState<Recipe[]>([]);
   const router = useRouter();
 
-  // Always fetch all recipes
   const { data: allRecipes, isLoading: recipesLoading } = useGetAllRecipes();
 
-  // Fetch weather-based recipes when coordinates are available
   const { data: weatherData, isLoading: weatherLoading } =
     useGetRecipesByWeather(coordinates?.lat, coordinates?.lon, !!coordinates);
 
-  // Recipe selection logic: Weather recipes take priority, fallback to all recipes
   useEffect(() => {
-    // Priority 1: If weather recipes are available, show ONLY weather recipes
     if (weatherData?.recipes && weatherData.recipes.length > 0) {
       console.log(
         `🌤️ Showing ${weatherData.recipes.length} weather-specific recipes`
       );
       setFinalRecipes(weatherData.recipes.slice(0, 5)); // Limit for better UX
-    }
-    // Priority 2: If no weather recipes but general recipes exist, show general recipes
-    else if (allRecipes && allRecipes.length > 0) {
+    } else if (allRecipes && allRecipes.length > 0) {
       console.log(
         `📚 No weather recipes found, showing ${Math.min(
           allRecipes.length,
@@ -76,9 +69,7 @@ const Carousel = () => {
         )} general recipes`
       );
       setFinalRecipes(allRecipes.slice(0, 5));
-    }
-    // Priority 3: No recipes available
-    else {
+    } else {
       console.log("❌ No recipes available");
       setFinalRecipes([]);
     }
@@ -88,9 +79,8 @@ const Carousel = () => {
   const isLoading = recipesLoading || (coordinates && weatherLoading);
   const totalSlides = recipes.length;
 
-  // Get user location on mount
   useEffect(() => {
-    if (coordinates) return; // Already have coordinates
+    if (coordinates) return;
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -101,7 +91,6 @@ const Carousel = () => {
           });
         },
         () => {
-          // Fallback to default location
           setCoordinates({ lat: 22.70317823887959, lon: 88.46529275336827 });
         }
       );
@@ -110,7 +99,6 @@ const Carousel = () => {
     }
   }, [coordinates]);
 
-  // Carousel navigation
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
   }, [totalSlides]);
@@ -121,7 +109,6 @@ const Carousel = () => {
 
   const goToSlide = (index: number) => setCurrentIndex(index);
 
-  // Auto-advance carousel
   useEffect(() => {
     if (totalSlides > 1) {
       const interval = setInterval(nextSlide, 5000);
@@ -134,7 +121,6 @@ const Carousel = () => {
       className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100"
       id="home"
     >
-      {/* Weather info banner */}
       {weatherData?.weather && (
         <div className="bg-gradient-to-r from-blue-500 to-teal-500 text-white py-2 px-4 text-center">
           <span>
@@ -153,7 +139,6 @@ const Carousel = () => {
         </div>
       )}
 
-      {/* Loading state */}
       {isLoading ? (
         <div className="h-[500px] flex items-center justify-center bg-primary-orange-bg rounded-2xl">
           <div className="text-center">
@@ -164,7 +149,6 @@ const Carousel = () => {
           </div>
         </div>
       ) : recipes.length === 0 ? (
-        /* No recipes state */
         <div className="h-[500px] flex items-center justify-center bg-primary-orange-bg rounded-2xl">
           <div className="text-center">
             <p className="text-secondary-green-dark text-xl font-medium mb-2">
@@ -174,7 +158,6 @@ const Carousel = () => {
           </div>
         </div>
       ) : (
-        /* Carousel */
         <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg">
           <div
             className="h-full flex transition-transform duration-1000"
@@ -211,7 +194,6 @@ const Carousel = () => {
             ))}
           </div>
 
-          {/* Navigation dots */}
           {totalSlides > 1 && (
             <div className="absolute bottom-4 left-1/4 transform -translate-x-1/2 flex space-x-2">
               {Array.from({ length: totalSlides }).map((_, index) => (
@@ -226,7 +208,6 @@ const Carousel = () => {
             </div>
           )}
 
-          {/* Navigation arrows */}
           {totalSlides > 1 && (
             <>
               <button

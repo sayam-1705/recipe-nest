@@ -84,7 +84,7 @@ declare global {
   }
 
   type CreateRecipeData = RecipeBaseData;
-  
+
   type UpdateRecipeData = Partial<RecipeBaseData>;
 
   interface RecipeFilter {
@@ -96,7 +96,7 @@ declare global {
     occasion?: string;
   }
 
-  interface RecipeFormData extends Omit<RecipeBaseData, 'image'> {
+  interface RecipeFormData extends Omit<RecipeBaseData, "image"> {
     image: File | string | null;
   }
 
@@ -106,7 +106,15 @@ declare global {
     onSubmit?: (data: RecipeFormData) => void;
     submitButtonText?: string;
     isSubmitting?: boolean;
-    staticData?: Record<'dietaryTypes' | 'types' | 'meals' | 'difficulties' | 'seasons' | 'occasions', string[]>;
+    staticData?: Record<
+      | "dietaryTypes"
+      | "types"
+      | "meals"
+      | "difficulties"
+      | "seasons"
+      | "occasions",
+      string[]
+    >;
   }
 
   interface WeatherInfo {
@@ -169,7 +177,7 @@ declare global {
   }
 
   interface LoadingSpinnerProps extends BaseComponentProps {
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: "sm" | "md" | "lg" | "xl";
     color?: string;
   }
 
@@ -180,10 +188,10 @@ declare global {
   }
 
   interface SkeletonProps extends BaseComponentProps {
-    variant?: 'text' | 'rectangular' | 'circular';
+    variant?: "text" | "rectangular" | "circular";
     width?: string | number;
     height?: string | number;
-    animation?: 'pulse' | 'wave';
+    animation?: "pulse" | "wave";
   }
 
   interface BaseErrorProps {
@@ -195,7 +203,7 @@ declare global {
 
   interface ErrorMessageProps extends BaseErrorProps {
     message: string;
-    variant?: 'error' | 'warning' | 'info';
+    variant?: "error" | "warning" | "info";
     className?: string;
   }
 

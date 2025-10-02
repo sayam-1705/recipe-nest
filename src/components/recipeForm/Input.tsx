@@ -24,7 +24,10 @@ const Input: React.FC<InputProps> = ({
     <div
       className={`space-y-3 transform transition-all duration-300 ease-out ${containerClassName}`}
     >
-      <label htmlFor={name} className="block text-sm font-semibold text-neutral-700 uppercase tracking-wide transition-colors duration-200 hover:text-primary-orange">
+      <label
+        htmlFor={name}
+        className="block text-sm font-semibold text-neutral-700 uppercase tracking-wide transition-colors duration-200 hover:text-primary-orange"
+      >
         {label}
         {required && <span className="text-red-500 ml-1 animate-pulse">*</span>}
       </label>

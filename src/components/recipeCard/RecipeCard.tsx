@@ -6,11 +6,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
 import { AxiosError } from "axios";
 
-// User Query
 const useGetUserById = (userId: string, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['users', 'byId', userId],
-    queryFn: async (): Promise<{ name: string; email: string; _id: string }> => {
+    queryKey: ["users", "byId", userId],
+    queryFn: async (): Promise<{
+      name: string;
+      email: string;
+      _id: string;
+    }> => {
       const response = await apiClient.get(`/getUserById/${userId}`);
       return response.data.user;
     },
@@ -18,7 +21,6 @@ const useGetUserById = (userId: string, enabled: boolean = true) => {
   });
 };
 
-// Recipe Mutation
 const useDeleteRecipe = () => {
   const queryClient = useQueryClient();
 
@@ -27,16 +29,17 @@ const useDeleteRecipe = () => {
       await apiClient.delete(`/deleteRecipe/${recipeId}`);
     },
     onSuccess: (_, recipeId) => {
-      // Remove the recipe from cache
-      queryClient.removeQueries({ queryKey: ['recipes', 'byId', recipeId] });
-      // Invalidate related queries
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      queryClient.invalidateQueries({ 
-        predicate: (query) => query.queryKey[0] === 'recipes'
+      queryClient.removeQueries({ queryKey: ["recipes", "byId", recipeId] });
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "recipes",
       });
     },
     onError: (error: AxiosError) => {
-      console.error('Failed to delete recipe:', error.response?.data || error.message);
+      console.error(
+        "Failed to delete recipe:",
+        error.response?.data || error.message
+      );
     },
   });
 };
@@ -50,10 +53,8 @@ const RecipeCard = ({
 }) => {
   const router = useRouter();
 
-  // Fetch user data using React Query
   const { data: userData } = useGetUserById(recipe.userId, !!recipe.userId);
 
-  // Delete recipe mutation
   const deleteRecipeMutation = useDeleteRecipe();
 
   const editRecipeHandler = () => {
@@ -74,7 +75,6 @@ const RecipeCard = ({
 
   return (
     <div className="recipe-card group flex flex-col w-80 bg-neutral-white shadow-sm hover:shadow-md transition-all duration-500 ease-smooth rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
-      {/* Recipe Image */}
       <div className="relative overflow-hidden rounded-t-2xl">
         <Image
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
@@ -85,9 +85,7 @@ const RecipeCard = ({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
-      {/* Recipe Content */}
       <div className="p-5 flex-1 flex flex-col">
-        {/* Author Info */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3 animate-fade-in-up delay-200">
             <div className="w-9 h-9 bg-gradient-to-br from-primary-orange to-primary-orange-hover rounded-full flex items-center justify-center shadow-sm">
@@ -101,7 +99,6 @@ const RecipeCard = ({
           </div>
           {isModified && (
             <div className="flex items-center gap-1 animate-fade-in-left delay-300">
-              {/* Edit Button */}
               <button
                 className="group/edit relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
                 onClick={editRecipeHandler}
@@ -117,7 +114,6 @@ const RecipeCard = ({
                 </svg>
               </button>
 
-              {/* Delete Button */}
               <button
                 className="group/delete relative p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={deleteRecipeHandler}
@@ -137,12 +133,10 @@ const RecipeCard = ({
           )}
         </div>
 
-        {/* Recipe Name */}
         <h3 className="text-xl font-bold text-gray-800 mb-4 text-clamp-2 animate-fade-in-up delay-400">
           {recipe.name}
         </h3>
 
-        {/* View Recipe Button */}
         <button
           onClick={() => router.push(`/showRecipe/${recipe._id}`)}
           className="mt-auto inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-primary-orange to-primary-orange-hover text-neutral-white font-semibold rounded-xl hover:from-primary-orange-hover hover:to-primary-orange hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-sm animate-fade-in-up delay-600"

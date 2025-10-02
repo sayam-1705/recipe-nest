@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -8,26 +8,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
 import { AxiosError } from "axios";
 
-// Recipe Mutation
 const useCreateRecipe = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
-      const response = await apiClient.post('/createRecipe', recipeData);
+      const response = await apiClient.post("/createRecipe", recipeData);
       return response.data.recipe;
     },
     onSuccess: (newRecipe) => {
-      // Invalidate and refetch related queries
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
       if (newRecipe.userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: ['recipes', 'byUserId', newRecipe.userId] 
+        queryClient.invalidateQueries({
+          queryKey: ["recipes", "byUserId", newRecipe.userId],
         });
       }
     },
     onError: (error: AxiosError) => {
-      console.error('Failed to create recipe:', error.response?.data || error.message);
+      console.error(
+        "Failed to create recipe:",
+        error.response?.data || error.message
+      );
     },
   });
 };
@@ -36,19 +37,39 @@ const CreateRecipe = () => {
   const router = useRouter();
   const createRecipeMutation = useCreateRecipe();
 
-  // Static data for form options
   const staticFormData = {
-    dietaryTypes: ["Vegetarian", "Non-Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free"],
-    types: ["Appetizer", "Main Course", "Dessert", "Snack", "Beverage", "Salad", "Soup"],
+    dietaryTypes: [
+      "Vegetarian",
+      "Non-Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Dairy-Free",
+    ],
+    types: [
+      "Appetizer",
+      "Main Course",
+      "Dessert",
+      "Snack",
+      "Beverage",
+      "Salad",
+      "Soup",
+    ],
     meals: ["Breakfast", "Lunch", "Dinner", "Snack", "Brunch"],
     difficulties: ["Easy", "Medium", "Hard", "Expert"],
     seasons: ["Spring", "Summer", "Fall", "Winter", "All Seasons"],
-    occasions: ["Everyday", "Party", "Holiday", "Special", "Quick Meal", "Date Night", "Family Gathering"],
+    occasions: [
+      "Everyday",
+      "Party",
+      "Holiday",
+      "Special",
+      "Quick Meal",
+      "Date Night",
+      "Family Gathering",
+    ],
   };
 
   const handleFormDataChange = (data: unknown) => {
-    // Optional: Handle form data changes if needed
-    console.log('Form data changed:', data);
+    console.log("Form data changed:", data);
   };
 
   const handleCreateRecipe = async (formData: {
@@ -66,9 +87,8 @@ const CreateRecipe = () => {
     image: string | File | null;
   }) => {
     try {
-      // Handle image conversion to base64 if needed
-      let imageData = '';
-      
+      let imageData = "";
+
       if (formData.image && formData.image instanceof File) {
         const arrayBuffer = await formData.image.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
@@ -98,19 +118,17 @@ const CreateRecipe = () => {
 
       await createRecipeMutation.mutateAsync(recipeData);
       console.log("Recipe created successfully");
-      
-      // Redirect to home page or recipe list
-      router.push('/');
-      
+
+      router.push("/");
     } catch (error) {
-      console.error('Error creating recipe:', error);
+      console.error("Error creating recipe:", error);
     }
   };
 
   return (
     <ProtectedRoute>
       <div>
-        <RecipeForm 
+        <RecipeForm
           staticData={staticFormData}
           onFormDataChange={handleFormDataChange}
           onSubmit={handleCreateRecipe}

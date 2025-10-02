@@ -16,7 +16,6 @@ const Select: React.FC<SelectProps> = ({
     onChange(e.target.value);
   };
 
-  // Convert string array to SelectOption array if needed
   const normalizedOptions: SelectOption[] = options.map((option) => {
     if (typeof option === "string") {
       return { value: option, label: option };
@@ -24,11 +23,12 @@ const Select: React.FC<SelectProps> = ({
     return option;
   });
 
-  // Custom dropdown icon component
   const DropdownIcon = () => (
     <svg
       className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-all duration-300 ease-out pointer-events-none ${
-        disabled ? "text-neutral-300" : "text-neutral-500 group-hover:text-primary-orange"
+        disabled
+          ? "text-neutral-300"
+          : "text-neutral-500 group-hover:text-primary-orange"
       }`}
       fill="none"
       stroke="currentColor"

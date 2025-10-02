@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { isAuthenticated, getUser } from '@/utils/auth';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isAuthenticated, getUser } from "@/utils/auth";
 
 export const useProtectedRoute = ({
-  redirectTo = '/login',
+  redirectTo = "/login",
   redirectDelay = 0,
 }: UseProtectedRouteOptions = {}): AuthState => {
   const router = useRouter();
@@ -18,9 +18,9 @@ export const useProtectedRoute = ({
   useEffect(() => {
     const authenticated = isAuthenticated();
     const user = getUser();
-    
+
     const isValid = authenticated && !!user;
-    
+
     if (!isValid) {
       const redirect = () => router.push(redirectTo);
       if (redirectDelay > 0) {
@@ -45,9 +45,11 @@ export const useRecipeOwnership = (recipeUserId?: string) => {
 
   useEffect(() => {
     const user = getUser();
-    const hasAccess = user && recipeUserId && 
+    const hasAccess =
+      user &&
+      recipeUserId &&
       (user._id === recipeUserId || user.id === recipeUserId);
-    
+
     setCanAccess(!!hasAccess);
   }, [recipeUserId]);
 

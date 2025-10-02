@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export const useApi = <T = unknown>(apiCall: () => Promise<T>) => {
   const [data, setData] = useState<T | null>(null);
@@ -15,7 +15,7 @@ export const useApi = <T = unknown>(apiCall: () => Promise<T>) => {
         const result = await memoizedApiCall();
         setData(result);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -31,7 +31,7 @@ export const useApi = <T = unknown>(apiCall: () => Promise<T>) => {
       const result = await apiCall();
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -40,19 +40,21 @@ export const useApi = <T = unknown>(apiCall: () => Promise<T>) => {
   return { data, loading, error, refetch };
 };
 
-export const useForm = <T extends Record<string, unknown>>(initialValues: T) => {
+export const useForm = <T extends Record<string, unknown>>(
+  initialValues: T
+) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
 
   const setValue = (key: keyof T, value: unknown) => {
-    setValues(prev => ({ ...prev, [key]: value }));
+    setValues((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) {
-      setErrors(prev => ({ ...prev, [key]: undefined }));
+      setErrors((prev) => ({ ...prev, [key]: undefined }));
     }
   };
 
   const setError = (key: keyof T, error: string) => {
-    setErrors(prev => ({ ...prev, [key]: error }));
+    setErrors((prev) => ({ ...prev, [key]: error }));
   };
 
   const reset = () => {

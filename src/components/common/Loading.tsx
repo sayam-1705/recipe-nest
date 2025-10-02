@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'md',
-  color = 'text-primary-orange',
-  className = '',
+  size = "md",
+  color = "text-primary-orange",
+  className = "",
 }) => {
   const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-8 w-8',
-    lg: 'h-12 w-12',
-    xl: 'h-16 w-16',
+    sm: "h-4 w-4",
+    md: "h-8 w-8",
+    lg: "h-12 w-12",
+    xl: "h-16 w-16",
   };
 
   return (
@@ -39,13 +39,13 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 };
 
 const LoadingSection: React.FC<LoadingSectionProps> = ({
-  message = 'Loading...',
+  message = "Loading...",
   fullPage = false,
   children,
 }) => {
   const containerClasses = fullPage
-    ? 'fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50'
-    : 'flex items-center justify-center py-12';
+    ? "fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50"
+    : "flex items-center justify-center py-12";
 
   return (
     <div className={containerClasses}>
@@ -62,28 +62,29 @@ const LoadingSection: React.FC<LoadingSectionProps> = ({
 };
 
 const Skeleton: React.FC<SkeletonProps> = ({
-  className = '',
-  variant = 'text',
+  className = "",
+  variant = "text",
   width,
   height,
-  animation = 'pulse',
+  animation = "pulse",
 }) => {
-  const baseClasses = 'bg-gray-200';
-  
+  const baseClasses = "bg-gray-200";
+
   const variantClasses = {
-    text: 'h-4 w-full rounded',
-    rectangular: 'rounded',
-    circular: 'rounded-full',
+    text: "h-4 w-full rounded",
+    rectangular: "rounded",
+    circular: "rounded-full",
   };
 
   const animationClasses = {
-    pulse: 'animate-pulse',
-    wave: 'animate-pulse', // You can implement wave animation with CSS
+    pulse: "animate-pulse",
+    wave: "animate-pulse",
   };
 
   const styles: React.CSSProperties = {};
-  if (width) styles.width = typeof width === 'number' ? `${width}px` : width;
-  if (height) styles.height = typeof height === 'number' ? `${height}px` : height;
+  if (width) styles.width = typeof width === "number" ? `${width}px` : width;
+  if (height)
+    styles.height = typeof height === "number" ? `${height}px` : height;
 
   return (
     <div

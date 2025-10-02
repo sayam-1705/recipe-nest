@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,52 +7,45 @@ export async function POST(request: NextRequest) {
     const { path, tag, secret } = body;
 
     if (secret !== process.env.REVALIDATION_SECRET) {
-      return NextResponse.json(
-        { message: 'Invalid secret' },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
     }
 
     if (path) {
       revalidatePath(path);
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: `Path ${path} revalidated successfully`,
         revalidated: true,
-        now: Date.now()
+        now: Date.now(),
       });
     }
 
     if (tag) {
       revalidateTag(tag);
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: `Tag ${tag} revalidated successfully`,
         revalidated: true,
-        now: Date.now()
+        now: Date.now(),
       });
     }
 
-    const pathsToRevalidate = [
-      '/',
-      '/api/getAllRecipes',
-    ];
+    const pathsToRevalidate = ["/", "/api/getAllRecipes"];
 
     pathsToRevalidate.forEach((path) => {
       revalidatePath(path);
     });
 
     return NextResponse.json({
-      message: 'Common paths revalidated successfully',
+      message: "Common paths revalidated successfully",
       revalidated: true,
       paths: pathsToRevalidate,
-      now: Date.now()
+      now: Date.now(),
     });
-
   } catch (error) {
-    console.error('Revalidation error:', error);
+    console.error("Revalidation error:", error);
     return NextResponse.json(
-      { 
-        message: 'Error revalidating',
-        error: error instanceof Error ? error.message : 'Unknown error'
+      {
+        message: "Error revalidating",
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
@@ -61,28 +54,24 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const pathsToRevalidate = [
-      '/',
-      '/api/getAllRecipes',
-    ];
+    const pathsToRevalidate = ["/", "/api/getAllRecipes"];
 
     pathsToRevalidate.forEach((path) => {
       revalidatePath(path);
     });
 
     return NextResponse.json({
-      message: 'Scheduled revalidation completed',
+      message: "Scheduled revalidation completed",
       revalidated: true,
       paths: pathsToRevalidate,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Scheduled revalidation error:', error);
+    console.error("Scheduled revalidation error:", error);
     return NextResponse.json(
-      { 
-        message: 'Scheduled revalidation failed',
-        error: error instanceof Error ? error.message : 'Unknown error'
+      {
+        message: "Scheduled revalidation failed",
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

@@ -1,12 +1,19 @@
 "use client";
 
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, ChartEvent, ActiveElement } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartEvent,
+  ActiveElement,
+} from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
-  // Ensure all values are numbers and provide fallbacks
   const safeNutritionData = {
     calories: nutritionData?.calories || 0,
     ENERC_KCAL: nutritionData?.ENERC_KCAL || 0,
@@ -15,10 +22,10 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
     CHOCDF_KCAL: nutritionData?.CHOCDF_KCAL || 0,
   };
 
-  // Check if we have any actual nutrition data
-  const hasNutritionData = safeNutritionData.PROCNT_KCAL > 0 || 
-                          safeNutritionData.FAT_KCAL > 0 || 
-                          safeNutritionData.CHOCDF_KCAL > 0;
+  const hasNutritionData =
+    safeNutritionData.PROCNT_KCAL > 0 ||
+    safeNutritionData.FAT_KCAL > 0 ||
+    safeNutritionData.CHOCDF_KCAL > 0;
   const data = {
     labels: ["Protein", "Fat", "Carbohydrates"],
     datasets: [
@@ -29,9 +36,9 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
           safeNutritionData.CHOCDF_KCAL,
         ],
         backgroundColor: [
-          "rgba(34, 197, 94, 0.8)", // Green for protein
-          "rgba(251, 146, 60, 0.8)", // Orange for fat
-          "rgba(139, 92, 246, 0.8)", // Violet for carbs
+          "rgba(34, 197, 94, 0.8)",
+          "rgba(251, 146, 60, 0.8)",
+          "rgba(139, 92, 246, 0.8)",
         ],
         borderColor: [
           "rgb(34, 197, 94)",
@@ -117,7 +124,8 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
               safeNutritionData.PROCNT_KCAL +
               safeNutritionData.FAT_KCAL +
               safeNutritionData.CHOCDF_KCAL;
-            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0";
+            const percentage =
+              total > 0 ? ((value / total) * 100).toFixed(1) : "0";
             return `${label}: ${value}g (${percentage}%)`;
           },
         },

@@ -12,10 +12,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
-    
-    // Log to error reporting service in production
-    if (process.env.NODE_ENV === 'production') {
-      // Add your error reporting service here (Sentry, LogRocket, etc.)
+
+    if (process.env.NODE_ENV === "production") {
     }
   }
 
