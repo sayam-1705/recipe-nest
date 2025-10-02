@@ -9,25 +9,32 @@ import { apiClient } from "@/utils/api";
 // Recipe Queries
 const useGetAllRecipes = () => {
   return useQuery({
-    queryKey: ['recipes'],
+    queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get('/getAllRecipes');
+      const response = await apiClient.get("/getAllRecipes");
       return response.data.recipes;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
-const useGetRecipesByWeather = (lat?: number, lon?: number, enabled: boolean = true) => {
+const useGetRecipesByWeather = (
+  lat?: number,
+  lon?: number,
+  enabled: boolean = true
+) => {
   return useQuery({
-    queryKey: ['recipes', 'byWeather', lat, lon],
-    queryFn: async (): Promise<{ 
-      recipes: Recipe[], 
-      weather: WeatherInfo,
-      searchStrategy?: string,
-      totalRecipes?: number
+    queryKey: ["recipes", "byWeather", lat, lon],
+    queryFn: async (): Promise<{
+      recipes: Recipe[];
+      weather: WeatherInfo;
+      searchStrategy?: string;
+      totalRecipes?: number;
     }> => {
-      const response = await apiClient.post('/getRecipeBasedOnWeather', { lat, lon });
+      const response = await apiClient.post("/getRecipeBasedOnWeather", {
+        lat,
+        lon,
+      });
       return response.data;
     },
     enabled: enabled && lat !== undefined && lon !== undefined,
@@ -46,41 +53,39 @@ const Carousel = () => {
 
   // Always fetch all recipes
   const { data: allRecipes, isLoading: recipesLoading } = useGetAllRecipes();
-  
+
   // Fetch weather-based recipes when coordinates are available
   const { data: weatherData, isLoading: weatherLoading } =
     useGetRecipesByWeather(coordinates?.lat, coordinates?.lon, !!coordinates);
 
-  // Simple logic: Update finalRecipes based on available data
+  // Recipe selection logic: Weather recipes take priority, fallback to all recipes
   useEffect(() => {
-    // If we have weather recipes, use them and add more from all recipes if needed
+    // Priority 1: If weather recipes are available, show ONLY weather recipes
     if (weatherData?.recipes && weatherData.recipes.length > 0) {
-      const weatherRecipes = weatherData.recipes.slice(0, 5);
-      
-      // If weather recipes are less than 5, add more from all recipes
-      if (weatherRecipes.length < 5 && allRecipes && allRecipes.length > 0) {
-        const weatherIds = new Set(weatherRecipes.map(r => r._id));
-        const additionalRecipes = allRecipes
-          .filter(recipe => !weatherIds.has(recipe._id))
-          .slice(0, 5 - weatherRecipes.length);
-        
-        setFinalRecipes([...weatherRecipes, ...additionalRecipes]);
-      } else {
-        setFinalRecipes(weatherRecipes);
-      }
-    } 
-    // If no weather recipes but we have all recipes, use those
+      console.log(
+        `🌤️ Showing ${weatherData.recipes.length} weather-specific recipes`
+      );
+      setFinalRecipes(weatherData.recipes.slice(0, 5)); // Limit for better UX
+    }
+    // Priority 2: If no weather recipes but general recipes exist, show general recipes
     else if (allRecipes && allRecipes.length > 0) {
+      console.log(
+        `📚 No weather recipes found, showing ${Math.min(
+          allRecipes.length,
+          5
+        )} general recipes`
+      );
       setFinalRecipes(allRecipes.slice(0, 5));
-    } 
-    // Otherwise, empty array
+    }
+    // Priority 3: No recipes available
     else {
+      console.log("❌ No recipes available");
       setFinalRecipes([]);
     }
   }, [weatherData?.recipes, allRecipes]);
 
   const recipes = finalRecipes;
-  const isLoading = recipesLoading || (!!coordinates && weatherLoading && !weatherData);
+  const isLoading = recipesLoading || (coordinates && weatherLoading);
   const totalSlides = recipes.length;
 
   // Get user location on mount
@@ -136,9 +141,13 @@ const Carousel = () => {
             {weatherData.weather.place}: {weatherData.weather.temperature}°C,{" "}
             {weatherData.weather.description}
           </span>
-          {weatherData.recipes && weatherData.recipes.length > 0 && (
+          {weatherData.recipes && weatherData.recipes.length > 0 ? (
             <span className="ml-4 opacity-80">
-              {weatherData.recipes.length} weather recipes available
+              Showing {weatherData.recipes.length} weather-specific recipes
+            </span>
+          ) : (
+            <span className="ml-4 opacity-80">
+              No weather-specific recipes found, showing all recipes
             </span>
           )}
         </div>
