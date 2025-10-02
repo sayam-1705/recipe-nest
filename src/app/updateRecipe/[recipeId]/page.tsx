@@ -14,7 +14,7 @@ const useGetRecipeById = (recipeId: string, enabled: boolean = true) => {
   return useQuery({
     queryKey: ['recipes', 'byId', recipeId],
     queryFn: async (): Promise<Recipe> => {
-      const response = await apiClient.get(`/api/getRecipeById/${recipeId}`);
+      const response = await apiClient.get(`/getRecipeById/${recipeId}`);
       return response.data.recipe;
     },
     enabled: enabled && !!recipeId,
@@ -27,7 +27,7 @@ const useUpdateRecipe = () => {
 
   return useMutation({
     mutationFn: async ({ recipeId, recipeData }: { recipeId: string; recipeData: UpdateRecipeData }): Promise<Recipe> => {
-      const response = await apiClient.put(`/api/updateRecipe/${recipeId}`, recipeData);
+      const response = await apiClient.put(`/updateRecipe/${recipeId}`, recipeData);
       return response.data.recipe;
     },
     onSuccess: (updatedRecipe, variables) => {

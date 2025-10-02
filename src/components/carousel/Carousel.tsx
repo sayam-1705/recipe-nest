@@ -11,7 +11,7 @@ const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ['recipes'],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get('/api/getAllRecipes');
+      const response = await apiClient.get('/getAllRecipes');
       return response.data.recipes;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -27,7 +27,7 @@ const useGetRecipesByWeather = (lat?: number, lon?: number, enabled: boolean = t
       searchStrategy?: string,
       totalRecipes?: number
     }> => {
-      const response = await apiClient.post('/api/getRecipeBasedOnWeather', { lat, lon });
+      const response = await apiClient.post('/getRecipeBasedOnWeather', { lat, lon });
       return response.data;
     },
     enabled: enabled && lat !== undefined && lon !== undefined,

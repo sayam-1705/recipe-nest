@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/utils/api";
@@ -13,7 +13,7 @@ const useLogin = () => {
 
   return useMutation({
     mutationFn: async (loginData: LoginData): Promise<{ token: string; user: { name: string; email: string; _id: string } }> => {
-      const response = await apiClient.post('/api/login', loginData);
+      const response = await apiClient.post('/login', loginData);
       return response.data;
     },
     onSuccess: (data) => {
@@ -38,8 +38,14 @@ const Login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const loginMutation = useLogin();
+
+  // Ensure component is mounted before rendering
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,6 +73,15 @@ const Login = () => {
       console.error('Login failed:', error);
     }
   };
+
+  // Show loading state until component is properly mounted
+  if (!isMounted) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div

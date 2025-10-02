@@ -14,7 +14,7 @@ const useCreateRecipe = () => {
 
   return useMutation({
     mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
-      const response = await apiClient.post('/api/createRecipe', recipeData);
+      const response = await apiClient.post('/createRecipe', recipeData);
       return response.data.recipe;
     },
     onSuccess: (newRecipe) => {

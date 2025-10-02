@@ -12,7 +12,7 @@ const useGetRecipesByUserId = (userId: string, enabled: boolean = true) => {
   return useQuery({
     queryKey: ['recipes', 'byUserId', userId],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get(`/api/getRecipeByUserId/${userId}`);
+      const response = await apiClient.get(`/getRecipeByUserId/${userId}`);
       return response.data.recipes;
     },
     enabled: enabled && !!userId,
@@ -63,7 +63,7 @@ const useDeleteUser = () => {
 
   return useMutation({
     mutationFn: async (email: string): Promise<void> => {
-      await apiClient.delete(`/api/delete/${email}`);
+      await apiClient.delete(`/delete/${email}`);
     },
     onSuccess: () => {
       // Clear auth data

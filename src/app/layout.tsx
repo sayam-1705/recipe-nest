@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import QueryProvider from "@/providers/QueryProvider";
+import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
 
 export const metadata: Metadata = {
   title: {
@@ -69,12 +70,14 @@ export default function RootLayout({
         <meta name="theme-color" content="#f97316" />
       </head>
       <body className="antialiased">
-        <QueryProvider>
-          <Navbar />
-          <main className="min-h-screen">
-            {children}
-          </main>
-        </QueryProvider>
+        <GlobalErrorBoundary>
+          <QueryProvider>
+            <Navbar />
+            <main className="min-h-screen">
+              {children}
+            </main>
+          </QueryProvider>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );

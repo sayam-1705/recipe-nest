@@ -1,4 +1,11 @@
-import mongoose from "mongoose";
+// Conditional import for server-side only
+const getMongoose = async () => {
+  if (typeof window === "undefined") {
+    const { default: mongoose } = await import("mongoose");
+    return mongoose;
+  }
+  return null;
+};
 
 const isBrowser = () => typeof window !== "undefined";
 
@@ -27,7 +34,12 @@ export const setAuthData = (token: string, user: User | null): void => {
 };
 
 export const validate = {
-  objectId: (id: string) => mongoose.Types.ObjectId.isValid(id),
+  objectId: async (id: string) => {
+    if (isBrowser()) return true; // Skip validation on client-side
+    const mongoose = await getMongoose();
+    if (!mongoose) return true;
+    return mongoose.Types.ObjectId.isValid(id);
+  },
   email: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
   password: (password: string) => 
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password),

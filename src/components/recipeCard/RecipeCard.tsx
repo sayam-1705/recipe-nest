@@ -11,7 +11,7 @@ const useGetUserById = (userId: string, enabled: boolean = true) => {
   return useQuery({
     queryKey: ['users', 'byId', userId],
     queryFn: async (): Promise<{ name: string; email: string; _id: string }> => {
-      const response = await apiClient.get(`/api/getUserById/${userId}`);
+      const response = await apiClient.get(`/getUserById/${userId}`);
       return response.data.user;
     },
     enabled: enabled && !!userId,
@@ -24,7 +24,7 @@ const useDeleteRecipe = () => {
 
   return useMutation({
     mutationFn: async (recipeId: string): Promise<void> => {
-      await apiClient.delete(`/api/deleteRecipe/${recipeId}`);
+      await apiClient.delete(`/deleteRecipe/${recipeId}`);
     },
     onSuccess: (_, recipeId) => {
       // Remove the recipe from cache

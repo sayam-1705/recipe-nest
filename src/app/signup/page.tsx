@@ -12,7 +12,7 @@ const useSignup = () => {
 
   return useMutation({
     mutationFn: async (signupData: SignupData): Promise<{ token: string; user: { name: string; email: string; _id: string } }> => {
-      const response = await apiClient.post('/api/signup', signupData);
+      const response = await apiClient.post('/signup', signupData);
       return response.data;
     },
     onSuccess: (data) => {

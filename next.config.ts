@@ -56,6 +56,8 @@ const nextConfig: NextConfig = {
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ['lucide-react', 'chart.js'],
+    // Fix SSR issues
+    esmExternals: true,
   },
 
   // Build optimization
@@ -68,6 +70,22 @@ const nextConfig: NextConfig = {
   
   // Output configuration for Vercel
   output: 'standalone',
+  
+  // Webpack configuration to handle SSR issues
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Exclude server-only modules from client bundle
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+      };
+    }
+
+    return config;
+  },
   
   // Vercel-specific optimizations
   ...(process.env.VERCEL && {

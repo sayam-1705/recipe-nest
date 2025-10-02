@@ -11,7 +11,7 @@ const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ['recipes'],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get('/api/getAllRecipes');
+      const response = await apiClient.get('/getAllRecipes');
       return response.data.recipes;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
