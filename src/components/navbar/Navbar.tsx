@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
+import MobileNavLink from "./MobileNavLink";
 
 // Hook to get current user - same as in AuthLinks
 const useCurrentUser = () => {
@@ -197,24 +198,5 @@ const Navbar = () => {
     </>
   );
 };
-
-// Mobile Navigation Link Component
-const MobileNavLink = ({
-  href,
-  onClick,
-  children,
-}: {
-  href: string;
-  onClick: () => void;
-  children: React.ReactNode;
-}) => (
-  <a
-    href={href}
-    onClick={onClick}
-    className="flex items-center px-4 py-3 text-gray-700 hover:text-primary-orange hover:bg-orange-50 rounded-lg transition-all duration-200 font-medium text-base"
-  >
-    {children}
-  </a>
-);
 
 export default Navbar;

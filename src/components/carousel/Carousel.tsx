@@ -83,19 +83,12 @@ const Carousel = () => {
     if (coordinates) return;
 
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCoordinates({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        () => {
-          setCoordinates({ lat: 22.70317823887959, lon: 88.46529275336827 });
-        }
-      );
-    } else {
-      setCoordinates({ lat: 22.70317823887959, lon: 88.46529275336827 });
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCoordinates({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
+      });
     }
   }, [coordinates]);
 
@@ -169,7 +162,7 @@ const Carousel = () => {
           >
             {recipes.map((recipe, index) => (
               <div key={recipe._id} className="w-full h-full flex-shrink-0">
-                <div className="w-full h-full flex flex-col md:flex-row items-center justify-center">
+                <div className="w-full h-full flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 md:px-16 lg:px-20 xl:px-24">
                   <div className="flex flex-col justify-center z-10 text-center md:text-left max-md:pt-4 md:pr-8 max-w-xl order-2 md:order-1 px-4 md:px-8 lg:px-12">
                     <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 text-secondary-green-dark leading-tight">
                       {recipe.name}
