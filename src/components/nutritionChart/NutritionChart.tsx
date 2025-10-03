@@ -75,9 +75,9 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
       legend: {
         position: "bottom" as const,
         labels: {
-          padding: 15,
+          padding: window?.innerWidth >= 640 ? 15 : 10,
           font: {
-            size: 14,
+            size: window?.innerWidth >= 768 ? 14 : 12,
             family: "Poppins, sans-serif",
             weight: "normal" as const,
           },
@@ -90,13 +90,13 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         display: true,
         text: `Total: ${safeNutritionData.calories} calories`,
         font: {
-          size: 18,
+          size: window?.innerWidth >= 768 ? 18 : window?.innerWidth >= 640 ? 16 : 14,
           weight: "normal" as const,
           family: "Poppins, sans-serif",
         },
         padding: {
-          top: 15,
-          bottom: 25,
+          top: window?.innerWidth >= 640 ? 15 : 10,
+          bottom: window?.innerWidth >= 640 ? 25 : 15,
         },
         color: "#374151",
       },
@@ -147,72 +147,72 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
 
   return (
     <div className="w-full space-y-8">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         <div
-          className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200 hover:shadow-lg hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-orange-200 hover:shadow-lg hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
           style={{ animationDelay: "0.1s" }}
         >
-          <div className="text-xs text-orange-600 font-medium uppercase tracking-wider mb-2 group-hover:text-orange-700 transition-colors duration-300">
+          <div className="text-xs text-orange-600 font-medium uppercase tracking-wider mb-1 sm:mb-2 group-hover:text-orange-700 transition-colors duration-300">
             Calories
           </div>
-          <div className="text-3xl font-light text-orange-800 group-hover:text-orange-900 transition-colors duration-300">
+          <div className="text-xl sm:text-2xl md:text-3xl font-light text-orange-800 group-hover:text-orange-900 transition-colors duration-300">
             {safeNutritionData.calories}
           </div>
         </div>
         <div
-          className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg hover:border-emerald-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-emerald-200 hover:shadow-lg hover:border-emerald-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
           style={{ animationDelay: "0.2s" }}
         >
-          <div className="text-xs text-emerald-600 font-medium uppercase tracking-wider mb-2 group-hover:text-emerald-700 transition-colors duration-300">
+          <div className="text-xs text-emerald-600 font-medium uppercase tracking-wider mb-1 sm:mb-2 group-hover:text-emerald-700 transition-colors duration-300">
             Protein
           </div>
-          <div className="text-3xl font-light text-emerald-800 group-hover:text-emerald-900 transition-colors duration-300">
+          <div className="text-xl sm:text-2xl md:text-3xl font-light text-emerald-800 group-hover:text-emerald-900 transition-colors duration-300">
             {safeNutritionData.PROCNT_KCAL}g
           </div>
         </div>
         <div
-          className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-2xl border border-amber-200 hover:shadow-lg hover:border-amber-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          className="bg-gradient-to-br from-amber-50 to-amber-100 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-amber-200 hover:shadow-lg hover:border-amber-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
           style={{ animationDelay: "0.3s" }}
         >
-          <div className="text-xs text-amber-600 font-medium uppercase tracking-wider mb-2 group-hover:text-amber-700 transition-colors duration-300">
+          <div className="text-xs text-amber-600 font-medium uppercase tracking-wider mb-1 sm:mb-2 group-hover:text-amber-700 transition-colors duration-300">
             Fat
           </div>
-          <div className="text-3xl font-light text-amber-800 group-hover:text-amber-900 transition-colors duration-300">
+          <div className="text-xl sm:text-2xl md:text-3xl font-light text-amber-800 group-hover:text-amber-900 transition-colors duration-300">
             {safeNutritionData.FAT_KCAL}g
           </div>
         </div>
         <div
-          className="bg-gradient-to-br from-violet-50 to-violet-100 p-6 rounded-2xl border border-violet-200 hover:shadow-lg hover:border-violet-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
+          className="bg-gradient-to-br from-violet-50 to-violet-100 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-violet-200 hover:shadow-lg hover:border-violet-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
           style={{ animationDelay: "0.4s" }}
         >
-          <div className="text-xs text-violet-600 font-medium uppercase tracking-wider mb-2 group-hover:text-violet-700 transition-colors duration-300">
+          <div className="text-xs text-violet-600 font-medium uppercase tracking-wider mb-1 sm:mb-2 group-hover:text-violet-700 transition-colors duration-300">
             Carbs
           </div>
-          <div className="text-3xl font-light text-violet-800 group-hover:text-violet-900 transition-colors duration-300">
+          <div className="text-xl sm:text-2xl md:text-3xl font-light text-violet-800 group-hover:text-violet-900 transition-colors duration-300">
             {safeNutritionData.CHOCDF_KCAL}g
           </div>
         </div>
       </div>
 
       <div
-        className="h-96 flex justify-center items-center animate-fade-in-up"
+        className="h-64 sm:h-80 md:h-96 flex justify-center items-center animate-fade-in-up px-4"
         style={{ animationDelay: "0.5s" }}
       >
         {hasNutritionData ? (
-          <div className="w-80 h-80 transition-all duration-500 hover:scale-105 relative group">
+          <div className="w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 transition-all duration-500 hover:scale-105 relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-100/20 to-violet-100/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
-            <div className="relative z-10 w-full h-full p-4 bg-white/50 backdrop-blur-sm rounded-full transition-all duration-500">
+            <div className="relative z-10 w-full h-full p-2 sm:p-3 md:p-4 bg-white/50 backdrop-blur-sm rounded-full transition-all duration-500">
               <Pie data={data} options={options} />
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-64 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 w-full">
-            <div className="text-center">
-              <div className="text-4xl mb-4">📊</div>
-              <p className="text-gray-500 text-lg font-medium">
+          <div className="flex items-center justify-center h-48 sm:h-56 md:h-64 bg-gray-50 rounded-xl sm:rounded-2xl border-2 border-dashed border-gray-200 w-full mx-4">
+            <div className="text-center p-4">
+              <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">📊</div>
+              <p className="text-gray-500 text-sm sm:text-base md:text-lg font-medium">
                 No nutrition breakdown available
               </p>
-              <p className="text-gray-400 text-sm mt-2">
+              <p className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
                 Only total calories are shown
               </p>
             </div>

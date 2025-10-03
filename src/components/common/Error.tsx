@@ -82,20 +82,24 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
   return (
     <div
-      className={`rounded-lg border p-6 ${variantClasses[variant]} ${className}`}
+      className={`rounded-lg border p-4 sm:p-6 ${variantClasses[variant]} ${className}`}
     >
-      <div className="flex items-start">
-        <div className={`flex-shrink-0 ${iconColor[variant]}`}>
+      <div className="flex items-start space-x-3">
+        <div className={`flex-shrink-0 ${iconColor[variant]} mt-0.5`}>
           <Icon />
         </div>
-        <div className="ml-3 flex-1">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="mt-2 text-sm opacity-90">{message}</p>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base sm:text-lg font-semibold leading-tight">
+            {title}
+          </h3>
+          <p className="mt-2 text-xs sm:text-sm opacity-90 leading-relaxed break-words">
+            {message}
+          </p>
           {onAction && (
-            <div className="mt-4">
+            <div className="mt-3 sm:mt-4">
               <button
                 onClick={onAction}
-                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${buttonColor[variant]}`}
+                className={`w-full sm:w-auto inline-flex items-center justify-center px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${buttonColor[variant]}`}
               >
                 {actionLabel}
               </button>
@@ -123,11 +127,11 @@ const NotFound: React.FC<NotFoundProps> = ({
   };
 
   return (
-    <div className="min-h-[400px] flex items-center justify-center bg-gray-50">
-      <div className="text-center p-8 max-w-md">
-        <div className="mb-6">
+    <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center bg-gray-50 px-4 py-6">
+      <div className="text-center p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-md mx-auto">
+        <div className="mb-4 sm:mb-6">
           <svg
-            className="mx-auto h-16 w-16 text-gray-400"
+            className="mx-auto h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -140,12 +144,16 @@ const NotFound: React.FC<NotFoundProps> = ({
             />
           </svg>
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">{title}</h2>
-        <p className="text-gray-600 mb-6">{message}</p>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 leading-tight">
+          {title}
+        </h2>
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
+          {message}
+        </p>
         {showHome && (
           <button
             onClick={handleGoHome}
-            className="bg-primary-orange hover:bg-primary-orange-hover text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+            className="w-full sm:w-auto bg-primary-orange hover:bg-primary-orange-hover text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors duration-200 text-sm sm:text-base"
           >
             {actionLabel}
           </button>

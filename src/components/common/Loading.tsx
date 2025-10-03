@@ -44,16 +44,18 @@ const LoadingSection: React.FC<LoadingSectionProps> = ({
   children,
 }) => {
   const containerClasses = fullPage
-    ? "fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50"
-    : "flex items-center justify-center py-12";
+    ? "fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50 px-4"
+    : "flex items-center justify-center py-8 sm:py-12 px-4";
 
   return (
     <div className={containerClasses}>
-      <div className="text-center">
+      <div className="text-center max-w-sm mx-auto">
         {children || (
           <>
-            <LoadingSpinner size="lg" className="mx-auto mb-4" />
-            <p className="text-gray-600 text-lg font-medium">{message}</p>
+            <LoadingSpinner size="lg" className="mx-auto mb-3 sm:mb-4" />
+            <p className="text-gray-600 text-base sm:text-lg font-medium px-2">
+              {message}
+            </p>
           </>
         )}
       </div>

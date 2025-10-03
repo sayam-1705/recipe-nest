@@ -18,7 +18,7 @@ export const Button: React.FC<{
   className = "",
 }) => {
   const baseClasses =
-    "px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
 
   const variantClasses = {
     primary:
@@ -39,9 +39,9 @@ export const Button: React.FC<{
       className={`${baseClasses} ${variantClasses[variant]} ${disabledClasses} ${className}`}
     >
       {loading ? (
-        <span className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          Loading...
+        <span className="flex items-center justify-center gap-1 sm:gap-2">
+          <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          <span className="hidden sm:inline">Loading...</span>
         </span>
       ) : (
         children
@@ -82,7 +82,7 @@ export const Input: React.FC<{
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-primary-orange ${
+        className={`w-full px-3 py-2 sm:py-2.5 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-primary-orange ${
           error ? "border-red-500" : "border-gray-300"
         }`}
       />
@@ -97,9 +97,9 @@ export const Card: React.FC<{
   padding?: "sm" | "md" | "lg";
 }> = ({ children, className = "", padding = "md" }) => {
   const paddingClasses = {
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8",
+    sm: "p-3 sm:p-4",
+    md: "p-4 sm:p-6",
+    lg: "p-6 sm:p-8",
   };
 
   return (
@@ -120,16 +120,16 @@ export const Modal: React.FC<{
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-xs sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
         {title && (
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate">{title}</h2>
           </div>
         )}
-        <div className="px-6 py-4">{children}</div>
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
-          <Button onClick={onClose} variant="secondary">
+        <div className="px-4 sm:px-6 py-3 sm:py-4">{children}</div>
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 flex justify-end">
+          <Button onClick={onClose} variant="secondary" className="text-sm">
             Close
           </Button>
         </div>
@@ -142,9 +142,9 @@ export const LoadingSpinner: React.FC<{ size?: "sm" | "md" | "lg" }> = ({
   size = "md",
 }) => {
   const sizeClasses = {
-    sm: "w-4 h-4",
-    md: "w-8 h-8",
-    lg: "w-12 h-12",
+    sm: "w-3 h-3 sm:w-4 sm:h-4",
+    md: "w-6 h-6 sm:w-8 sm:h-8",
+    lg: "w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12",
   };
 
   return (
@@ -163,11 +163,11 @@ export const EmptyState: React.FC<{
   };
 }> = ({ title, description, action }) => {
   return (
-    <div className="text-center py-12">
-      <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-      {description && <p className="text-gray-500 mb-6">{description}</p>}
+    <div className="text-center py-8 sm:py-12 px-4">
+      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">{title}</h3>
+      {description && <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">{description}</p>}
       {action && (
-        <Button onClick={action.onClick} variant="primary">
+        <Button onClick={action.onClick} variant="primary" className="w-full sm:w-auto">
           {action.label}
         </Button>
       )}
