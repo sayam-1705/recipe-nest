@@ -61,5 +61,13 @@ export default async function Home() {
     <Footer key="footer" />,
   ];
 
-  return <ErrorBoundary>{components}</ErrorBoundary>;
+  return (
+    <div className="w-full overflow-x-hidden">
+      <ErrorBoundary>
+        <div className="min-w-[320px] max-w-[1920px] mx-auto">
+          {components}
+        </div>
+      </ErrorBoundary>
+    </div>
+  );
 }

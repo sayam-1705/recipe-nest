@@ -89,7 +89,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
     return (
       <MenuCarousel
         totalCards={recipes.length}
-        cardWidth={320}
+        cardWidth={320} // Will be dynamically adjusted in MenuCarousel based on screen size
         recipes={recipes}
       />
     );
@@ -97,25 +97,25 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
   return (
     <section
-      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-6 md:p-10 gap-10"
+      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 gap-6 sm:gap-8 md:gap-10 xl:gap-12"
       id="menu"
       role="region"
       aria-labelledby="menu-title"
     >
-      <div className="flex flex-col justify-center gap-6 lg:pr-10">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col justify-center gap-4 sm:gap-5 md:gap-6 lg:pr-6 xl:pr-10">
+        <div className="flex flex-col gap-1 sm:gap-2">
           <h2
             id="menu-title"
-            className="text-4xl md:text-6xl font-bold text-gray-800 animate-fade-in-up"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-800 animate-fade-in-up leading-tight"
           >
             Discover Amazing
           </h2>
-          <h2 className="text-4xl md:text-6xl font-bold animate-fade-in-up">
-            <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-primary-orange-hover bg-clip-text text-transparent mr-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in-up leading-tight">
+            <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-primary-orange-hover bg-clip-text text-transparent mr-1 sm:mr-2">
               Recipes
             </span>
             <svg
-              className="w-10 h-10 md:w-14 md:h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
+              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
               xmlns="http://www.w3.org/2000/svg"
               height="40px"
               viewBox="0 -960 960 960"
@@ -128,19 +128,21 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
           </h2>
         </div>
 
-        <p className="text-gray-600 text-lg leading-8 animate-fade-in-up delay-200">
+        <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-6 sm:leading-7 md:leading-8 animate-fade-in-up delay-200">
           Explore our curated collection of delicious recipes from talented home
           cooks around the world. Find the perfect dish for any occasion.
         </p>
 
         {recipes.length > 0 && (
-          <div className="text-sm text-gray-500 animate-fade-in-up delay-300">
+          <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-300">
             Showing {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
           </div>
         )}
       </div>
 
-      <div className="min-h-[300px]">{renderContent()}</div>
+      <div className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px]">
+        {renderContent()}
+      </div>
     </section>
   );
 };

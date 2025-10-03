@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import QueryProvider from "@/providers/QueryProvider";
 import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -74,18 +83,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#f97316" />
       </head>
-      <body className="antialiased">
+      <body
+        className={`${poppins.variable} antialiased bg-primary-orange-bg font-poppins overflow-x-hidden`}
+      >
         <GlobalErrorBoundary>
           <QueryProvider>
             <Navbar />
-            <main className="min-h-screen">{children}</main>
+            <main className="min-h-screen w-full">{children}</main>
           </QueryProvider>
         </GlobalErrorBoundary>
       </body>

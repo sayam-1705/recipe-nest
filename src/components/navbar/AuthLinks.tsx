@@ -60,7 +60,7 @@ const useLogout = () => {
   });
 };
 
-const AuthLinks = () => {
+const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { data: user } = useCurrentUser();
   const logoutMutation = useLogout();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -76,21 +76,21 @@ const AuthLinks = () => {
         <>
           <div className="relative">
             <button
-              className="flex items-center gap-3 group relative overflow-hidden"
+              className="flex items-center gap-2 sm:gap-3 group relative overflow-hidden"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <span className="translate-x-[-20px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out text-gray-700 font-medium whitespace-nowrap">
+              <span className="hidden sm:block translate-x-[-20px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out text-gray-700 font-medium whitespace-nowrap text-sm sm:text-base">
                 {user?.name?.split(" ")[0]}
               </span>
               <div className="relative">
-                <span className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-full text-white text-lg font-bold transition-all duration-300 ease-out transform hover:shadow-lg active:scale-95 cursor-pointer select-none inline-block text-center">
+                <span className="bg-orange-400 hover:bg-orange-500 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-full text-white text-sm sm:text-base md:text-lg font-bold transition-all duration-300 ease-out transform hover:shadow-lg active:scale-95 cursor-pointer select-none flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 md:w-auto md:h-auto">
                   {user?.name?.split(" ")[0]?.charAt(0)?.toUpperCase()}
                 </span>
               </div>
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-48 sm:w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <Link
                   href="/profile"
                   className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
@@ -176,18 +176,21 @@ const AuthLinks = () => {
       ) : (
         <>
           <Link
-            className="relative border-2 border-secondary-green-light px-5 py-2 rounded-full font-medium text-secondary-green-light transition-all duration-300 hover:bg-secondary-green-light hover:text-white hover:scale-105 hover:shadow-lg active:scale-95 transform overflow-hidden group"
+            className="relative border-2 border-secondary-green-light px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2 rounded-full font-medium text-secondary-green-light transition-all duration-300 hover:bg-secondary-green-light hover:text-white hover:scale-105 hover:shadow-lg active:scale-95 transform overflow-hidden group text-xs sm:text-sm md:text-base"
             href="/login"
           >
             <span className="relative z-10">Login</span>
             <div className="absolute inset-0 bg-secondary-green-light transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </Link>
-          <Link
-            className="relative border border-orange-500 px-5 py-2 rounded-full font-medium bg-gradient-to-r from-orange-500 to-orange-600 text-white transition-all duration-300 hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-xl active:scale-95 transform overflow-hidden group"
-            href="/signup"
-          >
-            <span className="relative z-10">Sign Up</span>
-          </Link>
+          {/* Hide signup on mobile when isMobile is true, show on larger screens */}
+          {!isMobile && (
+            <Link
+              className="relative border border-orange-500 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2 rounded-full font-medium bg-gradient-to-r from-orange-500 to-orange-600 text-white transition-all duration-300 hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-xl active:scale-95 transform overflow-hidden group text-xs sm:text-sm md:text-base"
+              href="/signup"
+            >
+              <span className="relative z-10">Sign Up</span>
+            </Link>
+          )}
         </>
       )}
     </>

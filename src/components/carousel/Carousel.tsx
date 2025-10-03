@@ -122,70 +122,72 @@ const Carousel = () => {
       id="home"
     >
       {weatherData?.weather && (
-        <div className="bg-gradient-to-r from-blue-500 to-teal-500 text-white py-2 px-4 text-center">
-          <span>
-            {weatherData.weather.place}: {weatherData.weather.temperature}°C,{" "}
-            {weatherData.weather.description}
-          </span>
-          {weatherData.recipes && weatherData.recipes.length > 0 ? (
-            <span className="ml-4 opacity-80">
-              Showing {weatherData.recipes.length} weather-specific recipes
+        <div className="bg-gradient-to-r from-blue-500 to-teal-500 text-white py-2 px-4 text-center text-xs sm:text-sm md:text-base">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-0">
+            <span className="text-center">
+              {weatherData.weather.place}: {weatherData.weather.temperature}°C,{" "}
+              {weatherData.weather.description}
             </span>
-          ) : (
-            <span className="ml-4 opacity-80">
-              No weather-specific recipes found, showing all recipes
-            </span>
-          )}
+            {weatherData.recipes && weatherData.recipes.length > 0 ? (
+              <span className="sm:ml-4 opacity-80 text-center">
+                Showing {weatherData.recipes.length} weather-specific recipes
+              </span>
+            ) : (
+              <span className="sm:ml-4 opacity-80 text-center">
+                No weather-specific recipes found, showing all recipes
+              </span>
+            )}
+          </div>
         </div>
       )}
 
       {isLoading ? (
-        <div className="h-[500px] flex items-center justify-center bg-primary-orange-bg rounded-2xl">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-orange mx-auto mb-4"></div>
-            <p className="text-secondary-green-dark text-lg font-medium">
+        <div className="h-[350px] xs:h-[380px] sm:h-[420px] md:h-[500px] lg:h-[500px] xl:h-[500px] flex items-center justify-center bg-primary-orange-bg">
+          <div className="text-center px-4">
+            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-primary-orange mx-auto mb-4"></div>
+            <p className="text-secondary-green-dark text-base sm:text-lg font-medium">
               Loading recipes...
             </p>
           </div>
         </div>
       ) : recipes.length === 0 ? (
-        <div className="h-[500px] flex items-center justify-center bg-primary-orange-bg rounded-2xl">
-          <div className="text-center">
-            <p className="text-secondary-green-dark text-xl font-medium mb-2">
+        <div className="h-[350px] xs:h-[380px] sm:h-[420px] md:h-[500px] lg:h-[500px] xl:h-[500px] flex items-center justify-center bg-primary-orange-bg">
+          <div className="text-center px-4">
+            <p className="text-secondary-green-dark text-lg sm:text-xl font-medium mb-2">
               No recipes available
             </p>
-            <p className="text-gray-600">Please try again later.</p>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Please try again later.
+            </p>
           </div>
         </div>
       ) : (
-        <div className="relative h-[500px] overflow-hidden rounded-2xl shadow-2xl bg-primary-orange-bg">
+        <div className="relative h-[350px] xs:h-[380px] sm:h-[420px] md:h-[500px] lg:h-[500px] xl:h-[500px] overflow-hidden shadow-2xl bg-primary-orange-bg">
           <div
             className="h-full flex transition-transform duration-1000"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {recipes.map((recipe, index) => (
-              <div
-                key={recipe._id}
-                className="w-full h-full flex-shrink-0 pl-24"
-              >
-                <div className="w-full h-full flex items-center">
-                  <div className="flex flex-col justify-center z-10 pr-8 max-w-xl">
-                    <h3 className="text-6xl font-bold mb-6 text-secondary-green-dark leading-tight text-left">
+              <div key={recipe._id} className="w-full h-full flex-shrink-0">
+                <div className="w-full h-full flex flex-col md:flex-row items-center justify-center">
+                  <div className="flex flex-col justify-center z-10 text-center md:text-left max-md:pt-4 md:pr-8 max-w-xl order-2 md:order-1 px-4 md:px-8 lg:px-12">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 text-secondary-green-dark leading-tight">
                       {recipe.name}
                     </h3>
                     <button
                       onClick={() => router.push(`/showRecipe/${recipe._id}`)}
-                      className="text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-primary-orange text-left"
+                      className="text-sm sm:text-base md:text-lg lg:text-xl text-color-dark-green font-medium transition-all duration-300 hover:text-primary-orange inline-block bg-white/80 hover:bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg"
                     >
                       View Recipe
                     </button>
                   </div>
-                  <div className="w-2/3 h-[500px] relative overflow-hidden rounded-l-2xl">
+                  <div className="w-full md:w-2/3 h-[200px] xs:h-[220px] sm:h-[250px] md:h-[400px] lg:h-[400px] xl:h-[400px] overflow-hidden rounded-lg sm:rounded-xl md:rounded-l-2xl order-1 md:order-2 px-12 md:px-0">
                     <Image
                       src={recipe.image}
                       alt={recipe.name}
-                      fill
-                      className="object-cover transition-transform duration-700 hover:scale-110"
+                      width={800}
+                      height={400}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-110 rounded-lg"
                       priority={index === 0}
                     />
                   </div>
@@ -195,12 +197,12 @@ const Carousel = () => {
           </div>
 
           {totalSlides > 1 && (
-            <div className="absolute bottom-4 left-1/4 transform -translate-x-1/2 flex space-x-2">
+            <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2">
               {Array.from({ length: totalSlides }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-8 h-1 rounded-full transition-all duration-300 ${
+                  className={`w-4 sm:w-6 md:w-8 h-1 rounded-full transition-all duration-300 ${
                     index === currentIndex ? "bg-primary-orange" : "bg-gray-300"
                   }`}
                 />
@@ -212,10 +214,10 @@ const Carousel = () => {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-lg transition-all duration-300"
+                className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 md:p-4 rounded-full shadow-lg transition-all duration-300"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -230,10 +232,10 @@ const Carousel = () => {
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-lg transition-all duration-300"
+                className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 md:p-4 rounded-full shadow-lg transition-all duration-300"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

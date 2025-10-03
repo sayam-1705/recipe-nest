@@ -8,6 +8,15 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '320px',
+        '2xs': '375px',
+        '3xl': '1600px',
+        '4xl': '1920px',
+      },
+      fontFamily: {
+        poppins: ["var(--font-poppins)", "sans-serif"],
+      },
       colors: {
         primary: {
           orange: "#FF7009",
@@ -39,6 +48,8 @@ export default {
         glow: "glow 3s ease-in-out infinite",
         "signup-fade-in": "signupFadeIn 0.6s ease-out",
         "signup-slide-down": "signupSlideDown 0.4s ease-out 0.2s both",
+        sparkle: "sparkle 2s ease-in-out infinite",
+        "float-up": "floatUp 3s ease-out infinite",
       },
       keyframes: {
         fadeInUp: {
@@ -85,6 +96,26 @@ export default {
           "0%": { opacity: "0", transform: "translateY(-10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        sparkle: {
+          "0%, 100%": {
+            opacity: "1",
+            transform: "scale(1)",
+          },
+          "50%": {
+            opacity: "0.5",
+            transform: "scale(1.1)",
+          },
+        },
+        floatUp: {
+          "0%": {
+            opacity: "1",
+            transform: "translateY(0px)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(-50px)",
+          },
+        },
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -113,6 +144,12 @@ export default {
           "&::-webkit-scrollbar": {
             display: "none",
           },
+        },
+        ".bg-size-200": {
+          "background-size": "200% 100%",
+        },
+        ".bg-size-300": {
+          "background-size": "300% 100%",
         },
         ".hover-lift": {
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",

@@ -125,7 +125,7 @@ const Loading = () => {
             className="bg-gradient-to-r from-primary-orange to-primary-orange-hover h-full rounded-full transition-all duration-500 ease-out relative"
             style={{ width: `${Math.min(progress, 100)}%` }}
           >
-            <div className="absolute inset-0 bg-white/30 animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent bg-200"></div>
+            <div className="absolute inset-0 bg-white/30 animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent bg-size-200"></div>
           </div>
         </div>
 
