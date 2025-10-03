@@ -194,7 +194,7 @@ const Profile = () => {
 
               <div
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto scroll-smooth gap-3 sm:gap-4 md:gap-6 py-4 px-2 scrollbar-hide"
+                className="flex overflow-x-auto scroll-smooth gap-3 sm:gap-4 md:gap-6 py-4 px-12 sm:px-16 md:px-20 lg:px-24 scrollbar-hide"
               >
                 {loading ? (
                   <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">
