@@ -47,12 +47,12 @@ const nextConfig: NextConfig = {
   },
 
   compress: true,
-
   poweredByHeader: false,
+  
+  serverExternalPackages: ["mongoose", "bcryptjs", "jsonwebtoken"],
 
   experimental: {
-    optimizePackageImports: ["lucide-react", "chart.js"],
-    esmExternals: true,
+    serverComponentsHmrCache: false,
   },
 
   compiler: {
@@ -60,22 +60,6 @@ const nextConfig: NextConfig = {
   },
 
   staticPageGenerationTimeout: 60,
-
-  output: "standalone",
-
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: false,
-      };
-    }
-
-    return config;
-  },
 
   ...(process.env.VERCEL && {
     reactStrictMode: true,

@@ -10,10 +10,17 @@ const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get("/getAllRecipes");
-      return response.data.recipes;
+      try {
+        const response = await apiClient.get("/getAllRecipes");
+        return response.data.recipes || [];
+      } catch (error) {
+        console.error("Failed to fetch recipes:", error);
+        return [];
+      }
     },
     staleTime: 5 * 60 * 1000,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };
 
@@ -29,14 +36,17 @@ const MenuSkeleton = () => (
 
 const Menu = ({ initialRecipes = [] }: MenuProps) => {
   const {
-    data: recipes = initialRecipes,
+    data: recipes = [],
     isLoading,
     error,
     refetch,
   } = useGetAllRecipes();
 
+  // Use initialRecipes only if no data is loaded yet and not loading
+  const displayRecipes = recipes.length > 0 ? recipes : (isLoading ? [] : initialRecipes);
+
   const renderContent = () => {
-    if (isLoading && !initialRecipes.length) {
+    if (isLoading && !displayRecipes.length) {
       return (
         <div className="flex items-center justify-center">
           <MenuSkeleton />
@@ -58,7 +68,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
       );
     }
 
-    if (!recipes.length) {
+    if (!displayRecipes.length) {
       return (
         <div className="flex items-center justify-center">
           <div className="text-center py-12">
@@ -88,9 +98,9 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
     return (
       <MenuCarousel
-        totalCards={recipes.length}
+        totalCards={displayRecipes.length}
         cardWidth={320} // Will be dynamically adjusted in MenuCarousel based on screen size
-        recipes={recipes}
+        recipes={displayRecipes}
       />
     );
   };
@@ -133,9 +143,9 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
           cooks around the world. Find the perfect dish for any occasion.
         </p>
 
-        {recipes.length > 0 && (
+        {displayRecipes.length > 0 && (
           <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-300">
-            Showing {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
+            Showing {displayRecipes.length} recipe{displayRecipes.length !== 1 ? "s" : ""}
           </div>
         )}
       </div>
