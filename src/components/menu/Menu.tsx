@@ -35,15 +35,10 @@ const MenuSkeleton = () => (
 );
 
 const Menu = ({ initialRecipes = [] }: MenuProps) => {
-  const {
-    data: recipes = [],
-    isLoading,
-    error,
-    refetch,
-  } = useGetAllRecipes();
+  const { data: recipes = [], isLoading, error, refetch } = useGetAllRecipes();
 
-  // Use initialRecipes only if no data is loaded yet and not loading
-  const displayRecipes = recipes.length > 0 ? recipes : (isLoading ? [] : initialRecipes);
+  const displayRecipes =
+    recipes.length > 0 ? recipes : isLoading ? [] : initialRecipes;
 
   const renderContent = () => {
     if (isLoading && !displayRecipes.length) {
@@ -99,7 +94,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
     return (
       <MenuCarousel
         totalCards={displayRecipes.length}
-        cardWidth={320} // Will be dynamically adjusted in MenuCarousel based on screen size
+        cardWidth={320}
         recipes={displayRecipes}
       />
     );
@@ -145,7 +140,8 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
         {displayRecipes.length > 0 && (
           <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-300">
-            Showing {displayRecipes.length} recipe{displayRecipes.length !== 1 ? "s" : ""}
+            Showing {displayRecipes.length} recipe
+            {displayRecipes.length !== 1 ? "s" : ""}
           </div>
         )}
       </div>

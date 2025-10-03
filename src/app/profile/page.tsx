@@ -165,7 +165,9 @@ const Profile = () => {
 
           <div className="animate-fade-in delay-200">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">Your Recipes</h1>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
+                Your Recipes
+              </h1>
               <div className="text-xs sm:text-sm text-gray-500 animate-gentle-float">
                 Swipe to explore more
               </div>
@@ -207,7 +209,9 @@ const Profile = () => {
                       : "Failed to fetch recipes"}
                   </div>
                 ) : recipes.length === 0 ? (
-                  <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">No recipes found.</div>
+                  <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">
+                    No recipes found.
+                  </div>
                 ) : (
                   recipes.map((recipe: Recipe, index: number) => (
                     <div

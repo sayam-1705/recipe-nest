@@ -14,40 +14,42 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   const [startX, setStartX] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(middleCardIndex);
   const [dragDistance, setDragDistance] = useState(0);
-  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [screenSize, setScreenSize] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
   const lastInteractionRef = useRef<number>(Date.now());
 
-  // Dynamic card width based on screen size
   const getResponsiveCardWidth = useCallback(() => {
-    if (typeof window === 'undefined') return cardWidth;
-    
+    if (typeof window === "undefined") return cardWidth;
+
     const width = window.innerWidth;
-    if (width < 640) return Math.min(280, width - 40); // Mobile: full width minus padding
-    if (width < 1024) return 300; // Tablet
-    return cardWidth; // Desktop: use provided cardWidth
+    if (width < 640) return Math.min(280, width - 40);
+    if (width < 1024) return 300;
+    return cardWidth;
   }, [cardWidth]);
 
-  const [responsiveCardWidth, setResponsiveCardWidth] = useState(getResponsiveCardWidth());
+  const [responsiveCardWidth, setResponsiveCardWidth] = useState(
+    getResponsiveCardWidth()
+  );
 
-  // Update screen size and card width on resize
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 640) {
-        setScreenSize('mobile');
+        setScreenSize("mobile");
       } else if (width < 1024) {
-        setScreenSize('tablet');
+        setScreenSize("tablet");
       } else {
-        setScreenSize('desktop');
+        setScreenSize("desktop");
       }
       setResponsiveCardWidth(getResponsiveCardWidth());
     };
 
-    handleResize(); // Set initial size
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [getResponsiveCardWidth]);
 
   const scrollToCard = useCallback(
@@ -55,10 +57,12 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
       if (!carouselRef.current) return;
       const containerWidth = carouselRef.current.offsetWidth;
       const currentCardWidth = responsiveCardWidth;
-      
-      // Adjust padding for mobile screens
-      const paddingWidth = screenSize === 'mobile' ? 20 : (containerWidth - currentCardWidth) / 2;
-      const targetScroll = paddingWidth + index * (currentCardWidth + (screenSize === 'mobile' ? 16 : 0));
+
+      const paddingWidth =
+        screenSize === "mobile" ? 20 : (containerWidth - currentCardWidth) / 2;
+      const targetScroll =
+        paddingWidth +
+        index * (currentCardWidth + (screenSize === "mobile" ? 16 : 0));
 
       carouselRef.current.scrollTo({
         left: targetScroll,
@@ -168,8 +172,7 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   const getCardStyle = (index: number) => {
     const isFocused = index === currentIndex;
 
-    // On mobile, show all cards without blur/scale effects for better usability
-    if (screenSize === 'mobile') {
+    if (screenSize === "mobile") {
       return {
         transform: "scale(1) translateY(0px)",
         filter: "blur(0px)",
@@ -192,13 +195,14 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
     const distance = Math.abs(index - currentIndex);
     const factor = distance / (totalCards - 1);
 
-    // Reduce effects on tablet for better visibility
-    const scaleFactor = screenSize === 'tablet' ? 0.1 : 0.2;
-    const blurFactor = screenSize === 'tablet' ? 3 : 6;
-    const opacityFactor = screenSize === 'tablet' ? 0.2 : 0.3;
+    const scaleFactor = screenSize === "tablet" ? 0.1 : 0.2;
+    const blurFactor = screenSize === "tablet" ? 3 : 6;
+    const opacityFactor = screenSize === "tablet" ? 0.2 : 0.3;
 
     return {
-      transform: `scale(${1 - factor * scaleFactor}) translateY(${factor * (screenSize === 'tablet' ? 15 : 30)}px)`,
+      transform: `scale(${1 - factor * scaleFactor}) translateY(${
+        factor * (screenSize === "tablet" ? 15 : 30)
+      }px)`,
       filter: `blur(${factor * blurFactor}px)`,
       opacity: (1 - factor * opacityFactor).toString(),
       zIndex: (10 - distance).toString(),
@@ -213,11 +217,11 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
         className={`flex overflow-x-auto scrollbar-hide ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         } select-none items-center ${
-          screenSize === 'mobile' 
-            ? 'py-4 px-4' // Reduced padding on mobile
-            : screenSize === 'tablet'
-            ? 'py-8 px-6' // Medium padding on tablet
-            : 'py-20' // Full padding on desktop
+          screenSize === "mobile"
+            ? "py-4 px-4"
+            : screenSize === "tablet"
+            ? "py-8 px-6"
+            : "py-20"
         }`}
         style={{
           scrollBehavior: "smooth",
@@ -231,13 +235,13 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Left padding - minimal on mobile, centered on larger screens */}
         <div
           className="flex-shrink-0"
-          style={{ 
-            width: screenSize === 'mobile' 
-              ? '20px' // Minimal left padding on mobile
-              : `calc(50% - ${responsiveCardWidth / 2}px)` 
+          style={{
+            width:
+              screenSize === "mobile"
+                ? "20px"
+                : `calc(50% - ${responsiveCardWidth / 2}px)`,
           }}
         />
 
@@ -245,40 +249,37 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
           <div
             key={index}
             className={`flex-shrink-0 relative ${
-              screenSize === 'mobile' ? 'mr-4' : '' // Add margin between cards on mobile
+              screenSize === "mobile" ? "mr-4" : ""
             }`}
             style={{
               ...getCardStyle(index),
               width: responsiveCardWidth,
-              scrollSnapAlign: screenSize === 'mobile' ? "start" : "center",
+              scrollSnapAlign: screenSize === "mobile" ? "start" : "center",
             }}
           >
             <RecipeCard recipe={recipe} />
           </div>
         ))}
 
-        {/* Right padding - minimal on mobile, centered on larger screens */}
         <div
           className="flex-shrink-0"
-          style={{ 
-            width: screenSize === 'mobile' 
-              ? '20px' // Minimal right padding on mobile
-              : `calc(50% - ${responsiveCardWidth / 2}px)` 
+          style={{
+            width:
+              screenSize === "mobile"
+                ? "20px"
+                : `calc(50% - ${responsiveCardWidth / 2}px)`,
           }}
         />
       </div>
 
-      {/* Mobile-specific navigation indicators */}
-      {screenSize === 'mobile' && totalCards > 1 && (
+      {screenSize === "mobile" && totalCards > 1 && (
         <div className="flex justify-center mt-4 space-x-2">
           {Array.from({ length: totalCards }).map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToCard(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex 
-                  ? 'bg-primary-orange w-4' 
-                  : 'bg-gray-300'
+                index === currentIndex ? "bg-primary-orange w-4" : "bg-gray-300"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

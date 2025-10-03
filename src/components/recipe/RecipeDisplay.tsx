@@ -6,13 +6,13 @@ import dynamic from "next/dynamic";
 
 const NutritionChart = dynamic(
   () => import("@/components/nutritionChart/NutritionChart"),
-  { 
+  {
     ssr: false,
     loading: () => (
       <div className="flex items-center justify-center h-48 sm:h-56 md:h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
       </div>
-    )
+    ),
   }
 );
 
@@ -30,19 +30,19 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Step 1: Fetch recipe
+
         const recipeResponse = await fetch(`/api/getRecipeById/${recipeId}`);
         if (!recipeResponse.ok) {
-          throw new Error('Recipe not found');
+          throw new Error("Recipe not found");
         }
         const recipeData = await recipeResponse.json();
         const fetchedRecipe = recipeData.recipe;
         setRecipe(fetchedRecipe);
 
-        // Step 2: Fetch user data using userId from recipe
         if (fetchedRecipe?.userId) {
-          const userResponse = await fetch(`/api/getUserById/${fetchedRecipe.userId}`);
+          const userResponse = await fetch(
+            `/api/getUserById/${fetchedRecipe.userId}`
+          );
           if (userResponse.ok) {
             const userData = await userResponse.json();
             setUserData(userData.user);
@@ -50,10 +50,9 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
             console.warn(`User with ID ${fetchedRecipe.userId} not found`);
           }
         }
-
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error("Error fetching data:", err);
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -68,7 +67,9 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-600 mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg font-medium">Loading recipe...</p>
-          <p className="text-gray-400 text-sm mt-2">Fetching recipe and creator details</p>
+          <p className="text-gray-400 text-sm mt-2">
+            Fetching recipe and creator details
+          </p>
         </div>
       </div>
     );
@@ -80,7 +81,9 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
         <div className="text-center">
           <div className="text-4xl mb-4">😞</div>
           <p className="text-gray-600 text-lg font-medium">Recipe not found</p>
-          <p className="text-gray-400 text-sm mt-2">{error || 'The recipe you are looking for does not exist'}</p>
+          <p className="text-gray-400 text-sm mt-2">
+            {error || "The recipe you are looking for does not exist"}
+          </p>
         </div>
       </div>
     );
@@ -244,7 +247,9 @@ const NutritionSection = ({ recipe }: { recipe: Recipe }) => {
         ) : (
           <div className="flex items-center justify-center h-48 sm:h-56 md:h-64 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
             <div className="text-center p-4">
-              <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">📊</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
+                📊
+              </div>
               <p className="text-gray-500 text-sm sm:text-base md:text-lg font-medium">
                 Nutrition information not available
               </p>

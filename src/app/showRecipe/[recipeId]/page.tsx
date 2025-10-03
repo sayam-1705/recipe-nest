@@ -143,6 +143,4 @@ const ShowRecipe = async ({ params }: PageProps) => {
   return <RecipeDisplay recipeId={recipeId} />;
 };
 
-
-
 export default ShowRecipe;

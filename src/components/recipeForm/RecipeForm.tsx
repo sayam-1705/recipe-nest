@@ -211,7 +211,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
   };
 
   const renderStep1 = () => (
-    <div className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}>
+    <div
+      className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
+    >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
         <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           👨‍🍳
@@ -264,7 +266,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
   );
 
   const renderStep2 = () => (
-    <div className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}>
+    <div
+      className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
+    >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
         <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           ⭐
@@ -318,7 +322,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
   );
 
   const renderStep3 = () => (
-    <div className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}>
+    <div
+      className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
+    >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
         <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           🍽️
@@ -427,7 +433,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
   );
 
   const renderStep4 = () => (
-    <div className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}>
+    <div
+      className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
+    >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
         <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg">
           📖
@@ -506,7 +514,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
           {formData.image && typeof formData.image === "string" && (
             <div className="mb-3 sm:mb-4">
-              <p className="text-xs sm:text-sm text-gray-600 mb-2">Current image:</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-2">
+                Current image:
+              </p>
               <Image
                 width={128}
                 height={128}
@@ -587,7 +597,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
             <div className="flex flex-col items-center">
               {error && (
-                <p className="text-red-500 w-full text-center pb-6 sm:pb-8 md:pb-10 text-sm sm:text-base px-4">{error}</p>
+                <p className="text-red-500 w-full text-center pb-6 sm:pb-8 md:pb-10 text-sm sm:text-base px-4">
+                  {error}
+                </p>
               )}
               <div className="flex flex-col sm:flex-row justify-between pt-6 sm:pt-8 md:pt-10 border-t-2 border-orange-100 w-full gap-4 sm:gap-0">
                 <button

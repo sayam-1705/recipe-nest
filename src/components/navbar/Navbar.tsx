@@ -7,7 +7,6 @@ import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
 import MobileNavLink from "./MobileNavLink";
 
-// Hook to get current user - same as in AuthLinks
 const useCurrentUser = () => {
   return useQuery({
     queryKey: ["currentUser"],
@@ -15,11 +14,11 @@ const useCurrentUser = () => {
       try {
         if (typeof window !== "undefined") {
           const userData = localStorage.getItem("user");
-          
+
           if (!userData) {
             return null;
           }
-          
+
           return JSON.parse(userData);
         }
       } catch (error) {
@@ -28,7 +27,7 @@ const useCurrentUser = () => {
         return null;
       }
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
     retry: false,
   });
 };
@@ -67,7 +66,6 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden lg:flex gap-5 xl:gap-7 text-base lg:text-lg font-medium">
           <NavLink href="#home">Home</NavLink>
           <NavLink href="#how-it-works">How it works</NavLink>
@@ -76,9 +74,7 @@ const Navbar = () => {
           <NavLink href="#contact">Contact</NavLink>
         </div>
 
-        {/* Mobile menu and auth links container */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Mobile Hamburger Menu Button */}
           <button
             onClick={toggleMobileMenu}
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-orange z-60"
@@ -91,14 +87,12 @@ const Navbar = () => {
             </div>
           </button>
 
-          {/* Auth Links - Mobile optimized */}
           <div className="relative z-50 flex gap-2 sm:gap-3 md:gap-4 font-medium text-xs sm:text-sm md:text-base animate-fade-in-up delay-800">
             <AuthLinks isMobile={true} />
           </div>
         </div>
       </nav>
 
-      {/* Mobile Sidebar Overlay with blur effect */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40 lg:hidden"
@@ -106,13 +100,11 @@ const Navbar = () => {
         />
       )}
 
-      {/* Mobile Sidebar Menu */}
       <div
         className={`fixed top-0 left-0 h-full w-72 sm:w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 lg:hidden ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100">
           <Link
             className="flex items-center group transition-all duration-300"
@@ -133,7 +125,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Close Button */}
           <button
             onClick={closeMobileMenu}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-orange"
@@ -155,7 +146,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation Links */}
         <div className="flex flex-col p-4 sm:p-6 space-y-1">
           <MobileNavLink href="#home" onClick={closeMobileMenu}>
             🏠 Home
@@ -172,8 +162,7 @@ const Navbar = () => {
           <MobileNavLink href="#contact" onClick={closeMobileMenu}>
             📞 Contact
           </MobileNavLink>
-          
-          {/* Add Sign Up button for non-authenticated users */}
+
           {!user && (
             <>
               <div className="border-t border-gray-200 my-4"></div>
@@ -188,7 +177,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Footer */}
         <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 border-t border-gray-100">
           <p className="text-xs text-gray-500 text-center">
             © 2025 RecipeNest. All rights reserved.

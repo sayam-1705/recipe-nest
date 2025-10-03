@@ -182,7 +182,6 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
             <span className="relative z-10">Login</span>
             <div className="absolute inset-0 bg-secondary-green-light transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </Link>
-          {/* Hide signup on mobile when isMobile is true, show on larger screens */}
           {!isMobile && (
             <Link
               className="relative border border-orange-500 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2 rounded-full font-medium bg-gradient-to-r from-orange-500 to-orange-600 text-white transition-all duration-300 hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-xl active:scale-95 transform overflow-hidden group text-xs sm:text-sm md:text-base"

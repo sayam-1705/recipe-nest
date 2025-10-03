@@ -60,7 +60,7 @@ const Carousel = () => {
       console.log(
         `🌤️ Showing ${weatherData.recipes.length} weather-specific recipes`
       );
-      setFinalRecipes(weatherData.recipes.slice(0, 5)); // Limit for better UX
+      setFinalRecipes(weatherData.recipes.slice(0, 5));
     } else if (allRecipes && allRecipes.length > 0) {
       console.log(
         `📚 No weather recipes found, showing ${Math.min(
