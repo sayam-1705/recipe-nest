@@ -63,17 +63,18 @@ const Carousel = () => {
       setFinalRecipes(weatherData.recipes.slice(0, 5));
     } else if (allRecipes && allRecipes.length > 0) {
       console.log(
-        `📚 No weather recipes found, showing ${Math.min(
-          allRecipes.length,
-          5
-        )} general recipes`
+        `📚 ${
+          weatherData
+            ? "No weather-specific recipes found"
+            : "No weather data available"
+        }, showing ${Math.min(allRecipes.length, 5)} general recipes`
       );
       setFinalRecipes(allRecipes.slice(0, 5));
     } else {
       console.log("❌ No recipes available");
       setFinalRecipes([]);
     }
-  }, [weatherData?.recipes, allRecipes]);
+  }, [weatherData?.recipes, allRecipes, weatherData]);
 
   const recipes = finalRecipes;
   const isLoading = recipesLoading || (coordinates && weatherLoading);
@@ -123,11 +124,12 @@ const Carousel = () => {
             </span>
             {weatherData.recipes && weatherData.recipes.length > 0 ? (
               <span className="sm:ml-4 opacity-80 text-center">
-                Showing {weatherData.recipes.length} weather-specific recipes
+                Showing {Math.min(weatherData.recipes.length, 5)}{" "}
+                weather-specific recipes
               </span>
             ) : (
               <span className="sm:ml-4 opacity-80 text-center">
-                No weather-specific recipes found, showing all recipes
+                No weather-specific recipes found, showing general recipes
               </span>
             )}
           </div>
