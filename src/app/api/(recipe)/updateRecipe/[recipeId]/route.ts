@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import { z } from "zod";
-import { getNutritionInfo } from "@/app/api/(recipe)/getNutritionInfo";
+import { getNutritionInfo } from "@/app/api/getNutritionInfo";
 import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
 import { auth } from "@/app/api/auth";
