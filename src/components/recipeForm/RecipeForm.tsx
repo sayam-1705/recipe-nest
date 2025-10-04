@@ -215,7 +215,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
     >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
-        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
+        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           👨‍🍳
         </div>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-800 mb-2 sm:mb-3">
@@ -270,7 +270,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
     >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
-        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
+        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           ⭐
         </div>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-800 mb-2 sm:mb-3">
@@ -326,7 +326,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
     >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
-        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
+        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg animate-subtle-pulse">
           🍽️
         </div>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-800 mb-2 sm:mb-3">
@@ -340,7 +340,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       <div className="space-y-6 sm:space-y-8">
         <div className="bg-neutral-50 rounded-2xl p-4 sm:p-6 border-2 border-neutral-200 hover:border-primary-orange-light transition-all duration-300 shadow-sm hover:shadow-md">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-sm sm:text-lg font-bold shadow-md">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-sm sm:text-lg font-bold shadow-md">
               👥
             </div>
             <div className="space-y-2">
@@ -374,7 +374,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             <button
               type="button"
               onClick={addIngredient}
-              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-primary-orange to-primary-orange-dark text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
+              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-orange text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
             >
               <span className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-lg sm:text-2xl font-medium">
                 +
@@ -437,7 +437,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       className={`space-y-6 sm:space-y-8 transition-all duration-300 ${animationClass}`}
     >
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
-        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg">
+        <div className="mx-auto w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 shadow-lg">
           📖
         </div>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-800 mb-2 sm:mb-3">
@@ -458,7 +458,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             <button
               type="button"
               onClick={addInstruction}
-              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-primary-orange to-primary-orange-dark text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
+              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-orange text-neutral-100 rounded-xl hover:from-primary-orange-dark hover:to-primary-orange-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
             >
               <span className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-lg sm:text-2xl font-medium">
                 +
@@ -472,7 +472,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               key={index}
               className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-neutral-white rounded-2xl border-2 border-neutral-200 hover:border-primary-orange-light transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.02]"
             >
-              <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-orange to-primary-orange-dark text-neutral-100 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shadow-md">
+              <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-primary-orange-light text-neutral-100 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shadow-md">
                 {index + 1}
               </span>
               <div className="flex-1 w-full">
