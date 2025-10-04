@@ -1,219 +1,114 @@
-# RecipeNest 🍳
+<div align="center">
+  
+# 🍳 RecipeNest
 
-RecipeNest is your all-in-one platform to discover, share, and manage recipes from around the world. Whether you're a home cook, a professional chef, or someone who just loves food, RecipeNest offers a delightful and interactive experience:
+### _All-in-One Recipe Discovery_
 
----
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/sayam-1705/recipe-nest)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.1.8-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+
+</div>
+
+## 🎯 About
+
+RecipeNest is a modern full-stack web application for discovering, and managing recipes. Built with Next.js 15, TypeScript, and MongoDB, it offers weather-based recipe recommendations, nutritional analysis, and a comprehensive recipe management system.
 
 ## ✨ Features
 
-- **Recipe Discovery:** Browse and discover a diverse collection of community-contributed recipes.
-- **Personalized Search & Filters:** Find recipes by type, meal, dietary preference, season, occasion, and more.
-- **Weather-Based Recommendations:** Get recipe suggestions tailored to your local weather.
-- **Your Own Recipes:** Add, edit, and delete your recipes with step-by-step instructions and images.
-- **Nutritional Insights:** See detailed nutritional breakdowns for every recipe and per serving.
-- **Secure Authentication:** Register and log in securely using JWT-protected authentication.
-- **Personal Dashboard:** Manage your contributed recipes in your profile.
-- **Responsive & Fast:** Enjoy a seamless, mobile-friendly, and highly performant user experience.
-- **SEO Optimized:** Server-rendered with rich metadata for maximum search visibility.
+- **Recipe Discovery** - Browse and search recipes with advanced filters
+- **Weather Recommendations** - Get recipe suggestions based on your local weather
+- **Nutrition Analysis** - Detailed nutritional breakdowns using Edamam API
+- **User Authentication** - Secure JWT-based login and registration
+- **Recipe Management** - Create, edit, and delete your own recipes
+- **Responsive Design** - Mobile-first, optimized for all devices
 
----
+## 🛠️ Tech Stack
 
-## 🛠️ Installation & Setup
+- **Frontend:** Next.js 15.1.8, TypeScript, Tailwind CSS, React Query
+- **Backend:** Node.js, MongoDB, Mongoose, JWT Authentication
+- **External APIs:** OpenWeatherMap, Edamam Nutrition API
+- **Tools:** ESLint, Vercel-ready deployment
 
-1. **Clone the repository**
+## 🚀 Getting Started
 
-   ```bash
-   git clone https://github.com/sayam-1705/recipe-nest.git
-   cd recipe-nest
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/sayam-1705/recipe-nest.git
+cd recipe-nest
 
-2. **Install dependencies**
+# Install dependencies
+npm install
 
-   ```bash
-   npm install
-   ```
+# Set up environment variables
+cp .env.local
 
-3. **Environment Setup**
+# Start development server
+npm run dev
+```
 
-   Create a `.env.local` file in the root directory and add the required variables (see the Environment Variables section below).
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-4. **Run the development server**
+### Prerequisites
 
-   ```bash
-   npm run dev
-   ```
-
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
+- Node.js ≥18.0.0
+- MongoDB database
+- API keys for OpenWeatherMap and Edamam
 
 ## 🔐 Environment Variables
 
-Add the following to your `.env.local` file:
+Create a `.env.local` file:
 
 ```bash
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_NAME=RecipeNest
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/recipe-nest?retryWrites=true&w=majority
-SECRET_KEY=<your_jwt_secret_minimum_32_characters>
-WEATHER_API_KEY=<your_openweathermap_api_key>
-EDAMAM_API_KEY=<your_edamam_api_key>
-EDAMAM_APP_ID=<your_edamam_app_id>
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/recipe-nest
+SECRET_KEY=your_jwt_secret_minimum_32_characters_long
+WEATHER_API_KEY=your_openweathermap_api_key
+EDAMAM_API_KEY=your_edamam_nutrition_api_key
+EDAMAM_APP_ID=your_edamam_app_id
 ```
 
----
+Get API keys from:
 
-## 📝 API Documentation
+- [OpenWeatherMap](https://openweathermap.org/api)
+- [Edamam Developer](https://developer.edamam.com/)
+
+## 📝 API Endpoints
 
 ### Authentication
 
-All routes that mutate data (create, update, delete recipes) require a Bearer JWT token in the `Authorization` header.  
-Login and signup routes return a token upon successful authentication.
+Protected routes require Bearer token: `Authorization: Bearer <token>`
 
-**Example header:**
+### Key Endpoints
 
-```
-Authorization: Bearer <your_jwt_token>
-```
+- `GET /api/getAllRecipes` - Get all recipes
+- `GET /api/getRecipeById/[id]` - Get recipe by ID
+- `POST /api/createRecipe` - Create recipe (Protected)
+- `PUT /api/updateRecipe/[id]` - Update recipe (Protected)
+- `DELETE /api/deleteRecipe/[id]` - Delete recipe (Protected)
+- `POST /api/signup` - User registration
+- `POST /api/login` - User login
+- `GET /api/getRecipeBasedOnWeather` - Weather-based recommendations
 
----
+## 🤝 Contributing
 
-### Health Check
-
-**GET** `/api/health`
-
-- **Response:**
-  ```json
-  {
-    "status": "OK",
-    "timestamp": "2025-09-11T20:33:36Z",
-    "uptime": 123.45,
-    "environment": "development",
-    "version": "1.0.0",
-    "vercel": {
-      "region": "local",
-      "url": "localhost"
-    }
-  }
-  ```
-- **Purpose:** Health check for uptime and debugging.
-
----
-
-### Recipes
-
-#### Get All Recipes
-
-- **GET** `/api/getAllRecipes`
-- **Returns:**
-  ```json
-  {
-    "recipes": [ { ...recipeObject } ]
-  }
-  ```
-
-#### Get Recipe by ID
-
-- **GET** `/api/getRecipeById/:id`
-- **Returns:**
-  ```json
-  {
-    "recipe": { ...recipeObject }
-  }
-  ```
-
-#### Create Recipe
-
-- **POST** `/api/createRecipe`
-- **Auth:** Required
-- **Content-Type:** `multipart/form-data`
-- **Body:**
-  - `name` (string, required)
-  - `type`, `meal`, `time`, `difficulty`, `season`, `occasion` (string, required)
-  - `dietaryType` (`Vegetarian` | `Non-Vegetarian` | `Vegan`, required)
-  - `servings` (number, required)
-  - `ingredients` (JSON stringified array of `{ name, quantity }`)
-  - `instructions` (JSON stringified array of strings)
-  - `image` (optional)
-- **Returns:**
-  - Success: `{ message: "Recipe created successfully", recipe: { ... } }`
-  - Errors:
-    - 401: Authentication required
-    - 400: Validation error
-    - 500: Server/database error
-
-#### Update Recipe
-
-- **PUT** `/api/updateRecipe/:id`
-- **Auth:** Required
-- **Body:** Same as Create
-- **Returns:**
-  - Success: `{ message: "Recipe updated", recipe: { ... } }`
-  - Errors:
-    - 401: Authentication required
-    - 404: Not found
-    - 400/500: Error
-
-#### Delete Recipe
-
-- **DELETE** `/api/deleteRecipe/:id`
-- **Auth:** Required
-- **Returns:**
-  - Success: `{ message: "Recipe deleted" }`
-  - Errors:
-    - 401: Authentication required
-    - 404: Not found
-    - 400/500: Error
-
----
-
-### Nutrition Info
-
-- **Internal helper:** Uses [Edamam Nutrition API](https://developer.edamam.com/edamam-nutrition-api)
-- **Example:** Called when creating/updating recipes to fetch nutrition data for given ingredients.
-
----
-
-### User
-
-#### Login
-
-- **POST** `/api/login`
-- **Body:** `{ email: string, password: string }`
-- **Returns:**
-  ```json
-  {
-    "token": "jwt_token",
-    "user": { "name": "...", "email": "...", "_id": "..." }
-  }
-  ```
-- **Errors:**
-  - 401: Invalid credentials
-
-#### Signup
-
-- **POST** `/api/signup`
-- **Body:** `{ name: string, email: string, password: string }`
-- **Returns:** Same as Login
-
----
-
-### Cache Revalidation
-
-- **POST** `/api/revalidate`
-- **Auth:** Required (uses secret in headers/body)
-- **Purpose:** Triggers static/path revalidation for updated recipes & site content
-- **Returns:**  
-  `{ message: string, revalidated: boolean, paths: string[], now: timestamp }`
-- **Errors:**
-  - 400/500: Error message
-
----
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Make your changes and commit: `git commit -m "Add new feature"`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This is a personal project. All rights reserved.
 
 ---
 
-Made with ❤️ by [RecipeNest Team]
+<div align="center">
+
+**Made with ❤️ by [sayam-1705](https://github.com/sayam-1705)**
+
+[⭐ Star this repo](https://github.com/sayam-1705/recipe-nest) • [🤝 Contribute](https://github.com/sayam-1705/recipe-nest/fork) • [� Report Issues](https://github.com/sayam-1705/recipe-nest/issues)
+
+</div>
