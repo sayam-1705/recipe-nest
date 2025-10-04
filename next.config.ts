@@ -11,12 +11,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "example.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
         hostname: "media.istockphoto.com",
         port: "",
         pathname: "/**",
@@ -40,31 +34,28 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-    formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   compress: true,
   poweredByHeader: false,
-  
+
   serverExternalPackages: ["mongoose", "bcryptjs", "jsonwebtoken"],
 
   experimental: {
     serverComponentsHmrCache: false,
   },
 
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+  staticPageGenerationTimeout: 120,
+
+  reactStrictMode: true,
+
+  trailingSlash: false,
+
+  logging: {
+    fetches: {
+      fullUrl: false,
+    },
   },
-
-  staticPageGenerationTimeout: 60,
-
-  ...(process.env.VERCEL && {
-    reactStrictMode: true,
-    swcMinify: true,
-  }),
 };
 
 export default nextConfig;

@@ -1,35 +1,6 @@
 import { MetadataRoute } from "next";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-const fetchWithErrorHandling = async (
-  url: string,
-  options: RequestInit = {},
-  fallbackValue: Recipe[] = []
-) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}${url}`, options);
-
-    if (!response.ok) {
-      if (response.status === 404 && fallbackValue === null) return null;
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.recipes || data.recipe || fallbackValue;
-  } catch (error) {
-    console.error(`API Error for ${url}:`, error);
-    return fallbackValue;
-  }
-};
-
-const serverApi = {
-  getAllRecipes: (): Promise<Recipe[]> =>
-    fetchWithErrorHandling("/api/getAllRecipes", {
-      cache: "force-cache",
-      next: { revalidate: 300 },
-    }),
-};
+import { dbConnect } from "./api/mongodb";
+import Recipe from "@/models/Recipe";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl =
@@ -40,27 +11,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const now = new Date();
 
-  const staticPages = [
-    { url: baseUrl, priority: 1, changeFrequency: "daily" as const },
+  const staticPages: MetadataRoute.Sitemap = [
+    {
+      url: baseUrl,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 1,
+    },
     {
       url: `${baseUrl}/login`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.5,
-      changeFrequency: "monthly" as const,
     },
     {
       url: `${baseUrl}/signup`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.5,
-      changeFrequency: "monthly" as const,
     },
-  ].map((page) => ({ ...page, lastModified: now }));
+  ];
 
-  const recipes = await serverApi.getAllRecipes();
-  const recipePages = recipes.map((recipe) => ({
-    url: `${baseUrl}/showRecipe/${recipe._id}`,
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  }));
+  try {
+    await dbConnect();
+    const recipes = await Recipe.find({}, { _id: 1 }).lean();
 
-  return [...staticPages, ...recipePages];
+    const recipePages: MetadataRoute.Sitemap = recipes.map((recipe) => ({
+      url: `${baseUrl}/showRecipe/${recipe._id}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+    return [...staticPages, ...recipePages];
+  } catch (error) {
+    console.error("Sitemap generation error:", error);
+    return staticPages;
+  }
 }

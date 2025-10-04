@@ -1,0 +1,51 @@
+# Development files
+.env.local
+.env.development
+.env.test
+
+# Build artifacts
+.next/
+out/
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Coverage reports
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Temporary files
+tmp/
+temp/
+
+# Git
+.git/
+
+# README
+README.md
+
+# Development-only scripts
+scripts/
+docs/

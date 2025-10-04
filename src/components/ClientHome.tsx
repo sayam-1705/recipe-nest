@@ -21,7 +21,7 @@ export default function ClientHome() {
         <div className="min-w-[320px] max-w-[1920px] mx-auto">
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-orange mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto mb-4"></div>
               <p className="text-gray-600">Loading RecipeNest...</p>
             </div>
           </div>
