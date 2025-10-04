@@ -74,7 +74,7 @@ const RecipeCard = ({
   };
 
   return (
-    <div className="group flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:w-80 bg-neutral-white shadow-sm hover:shadow-md transition-all duration-300 ease-smooth transform-gpu hover:hover-lift-subtle focus-within:ring-2 focus-within:ring-primary-orange focus-within:ring-offset-2 rounded-xl sm:rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
+    <div className="group flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:w-80 bg-neutral-white shadow-sm transition-all duration-300 ease-smooth transform-gpu focus-within:ring-2 focus-within:ring-primary-orange focus-within:ring-offset-2 rounded-xl sm:rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
       <div className="relative overflow-hidden rounded-t-xl sm:rounded-t-2xl">
         <Image
           className="w-full h-40 sm:h-44 md:h-48 object-cover group-hover:scale-105 transition-transform duration-700 ease-out"

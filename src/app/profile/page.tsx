@@ -216,7 +216,7 @@ const Profile = () => {
                   recipes.map((recipe: Recipe, index: number) => (
                     <div
                       key={recipe._id || index}
-                      className={`flex-shrink-0 w-64 sm:w-72 md:w-80 hover:scale-105 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 animate-scale-in`}
+                      className={`flex-shrink-0 w-64 sm:w-72 md:w-80 hover:scale-105 hover:-translate-y-2 transition-all duration-300 animate-scale-in`}
                       style={{
                         animationDelay: `${index * 100}ms`,
                       }}
