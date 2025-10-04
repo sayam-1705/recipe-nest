@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import RecipeDisplay from "@/components/recipe/RecipeDisplay";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -52,38 +51,6 @@ const serverApi = {
       null
     ),
 };
-
-const generateRecipeJsonLd = (recipe: Recipe) => ({
-  "@context": "https://schema.org/",
-  "@type": "Recipe",
-  name: recipe.name,
-  image: recipe.image,
-  description: `A delicious ${recipe.type} recipe perfect for ${recipe.meal}`,
-  recipeCategory: recipe.type,
-  recipeCuisine: recipe.dietaryType,
-  prepTime: recipe.time,
-  recipeYield: `${recipe.servings} servings`,
-  difficulty: recipe.difficulty,
-  recipeIngredient: recipe.ingredients.map(
-    (ing) => `${ing.quantity} ${ing.name}`
-  ),
-  recipeInstructions: recipe.instructions.map((instruction, index) => ({
-    "@type": "HowToStep",
-    name: `Step ${index + 1}`,
-    text: instruction,
-  })),
-  ...(recipe.nutritionPerServing && {
-    nutrition: {
-      "@type": "NutritionInformation",
-      calories:
-        recipe.nutritionPerServing.calories ||
-        recipe.nutritionPerServing.ENERC_KCAL,
-      proteinContent: recipe.nutritionPerServing.PROCNT_KCAL,
-      fatContent: recipe.nutritionPerServing.FAT_KCAL,
-      carbohydrateContent: recipe.nutritionPerServing.CHOCDF_KCAL,
-    },
-  }),
-});
 
 export async function generateMetadata({
   params,

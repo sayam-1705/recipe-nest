@@ -6,6 +6,23 @@ const Loading = () => {
   const [loadingText, setLoadingText] = useState("Preparing ingredients");
   const [progress, setProgress] = useState(0);
   const [showChef, setShowChef] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowWidth(window.innerWidth);
+
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const loadingSteps = [
@@ -67,7 +84,7 @@ const Loading = () => {
               key={i}
               className="absolute w-1 h-6 sm:w-2 sm:h-8 bg-white/30 rounded-full animate-bounce opacity-60"
               style={{
-                left: `${i * (window?.innerWidth >= 640 ? 10 : 6)}px`,
+                left: `${i * (windowWidth >= 640 ? 10 : 6)}px`,
                 animationDelay: `${i * 0.3}s`,
                 animationDuration: "2s",
               }}
@@ -95,9 +112,7 @@ const Loading = () => {
                   key={i}
                   className="absolute w-0.5 h-4 sm:w-1 sm:h-6 lg:w-1.5 lg:h-7 bg-white/60 rounded-full animate-bounce"
                   style={{
-                    left: `${
-                      (i - 1.5) * (window?.innerWidth >= 640 ? 6 : 4)
-                    }px`,
+                    left: `${(i - 1.5) * (windowWidth >= 640 ? 6 : 4)}px`,
                     animationDelay: `${i * 0.2}s`,
                     animationDuration: "1.5s",
                   }}
