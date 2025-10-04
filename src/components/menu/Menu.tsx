@@ -102,7 +102,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
   return (
     <section
-      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 gap-6 sm:gap-8 md:gap-10 xl:gap-12"
+      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-4 py-6 sm:p-6 md:p-8 lg:px-10 lg:py-0 xl:px-12 xl:py-0 gap-6 sm:gap-8 md:gap-10 xl:gap-12"
       id="menu"
       role="region"
       aria-labelledby="menu-title"

@@ -90,7 +90,12 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         display: true,
         text: `Total: ${safeNutritionData.calories} calories`,
         font: {
-          size: window?.innerWidth >= 768 ? 18 : window?.innerWidth >= 640 ? 16 : 14,
+          size:
+            window?.innerWidth >= 768
+              ? 18
+              : window?.innerWidth >= 640
+              ? 16
+              : 14,
           weight: "normal" as const,
           family: "Poppins, sans-serif",
         },
@@ -147,7 +152,7 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
 
   return (
     <div className="w-full space-y-8">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
         <div
           className="bg-gradient-to-br from-orange-50 to-orange-100 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border border-orange-200 hover:shadow-lg hover:border-orange-300 transition-all duration-500 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer group"
           style={{ animationDelay: "0.1s" }}
@@ -208,7 +213,9 @@ const NutritionChart: React.FC<NutritionChartProps> = ({ nutritionData }) => {
         ) : (
           <div className="flex items-center justify-center h-48 sm:h-56 md:h-64 bg-gray-50 rounded-xl sm:rounded-2xl border-2 border-dashed border-gray-200 w-full mx-4">
             <div className="text-center p-4">
-              <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">📊</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
+                📊
+              </div>
               <p className="text-gray-500 text-sm sm:text-base md:text-lg font-medium">
                 No nutrition breakdown available
               </p>
