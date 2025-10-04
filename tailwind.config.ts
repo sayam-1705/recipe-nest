@@ -9,10 +9,10 @@ export default {
   theme: {
     extend: {
       screens: {
-        'xs': '320px',
-        '2xs': '375px',
-        '3xl': '1600px',
-        '4xl': '1920px',
+        xs: "320px",
+        "2xs": "375px",
+        "3xl": "1600px",
+        "4xl": "1920px",
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],

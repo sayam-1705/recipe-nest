@@ -13,20 +13,20 @@ dist/
 node_modules/
 
 # TypeScript build info
-*.tsbuildinfo
+\*.tsbuildinfo
 
 # IDE files
 .vscode/
 .idea/
-*.swp
-*.swo
+_.swp
+_.swo
 
 # OS generated files
 .DS_Store
 Thumbs.db
 
 # Logs
-*.log
+\*.log
 logs/
 
 # Coverage reports

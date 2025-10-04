@@ -124,7 +124,9 @@ export const Modal: React.FC<{
       <div className="bg-white rounded-lg shadow-xl max-w-xs sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
         {title && (
           <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
-            <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate">{title}</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
+              {title}
+            </h2>
           </div>
         )}
         <div className="px-4 sm:px-6 py-3 sm:py-4">{children}</div>
@@ -164,10 +166,20 @@ export const EmptyState: React.FC<{
 }> = ({ title, description, action }) => {
   return (
     <div className="text-center py-8 sm:py-12 px-4">
-      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">{title}</h3>
-      {description && <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">{description}</p>}
+      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">
+        {title}
+      </h3>
+      {description && (
+        <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
+          {description}
+        </p>
+      )}
       {action && (
-        <Button onClick={action.onClick} variant="primary" className="w-full sm:w-auto">
+        <Button
+          onClick={action.onClick}
+          variant="primary"
+          className="w-full sm:w-auto"
+        >
           {action.label}
         </Button>
       )}
