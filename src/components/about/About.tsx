@@ -5,7 +5,7 @@ const About = () => {
   return (
     <div className="relative" id="about">
       <div className="sticky top-0 bg-secondary-green-light text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-20 py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-14 z-10">
-        <div className="relative flex justify-center items-center delay-300 order-2 lg:order-1 min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[450px]">
+        <div className="relative flex justify-center items-center delay-300 min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[450px]">
           <div
             className="absolute top-4 sm:top-6 md:top-8 lg:top-10 right-0 sm:right-2 md:right-4 lg:right-0 z-10 flex flex-col items-center justify-center 
                          bg-primary-orange-light backdrop-blur-glass p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl 
@@ -43,7 +43,7 @@ const About = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 order-1 lg:order-2">
+        <div className="flex flex-col justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-tight animate-fade-in-up delay-200">
             Join Recipe Nest community today!
           </h1>
@@ -66,7 +66,7 @@ const About = () => {
       </div>
 
       <div className="relative bg-secondary-green-medium text-neutral-cream grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-20 py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-14 z-20">
-        <div className="flex flex-col justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 order-1 lg:order-2 delay-300">
+        <div className="flex flex-col justify-center gap-3 order-2 lg:order-1 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 delay-300">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-tight animate-fade-in-up delay-500">
             Share your culinary creation with others
           </h1>
@@ -75,7 +75,7 @@ const About = () => {
             receive feedback from a supportive community of fellow home cooks.
           </p>
         </div>
-        <div className="relative flex justify-center items-center order-2 lg:order-1 delay-200 min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[450px]">
+        <div className="relative flex justify-center items-center delay-200 order-1 lg:order-2 min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[450px]">
           <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 lg:bottom-5 right-2 sm:right-3 md:right-4 lg:right-5 z-10 animate-fade-in-up delay-700">
             <Link
               className="inline-block bg-primary-orange text-secondary-green-dark font-medium px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm md:text-base rounded-full 
