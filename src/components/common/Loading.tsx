@@ -81,6 +81,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   const animationClasses = {
     pulse: "animate-pulse",
     wave: "animate-pulse",
+    none: "",
   };
 
   const styles: React.CSSProperties = {};

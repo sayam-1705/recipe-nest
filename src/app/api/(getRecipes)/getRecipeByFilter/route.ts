@@ -1,57 +1,41 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { z } from "zod";
 import Recipe from "@/models/Recipe";
-import { apiResponse } from "@/utils/api";
-
-const reqSchema = z.object({
-  name: z.string().optional(),
-  type: z.string().optional(),
-  meal: z.string().optional(),
-  time: z.string().optional(),
-  difficulty: z.string().optional(),
-  season: z.string().optional(),
-  occasion: z.string().optional(),
-  dietaryType: z.string().optional(),
-  ingredients: z.array(z.object({ name: z.string().optional() })).optional(),
-});
-
-const buildRegexFilter = (key: string, value?: string) =>
-  value ? { [key]: { $regex: value, $options: "i" } } : {};
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-
     const body = await req.json();
-    const result = reqSchema.safeParse(body);
 
-    if (!result.success) {
-      return apiResponse.badRequest("Invalid filter parameters");
+    const query: Record<string, unknown> = {};
+
+    // Build regex filters
+    Object.entries(body).forEach(([key, value]) => {
+      if (value && typeof value === "string" && key !== "ingredients") {
+        query[key] = { $regex: value, $options: "i" };
+      }
+    });
+
+    // Handle ingredients filter
+    if (body.ingredients && Array.isArray(body.ingredients)) {
+      const ingredientNames = body.ingredients
+        .map((ing: { name?: string }) => ing.name)
+        .filter(Boolean);
+
+      if (ingredientNames.length > 0) {
+        query.ingredients = {
+          $elemMatch: { name: { $in: ingredientNames } },
+        };
+      }
     }
 
-    const { ingredients, ...filters } = result.data;
-
-    const query = {
-      ...Object.entries(filters).reduce(
-        (acc, [key, value]) => ({
-          ...acc,
-          ...buildRegexFilter(key, value),
-        }),
-        {}
-      ),
-      ...(ingredients?.length && {
-        ingredients: {
-          $elemMatch: {
-            name: { $in: ingredients.map((ing) => ing.name).filter(Boolean) },
-          },
-        },
-      }),
-    };
-
     const recipes = await Recipe.find(query);
-    return apiResponse.success({ recipes });
-  } catch {
-    return apiResponse.error("Failed to filter recipes");
+    return NextResponse.json({ recipes });
+  } catch (error) {
+    console.error("Filter recipes error:", error);
+    return NextResponse.json(
+      { error: "Failed to filter recipes" },
+      { status: 500 }
+    );
   }
 }

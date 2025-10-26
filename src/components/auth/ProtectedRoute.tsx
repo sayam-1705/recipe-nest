@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated, getUser } from "@/utils/auth";
+import { isAuthenticated, getUser } from "@/lib/auth";
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+const ProtectedRoute = ({
   children,
   redirectTo = "/login",
-  showFallback = true,
-}) => {
+  requireAuth = true,
+}: ProtectedRouteProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -18,12 +18,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       const authenticated = isAuthenticated();
       const user = getUser();
 
-      if (!authenticated || !user) {
-        const currentPath = window.location.pathname;
-        const loginUrl = `${redirectTo}?redirect=${encodeURIComponent(
-          currentPath
-        )}`;
-        router.push(loginUrl);
+      // If requireAuth is true (default): redirect to login if not authenticated
+      if (requireAuth && (!authenticated || !user)) {
+        router.push(redirectTo);
+        return;
+      }
+
+      // If requireAuth is false: redirect to home if authenticated (for login/signup pages)
+      if (!requireAuth && authenticated && user) {
+        router.push("/");
         return;
       }
 
@@ -32,11 +35,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     };
 
     checkAuth();
-  }, [router, redirectTo]);
+  }, [router, redirectTo, requireAuth]);
 
   if (isLoading) {
-    if (!showFallback) return null;
-
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
         <div className="text-center">
@@ -48,27 +49,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!isAuthorized) {
-    if (!showFallback) return null;
-
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-orange-500 text-4xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Authentication Required
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Please log in to access this page.
-          </p>
-          <button
-            onClick={() => router.push(redirectTo)}
-            className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-          >
-            Go to Login
-          </button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return <>{children}</>;

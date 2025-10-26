@@ -1,42 +1,47 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { schemas } from "../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-import { createJwt } from "../helpers";
-import { apiResponse } from "@/utils/api";
+import { sign } from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
+    const { email, password } = await req.json();
 
-    const body = await req.json();
-    const result = schemas.loginSchema.safeParse(body);
-
-    if (!result.success) {
-      return apiResponse.badRequest(result.error.errors[0].message);
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
     }
-
-    const { email, password } = result.data;
 
     const user = await User.findOne({ email });
     if (!user) {
-      return apiResponse.notFound("User");
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return apiResponse.unauthorized("Invalid credentials");
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
     }
 
-    const token = createJwt(user._id, email);
+    const token = sign(
+      { userId: user._id, email },
+      process.env.SECRET_KEY as string,
+      { expiresIn: "1h" }
+    );
 
-    return apiResponse.success({
+    return NextResponse.json({
       message: "Login successful",
       user: { id: user._id, name: user.name, email: user.email },
       token,
     });
-  } catch {
-    return apiResponse.error("Login failed");
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }

@@ -2,72 +2,20 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-
-const useCurrentUser = () => {
-  return useQuery({
-    queryKey: ["auth", "me"],
-    queryFn: () => {
-      if (typeof window !== "undefined") {
-        try {
-          const userData = localStorage.getItem("user");
-          const token = localStorage.getItem("authToken");
-
-          if (!token) {
-            return null;
-          }
-
-          if (!userData) {
-            localStorage.removeItem("authToken");
-            return null;
-          }
-
-          return JSON.parse(userData);
-        } catch (error) {
-          console.error("Error parsing user data from localStorage:", error);
-          localStorage.removeItem("user");
-          localStorage.removeItem("authToken");
-          return null;
-        }
-      }
-      return null;
-    },
-    staleTime: 5 * 60 * 1000,
-    retry: false,
-  });
-};
-
-const useLogout = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async () => {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
-      }
-    },
-    onSuccess: () => {
-      queryClient.clear();
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
-      }
-    },
-    onError: (error: AxiosError) => {
-      console.error("Logout failed:", error);
-    },
-  });
-};
+import { getUser, clearAuth } from "@/lib/auth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const { data: user } = useCurrentUser();
-  const logoutMutation = useLogout();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const queryClient = useQueryClient();
+  const user = getUser();
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
-    setShowDropdown(false);
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    clearAuth();
+    queryClient.clear();
+    window.location.href = "/";
   };
 
   return (
@@ -138,11 +86,11 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
                 <hr className="border-gray-200" />
                 <button
                   onClick={handleLogout}
-                  disabled={logoutMutation.isPending}
+                  disabled={isLoggingOut}
                   className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   <div className="flex items-center gap-2">
-                    {logoutMutation.isPending ? (
+                    {isLoggingOut ? (
                       <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <svg
@@ -159,7 +107,7 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
                         />
                       </svg>
                     )}
-                    {logoutMutation.isPending ? "Logging out..." : "Logout"}
+                    {isLoggingOut ? "Logging out..." : "Logout"}
                   </div>
                 </button>
               </div>

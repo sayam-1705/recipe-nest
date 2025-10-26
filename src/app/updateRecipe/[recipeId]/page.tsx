@@ -2,76 +2,70 @@
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import { useRecipeOwnership } from "@/hooks/useProtectedRoute";
-import React, { use, useCallback } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
-import { AxiosError } from "axios";
+import { getUser } from "@/lib/auth";
 
-const useGetRecipeById = (recipeId: string, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: ["recipes", "byId", recipeId],
-    queryFn: async (): Promise<Recipe> => {
-      const response = await apiClient.get(`/getRecipeById/${recipeId}`);
-      return response.data.recipe;
-    },
-    enabled: enabled && !!recipeId,
-  });
-};
-
-const useUpdateRecipe = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      recipeId,
-      recipeData,
-    }: {
-      recipeId: string;
-      recipeData: UpdateRecipeData;
-    }): Promise<Recipe> => {
-      const response = await apiClient.put(
-        `/updateRecipe/${recipeId}`,
-        recipeData
-      );
-      return response.data.recipe;
-    },
-    onSuccess: (updatedRecipe, variables) => {
-      queryClient.setQueryData(
-        ["recipes", "byId", variables.recipeId],
-        updatedRecipe
-      );
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
-      if (updatedRecipe.userId) {
-        queryClient.invalidateQueries({
-          queryKey: ["recipes", "byUserId", updatedRecipe.userId],
-        });
-      }
-    },
-    onError: (error: AxiosError) => {
-      console.error(
-        "Failed to update recipe:",
-        error.response?.data || error.message
-      );
-    },
-  });
-};
-
-const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
+const UpdateRecipe = ({
+  params,
+}: {
+  params: Promise<{ recipeId: string }>;
+}) => {
   const resolvedParams = use(params);
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const [canAccess, setCanAccess] = useState<boolean | null>(null);
 
   const {
     data: recipe,
-    isLoading: loading,
+    isLoading,
     error,
-    isError,
-  } = useGetRecipeById(resolvedParams.recipeId, !!resolvedParams.recipeId);
+  } = useQuery({
+    queryKey: ["recipes", "byId", resolvedParams.recipeId],
+    queryFn: async (): Promise<Recipe> => {
+      const response = await fetch(
+        `/api/getRecipeById/${resolvedParams.recipeId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch recipe");
+      const data = await response.json();
+      return data.recipe;
+    },
+    enabled: !!resolvedParams.recipeId,
+  });
 
-  const canAccess = useRecipeOwnership(recipe?.userId);
+  useEffect(() => {
+    if (recipe) {
+      const user = getUser();
+      const hasAccess =
+        user && (user._id === recipe.userId || user.id === recipe.userId);
+      setCanAccess(!!hasAccess);
+    }
+  }, [recipe]);
 
-  const updateRecipeMutation = useUpdateRecipe();
+  const updateRecipeMutation = useMutation({
+    mutationFn: async (recipeData: UpdateRecipeData): Promise<Recipe> => {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(
+        `/api/updateRecipe/${resolvedParams.recipeId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(recipeData),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to update recipe");
+      const data = await response.json();
+      return data.recipe;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      router.push(`/showRecipe/${resolvedParams.recipeId}`);
+    },
+  });
 
   const staticFormData = {
     dietaryTypes: [
@@ -104,25 +98,8 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     ],
   };
 
-  const handleFormDataChange = useCallback((data: unknown) => {
-    console.log("Updated form data:", data);
-  }, []);
-
   const handleUpdateRecipe = useCallback(
-    async (formData: {
-      name: string;
-      type: string;
-      meal: string;
-      time: string;
-      difficulty: string;
-      season: string;
-      occasion: string;
-      dietaryType: string;
-      servings: number;
-      ingredients: Array<{ name: string; quantity: string }>;
-      instructions: string[];
-      image: File | string | null;
-    }) => {
+    async (formData: RecipeFormData) => {
       try {
         let imageData = recipe?.image;
 
@@ -140,7 +117,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
           imageData = formData.image;
         }
 
-        const updateData = {
+        const updateData: UpdateRecipeData = {
           name: formData.name,
           type: formData.type,
           meal: formData.meal,
@@ -155,21 +132,13 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
           image: imageData,
         };
 
-        await updateRecipeMutation.mutateAsync({
-          recipeId: resolvedParams.recipeId,
-          recipeData: updateData,
-        });
-
-        console.log("Recipe updated successfully");
-        alert("Recipe updated successfully!");
-
-        router.push(`/showRecipe/${resolvedParams.recipeId}`);
+        await updateRecipeMutation.mutateAsync(updateData);
       } catch (error) {
         console.error("Error updating recipe:", error);
         alert("An error occurred while updating the recipe");
       }
     },
-    [recipe?.image, resolvedParams.recipeId, router, updateRecipeMutation]
+    [recipe?.image, updateRecipeMutation]
   );
 
   if (recipe && canAccess === false) {
@@ -196,7 +165,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     );
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
@@ -209,7 +178,7 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     );
   }
 
-  if (isError) {
+  if (error) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
@@ -250,15 +219,12 @@ const UpdateRecipe = ({ params }: UpdateRecipeProps) => {
     );
   }
 
-  console.log("Current recipe state:", recipe);
-
   return (
     <ProtectedRoute>
       <div>
         <RecipeForm
           initialData={recipe}
           staticData={staticFormData}
-          onFormDataChange={handleFormDataChange}
           onSubmit={handleUpdateRecipe}
           submitButtonText="Update Recipe"
           isSubmitting={updateRecipeMutation.isPending}

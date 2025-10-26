@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
-import { AxiosError } from "axios";
 
 const useGetUserById = (userId: string, enabled: boolean = true) => {
   return useQuery({
@@ -14,8 +12,10 @@ const useGetUserById = (userId: string, enabled: boolean = true) => {
       email: string;
       _id: string;
     }> => {
-      const response = await apiClient.get(`/getUserById/${userId}`);
-      return response.data.user;
+      const response = await fetch(`/api/getUserById/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch user");
+      const data = await response.json();
+      return data.user;
     },
     enabled: enabled && !!userId,
   });
@@ -26,7 +26,14 @@ const useDeleteRecipe = () => {
 
   return useMutation({
     mutationFn: async (recipeId: string): Promise<void> => {
-      await apiClient.delete(`/deleteRecipe/${recipeId}`);
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`/api/deleteRecipe/${recipeId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete recipe");
     },
     onSuccess: (_, recipeId) => {
       queryClient.removeQueries({ queryKey: ["recipes", "byId", recipeId] });
@@ -34,12 +41,6 @@ const useDeleteRecipe = () => {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === "recipes",
       });
-    },
-    onError: (error: AxiosError) => {
-      console.error(
-        "Failed to delete recipe:",
-        error.response?.data || error.message
-      );
     },
   });
 };

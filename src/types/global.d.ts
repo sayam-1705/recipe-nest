@@ -1,4 +1,5 @@
 declare global {
+  // User & Auth Types
   interface User {
     _id?: string;
     id?: string;
@@ -11,6 +12,7 @@ declare global {
     email: string;
   }
 
+  // Recipe Related Types
   interface Ingredient {
     name: string;
     quantity: string;
@@ -56,12 +58,13 @@ declare global {
     CHOCDF_KCAL: number;
   }
 
-  interface LoginData extends Record<string, string> {
+  // Form Data Types
+  interface LoginData {
     email: string;
     password: string;
   }
 
-  interface SignupData extends Record<string, string> {
+  interface SignupData {
     name: string;
     email: string;
     password: string;
@@ -84,7 +87,6 @@ declare global {
   }
 
   type CreateRecipeData = RecipeBaseData;
-
   type UpdateRecipeData = Partial<RecipeBaseData>;
 
   interface RecipeFilter {
@@ -100,6 +102,7 @@ declare global {
     image: File | string | null;
   }
 
+  // Component Props Types
   interface RecipeFormProps {
     initialData?: Partial<RecipeFormData> & { _id?: string };
     onFormDataChange?: (data: RecipeFormData) => void;
@@ -131,40 +134,32 @@ declare global {
     season: string;
   }
 
-  type WeatherResponseProps = (
-    lat: number,
-    lon: number
-  ) => Promise<{
-    temperature: number;
-    place: string;
-    weatherDescription: string;
-    weatherDetails: string;
-    humidity: number;
-    windSpeed: number;
-    clouds: number;
-  }>;
-
   interface SelectOption {
     value: string;
     label: string;
   }
 
-  interface SelectProps extends BaseInputProps {
+  interface SelectProps {
+    label: string;
+    placeholder?: string;
+    className?: string;
+    containerClassName?: string;
+    disabled?: boolean;
+    required?: boolean;
+    name?: string;
     value: string;
     onChange: (value: string) => void;
     options: SelectOption[] | string[];
   }
 
-  interface BaseInputProps extends BaseComponentProps {
+  interface InputProps {
     label: string;
     placeholder?: string;
+    className?: string;
     containerClassName?: string;
     disabled?: boolean;
     required?: boolean;
     name?: string;
-  }
-
-  interface InputProps extends BaseInputProps {
     value: string | number;
     onChange: (value: string | number) => void;
     type?: "text" | "number" | "email" | "password" | "url" | "tel";
@@ -172,42 +167,20 @@ declare global {
     max?: number;
   }
 
-  interface BaseComponentProps {
+  interface ErrorMessageProps {
+    title?: string;
+    message: string;
+    actionLabel?: string;
+    variant?: "error" | "warning" | "info";
     className?: string;
+    onAction?: () => void;
   }
 
-  interface LoadingSpinnerProps extends BaseComponentProps {
-    size?: "sm" | "md" | "lg" | "xl";
-    color?: string;
-  }
-
-  interface LoadingSectionProps {
-    message?: string;
-    fullPage?: boolean;
-    children?: React.ReactNode;
-  }
-
-  interface SkeletonProps extends BaseComponentProps {
-    variant?: "text" | "rectangular" | "circular";
-    width?: string | number;
-    height?: string | number;
-    animation?: "pulse" | "wave";
-  }
-
-  interface BaseErrorProps {
+  interface NotFoundProps {
     title?: string;
     message?: string;
     actionLabel?: string;
     onAction?: () => void;
-  }
-
-  interface ErrorMessageProps extends BaseErrorProps {
-    message: string;
-    variant?: "error" | "warning" | "info";
-    className?: string;
-  }
-
-  interface NotFoundProps extends BaseErrorProps {
     showHome?: boolean;
   }
 
@@ -221,15 +194,29 @@ declare global {
     error?: Error;
   }
 
+  interface LoadingSpinnerProps {
+    size?: "sm" | "md" | "lg" | "xl";
+    color?: string;
+    className?: string;
+  }
+
+  interface LoadingSectionProps {
+    message?: string;
+    fullPage?: boolean;
+    children?: React.ReactNode;
+  }
+
+  interface SkeletonProps {
+    className?: string;
+    variant?: "text" | "rectangular" | "circular";
+    width?: string | number;
+    height?: string | number;
+    animation?: "pulse" | "wave" | "none";
+  }
+
   interface ProtectedRouteProps {
     children: React.ReactNode;
     redirectTo?: string;
-    showFallback?: boolean;
-  }
-
-  interface AuthGuardProps {
-    children: React.ReactNode;
-    fallback?: React.ReactNode;
     requireAuth?: boolean;
   }
 
@@ -247,27 +234,11 @@ declare global {
     nutritionData: NutritionData;
   }
 
-  interface QueryProviderProps {
-    children: React.ReactNode;
-  }
-
-  interface UseProtectedRouteOptions {
-    redirectTo?: string;
-    redirectDelay?: number;
-  }
-
-  interface AuthState {
-    isLoading: boolean;
-    isAuthenticated: boolean;
-    user: User | null;
-  }
-
   interface RecipePageProps {
     params: Promise<{ recipeId: string }>;
   }
 
   type PageProps = RecipePageProps;
-  type UpdateRecipeProps = RecipePageProps;
 }
 
 export {};

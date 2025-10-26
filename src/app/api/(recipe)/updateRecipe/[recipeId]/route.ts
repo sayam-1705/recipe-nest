@@ -1,32 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
-import { z } from "zod";
 import { getNutritionInfo } from "@/app/api/getNutritionInfo";
 import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
 import { auth } from "@/app/api/auth";
-
-const reqSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  type: z.string().min(1, "Type is required"),
-  meal: z.string().min(1, "Meal is required"),
-  time: z.string().min(1, "Time is required"),
-  difficulty: z.string().min(1, "Difficulty is required"),
-  season: z.string().min(1, "Season is required"),
-  occasion: z.string().min(1, "Occasion is required"),
-  dietaryType: z.enum(["Vegetarian", "Non-Vegetarian", "Vegan"], {
-    required_error: "Dietary type is required",
-  }),
-  servings: z.number().min(1, "Servings must be at least 1"),
-  ingredients: z.array(
-    z.object({
-      name: z.string().min(1, "Ingredient name is required"),
-      quantity: z.string().min(1, "Ingredient quantity is required"),
-    })
-  ),
-  instructions: z.array(z.string().min(1, "Instruction is required")),
-  image: z.string().url("Image must be a valid URL"),
-});
 
 export async function PUT(
   req: NextRequest,
@@ -44,21 +21,6 @@ export async function PUT(
     }
 
     const body = await req.json();
-
-    const bodyData = reqSchema.safeParse(body);
-    if (!bodyData.success) {
-      return NextResponse.json({ error: bodyData.error }, { status: 400 });
-    }
-
-    const { recipeId } = await params;
-
-    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
-      return NextResponse.json(
-        { error: "Invalid recipe ID format" },
-        { status: 400 }
-      );
-    }
-
     const {
       name,
       type,
@@ -72,7 +34,35 @@ export async function PUT(
       ingredients,
       instructions,
       image,
-    } = bodyData.data;
+    } = body;
+
+    if (
+      !name ||
+      !type ||
+      !meal ||
+      !time ||
+      !difficulty ||
+      !season ||
+      !occasion ||
+      !dietaryType ||
+      !servings ||
+      !ingredients ||
+      !instructions
+    ) {
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      );
+    }
+
+    const { recipeId } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+      return NextResponse.json(
+        { error: "Invalid recipe ID format" },
+        { status: 400 }
+      );
+    }
 
     const existingRecipe = await Recipe.findById(recipeId);
     if (!existingRecipe) {
@@ -86,34 +76,30 @@ export async function PUT(
       );
     }
 
+    // Calculate nutrition
     let totalCalories = 0;
     let totalENERC_KCAL = 0;
     let totalPROCNT_KCAL = 0;
     let totalFAT_KCAL = 0;
     let totalCHOCDF_KCAL = 0;
-    const ingredientsWithNutrition: Ingredient[] = [];
+    const ingredientsWithNutrition = [];
 
     for (const ingredient of ingredients) {
-      if (ingredient?.name && ingredient?.quantity) {
-        const nutritionData = await getNutritionInfo([
-          ingredient.quantity,
-          ingredient.name,
-        ]);
+      const nutritionData = await getNutritionInfo([
+        ingredient.quantity,
+        ingredient.name,
+      ]);
 
-        totalCalories += nutritionData.calories;
-        totalENERC_KCAL += nutritionData.totalNutrientsKCal.ENERC_KCAL.quantity;
-        totalPROCNT_KCAL +=
-          nutritionData.totalNutrientsKCal.PROCNT_KCAL.quantity;
-        totalFAT_KCAL += nutritionData.totalNutrientsKCal.FAT_KCAL.quantity;
-        totalCHOCDF_KCAL +=
-          nutritionData.totalNutrientsKCal.CHOCDF_KCAL.quantity;
+      totalCalories += nutritionData.calories;
+      totalENERC_KCAL += nutritionData.totalNutrientsKCal.ENERC_KCAL.quantity;
+      totalPROCNT_KCAL += nutritionData.totalNutrientsKCal.PROCNT_KCAL.quantity;
+      totalFAT_KCAL += nutritionData.totalNutrientsKCal.FAT_KCAL.quantity;
+      totalCHOCDF_KCAL += nutritionData.totalNutrientsKCal.CHOCDF_KCAL.quantity;
 
-        ingredientsWithNutrition.push({
-          name: ingredient.name,
-          quantity: ingredient.quantity,
-          nutrition: nutritionData,
-        });
-      }
+      ingredientsWithNutrition.push({
+        ...ingredient,
+        nutrition: nutritionData,
+      });
     }
 
     const nutritionPerServing = {
@@ -139,7 +125,7 @@ export async function PUT(
         ingredients: ingredientsWithNutrition,
         nutritionPerServing,
         instructions,
-        image,
+        image: image || "",
       },
       { new: true }
     );
@@ -154,7 +140,7 @@ export async function PUT(
   } catch (error) {
     console.error("Update recipe error:", error);
     return NextResponse.json(
-      { error: "An error occurred while updating the recipe" },
+      { error: "Failed to update recipe" },
       { status: 500 }
     );
   }
