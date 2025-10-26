@@ -4,14 +4,15 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
 
 const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get("/getAllRecipes");
-      return response.data.recipes;
+      const response = await fetch("/api/getAllRecipes");
+      if (!response.ok) throw new Error("Failed to fetch recipes");
+      const data = await response.json();
+      return data.recipes;
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -30,11 +31,13 @@ const useGetRecipesByWeather = (
       searchStrategy?: string;
       totalRecipes?: number;
     }> => {
-      const response = await apiClient.post("/getRecipeBasedOnWeather", {
-        lat,
-        lon,
+      const response = await fetch("/api/getRecipeBasedOnWeather", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat, lon }),
       });
-      return response.data;
+      if (!response.ok) throw new Error("Failed to fetch weather recipes");
+      return response.json();
     },
     enabled: enabled && lat !== undefined && lon !== undefined,
     staleTime: 10 * 60 * 1000,

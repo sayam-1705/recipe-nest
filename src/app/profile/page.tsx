@@ -4,105 +4,50 @@ import RecipeCard from "@/components/recipeCard/RecipeCard";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
-import { AxiosError } from "axios";
-
-const useGetRecipesByUserId = (userId: string, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: ["recipes", "byUserId", userId],
-    queryFn: async (): Promise<Recipe[]> => {
-      const response = await apiClient.get(`/getRecipeByUserId/${userId}`);
-      return response.data.recipes;
-    },
-    enabled: enabled && !!userId,
-  });
-};
-
-const useCurrentUser = () => {
-  return useQuery({
-    queryKey: ["auth", "me"],
-    queryFn: () => {
-      if (typeof window !== "undefined") {
-        try {
-          const userData = localStorage.getItem("user");
-          const token = localStorage.getItem("authToken");
-
-          if (!token) {
-            return null;
-          }
-
-          if (!userData) {
-            localStorage.removeItem("authToken");
-            return null;
-          }
-
-          return JSON.parse(userData);
-        } catch (error) {
-          console.error("Error parsing user data from localStorage:", error);
-          localStorage.removeItem("user");
-          localStorage.removeItem("authToken");
-          return null;
-        }
-      }
-      return null;
-    },
-    staleTime: 5 * 60 * 1000,
-    retry: false,
-  });
-};
-
-const useDeleteUser = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (email: string): Promise<void> => {
-      await apiClient.delete(`/delete/${email}`);
-    },
-    onSuccess: () => {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
-      }
-      queryClient.clear();
-    },
-    onError: (error: AxiosError) => {
-      console.error(
-        "Failed to delete user:",
-        error.response?.data || error.message
-      );
-    },
-  });
-};
+import { clearAuth, getUser } from "@/lib/auth";
 
 const Profile = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
-  const { data: currentUser } = useCurrentUser();
+  const currentUser = getUser();
   const userId = currentUser?.id;
 
   const {
     data: recipes = [],
-    isLoading: loading,
+    isLoading,
     error,
-    isError,
-  } = useGetRecipesByUserId(userId, !!userId);
+  } = useQuery({
+    queryKey: ["recipes", "byUserId", userId],
+    queryFn: async (): Promise<Recipe[]> => {
+      const response = await fetch(`/api/getRecipeByUserId/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch recipes");
+      const data = await response.json();
+      return data.recipes;
+    },
+    enabled: !!userId,
+  });
 
-  const deleteUserMutation = useDeleteUser();
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
+  const deleteUserMutation = useMutation({
+    mutationFn: async (email: string) => {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`/api/delete/${email}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to delete user");
+    },
+    onSuccess: () => {
+      clearAuth();
+      queryClient.clear();
+      window.location.replace("/");
+    },
+  });
 
   const handleLogOut = () => {
-    localStorage.clear();
+    clearAuth();
     window.location.replace("/");
   };
 
@@ -116,12 +61,19 @@ const Profile = () => {
     ) {
       try {
         await deleteUserMutation.mutateAsync(currentUser.email);
-        window.location.replace("/");
       } catch (error) {
         console.error("Failed to delete account:", error);
         alert("Failed to delete account. Please try again.");
       }
     }
+  };
+
+  const scrollLeft = () => {
+    scrollContainerRef.current?.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    scrollContainerRef.current?.scrollBy({ left: 300, behavior: "smooth" });
   };
 
   return (
@@ -198,11 +150,11 @@ const Profile = () => {
                 ref={scrollContainerRef}
                 className="flex overflow-x-auto scroll-smooth gap-3 sm:gap-4 md:gap-6 py-4 px-12 sm:px-16 md:px-20 lg:px-24 scrollbar-hide"
               >
-                {loading ? (
+                {isLoading ? (
                   <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">
                     Loading recipes...
                   </div>
-                ) : isError ? (
+                ) : error ? (
                   <div className="text-red-500 text-sm sm:text-base md:text-lg flex-shrink-0 max-w-xs sm:max-w-sm">
                     {error instanceof Error
                       ? error.message

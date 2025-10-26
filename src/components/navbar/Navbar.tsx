@@ -1,34 +1,56 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
 import MobileNavLink from "./MobileNavLink";
 
 const useCurrentUser = () => {
-  return useQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => {
-      try {
-        if (typeof window !== "undefined") {
-          const userData = localStorage.getItem("user");
+  const queryClient = useQueryClient();
 
-          if (!userData) {
+  useEffect(() => {
+    const handleStorageChange = () => {
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event for same-window auth changes
+    window.addEventListener("authChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("authChange", handleStorageChange);
+    };
+  }, [queryClient]);
+
+  return useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: () => {
+      if (typeof window !== "undefined") {
+        try {
+          const userData = localStorage.getItem("user");
+          const token = localStorage.getItem("authToken");
+
+          if (!token || !userData) {
             return null;
           }
 
           return JSON.parse(userData);
+        } catch (error) {
+          console.error("Error parsing user data from localStorage:", error);
+          localStorage.removeItem("user");
+          localStorage.removeItem("authToken");
+          return null;
         }
-      } catch (error) {
-        console.error("Error parsing user data from localStorage:", error);
-        localStorage.removeItem("user");
-        return null;
       }
+      return null;
     },
-    staleTime: 1000 * 60 * 5,
-    retry: false,
+    staleTime: 0, // Always check for fresh data
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 };
 

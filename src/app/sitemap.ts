@@ -1,8 +1,6 @@
 import { MetadataRoute } from "next";
-import { dbConnect } from "./api/mongodb";
-import Recipe from "@/models/Recipe";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
     (process.env.VERCEL_URL
@@ -11,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const now = new Date();
 
-  const staticPages: MetadataRoute.Sitemap = [
+  return [
     {
       url: baseUrl,
       lastModified: now,
@@ -31,21 +29,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
   ];
-
-  try {
-    await dbConnect();
-    const recipes = await Recipe.find({}, { _id: 1 }).lean();
-
-    const recipePages: MetadataRoute.Sitemap = recipes.map((recipe) => ({
-      url: `${baseUrl}/showRecipe/${recipe._id}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    }));
-
-    return [...staticPages, ...recipePages];
-  } catch (error) {
-    console.error("Sitemap generation error:", error);
-    return staticPages;
-  }
 }

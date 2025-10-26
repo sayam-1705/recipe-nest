@@ -37,11 +37,11 @@ const useCurrentUser = () => {
   });
 };
 
-const AuthGuard: React.FC<AuthGuardProps> = ({
-  children,
-  fallback = null,
-  requireAuth = true,
-}) => {
+const AuthGuard: React.FC<{
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  requireAuth?: boolean;
+}> = ({ children, fallback = null, requireAuth = true }) => {
   const { data: user, isLoading } = useCurrentUser();
   const router = useRouter();
 

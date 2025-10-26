@@ -1,40 +1,48 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../mongodb";
-import { schemas } from "../validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
-import { apiResponse } from "@/utils/api";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
+    const { name, email, password, confirmPassword } = await req.json();
 
-    const body = await req.json();
-    const result = schemas.signupSchema.safeParse(body);
-
-    if (!result.success) {
-      return apiResponse.badRequest(result.error.errors[0].message);
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      );
     }
 
-    const { name, email, password } = result.data;
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        { error: "Passwords don't match" },
+        { status: 400 }
+      );
+    }
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return apiResponse.badRequest("User already exists");
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-    return apiResponse.success(
+    return NextResponse.json(
       {
         message: "User created successfully",
         user: { name: newUser.name, email: newUser.email },
       },
-      201
+      { status: 201 }
     );
-  } catch {
-    return apiResponse.error("Signup failed");
+  } catch (error) {
+    console.error("Signup error:", error);
+    return NextResponse.json({ error: "Signup failed" }, { status: 500 });
   }
 }

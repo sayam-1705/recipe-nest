@@ -1,9 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
 import { auth } from "@/app/api/auth";
-import { apiResponse } from "@/utils/api";
-import { validate } from "@/utils/auth";
+import mongoose from "mongoose";
 
 export async function DELETE(
   req: NextRequest,
@@ -14,27 +13,37 @@ export async function DELETE(
 
     const authData = await auth(req);
     if (!authData) {
-      return apiResponse.unauthorized();
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
     }
 
     const { recipeId } = await params;
 
-    if (!validate.objectId(recipeId)) {
-      return apiResponse.badRequest("Invalid recipe ID format");
+    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+      return NextResponse.json({ error: "Invalid recipe ID" }, { status: 400 });
     }
 
     const existingRecipe = await Recipe.findById(recipeId);
     if (!existingRecipe) {
-      return apiResponse.notFound("Recipe");
+      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
     }
 
     if (existingRecipe.userId.toString() !== authData.userId) {
-      return apiResponse.forbidden("You can only delete your own recipes");
+      return NextResponse.json(
+        { error: "You can only delete your own recipes" },
+        { status: 403 }
+      );
     }
 
     await Recipe.deleteOne({ _id: recipeId });
-    return apiResponse.success({ message: "Recipe deleted successfully" });
-  } catch {
-    return apiResponse.error("Failed to delete recipe");
+    return NextResponse.json({ message: "Recipe deleted successfully" });
+  } catch (error) {
+    console.error("Delete recipe error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete recipe" },
+      { status: 500 }
+    );
   }
 }

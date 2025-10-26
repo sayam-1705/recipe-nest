@@ -4,38 +4,24 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 import { Skeleton } from "../common/Loading";
 import ErrorMessage from "../common/Error";
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
 
-const useGetAllRecipes = () => {
-  return useQuery({
+const Menu = ({ initialRecipes = [] }: MenuProps) => {
+  const {
+    data: recipes = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      try {
-        const response = await apiClient.get("/getAllRecipes");
-        return response.data.recipes || [];
-      } catch (error) {
-        console.error("Failed to fetch recipes:", error);
-        return [];
-      }
+      const response = await fetch("/api/getAllRecipes");
+      if (!response.ok) return [];
+      const data = await response.json();
+      return data.recipes || [];
     },
     staleTime: 5 * 60 * 1000,
     retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
-};
-
-const MenuSkeleton = () => (
-  <div className="space-y-4">
-    <Skeleton variant="rectangular" height={200} className="w-full" />
-    <div className="space-y-2">
-      <Skeleton variant="text" className="w-3/4" />
-      <Skeleton variant="text" className="w-1/2" />
-    </div>
-  </div>
-);
-
-const Menu = ({ initialRecipes = [] }: MenuProps) => {
-  const { data: recipes = [], isLoading, error, refetch } = useGetAllRecipes();
 
   const displayRecipes =
     recipes.length > 0 ? recipes : isLoading ? [] : initialRecipes;
@@ -44,7 +30,13 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
     if (isLoading && !displayRecipes.length) {
       return (
         <div className="flex items-center justify-center">
-          <MenuSkeleton />
+          <div className="space-y-4">
+            <Skeleton variant="rectangular" height={200} className="w-full" />
+            <div className="space-y-2">
+              <Skeleton variant="text" className="w-3/4" />
+              <Skeleton variant="text" className="w-1/2" />
+            </div>
+          </div>
         </div>
       );
     }

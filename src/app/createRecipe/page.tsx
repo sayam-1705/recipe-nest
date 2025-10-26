@@ -2,40 +2,33 @@
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import React from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/utils/api";
-import { AxiosError } from "axios";
-
-const useCreateRecipe = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
-      const response = await apiClient.post("/createRecipe", recipeData);
-      return response.data.recipe;
-    },
-    onSuccess: (newRecipe) => {
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
-      if (newRecipe.userId) {
-        queryClient.invalidateQueries({
-          queryKey: ["recipes", "byUserId", newRecipe.userId],
-        });
-      }
-    },
-    onError: (error: AxiosError) => {
-      console.error(
-        "Failed to create recipe:",
-        error.response?.data || error.message
-      );
-    },
-  });
-};
 
 const CreateRecipe = () => {
   const router = useRouter();
-  const createRecipeMutation = useCreateRecipe();
+  const queryClient = useQueryClient();
+
+  const createRecipeMutation = useMutation({
+    mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("/api/createRecipe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(recipeData),
+      });
+      if (!response.ok) throw new Error("Failed to create recipe");
+      const data = await response.json();
+      return data.recipe;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      router.push("/");
+    },
+  });
 
   const staticFormData = {
     dietaryTypes: [
@@ -68,24 +61,7 @@ const CreateRecipe = () => {
     ],
   };
 
-  const handleFormDataChange = (data: unknown) => {
-    console.log("Form data changed:", data);
-  };
-
-  const handleCreateRecipe = async (formData: {
-    name: string;
-    type: string;
-    meal: string;
-    time: string;
-    difficulty: string;
-    season: string;
-    occasion: string;
-    dietaryType: string;
-    servings: number;
-    ingredients: Array<{ name: string; quantity: string }>;
-    instructions: string[];
-    image: string | File | null;
-  }) => {
+  const handleCreateRecipe = async (formData: RecipeFormData) => {
     try {
       let imageData = "";
 
@@ -101,7 +77,7 @@ const CreateRecipe = () => {
         imageData = `data:${mimeType};base64,${base64String}`;
       }
 
-      const recipeData = {
+      const recipeData: CreateRecipeData = {
         name: formData.name,
         type: formData.type,
         meal: formData.meal,
@@ -117,9 +93,6 @@ const CreateRecipe = () => {
       };
 
       await createRecipeMutation.mutateAsync(recipeData);
-      console.log("Recipe created successfully");
-
-      router.push("/");
     } catch (error) {
       console.error("Error creating recipe:", error);
     }
@@ -130,7 +103,6 @@ const CreateRecipe = () => {
       <div>
         <RecipeForm
           staticData={staticFormData}
-          onFormDataChange={handleFormDataChange}
           onSubmit={handleCreateRecipe}
           submitButtonText="Create Recipe"
           isSubmitting={createRecipeMutation.isPending}

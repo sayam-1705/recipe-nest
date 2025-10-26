@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/app/api/mongodb";
-import { z } from "zod";
-import { validatePassword } from "@/app/api/(user)/validations";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { auth } from "@/app/api/auth";
-
-const reqSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-});
 
 export async function DELETE(
   req: NextRequest,
@@ -28,7 +21,7 @@ export async function DELETE(
 
     const { email } = await params;
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -42,33 +35,28 @@ export async function DELETE(
 
     const { password } = await req.json();
 
-    const data = reqSchema.safeParse({ email, password });
-    if (!data.success) {
-      return NextResponse.json({ error: data.error }, { status: 400 });
-    }
-
-    if (!validatePassword(password)) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+    if (!password) {
+      return NextResponse.json(
+        { error: "Password is required" },
+        { status: 400 }
+      );
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return NextResponse.json(
-        { error: "Invalid Credentials" },
+        { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
-    await User.deleteOne({ email: email });
+    await User.deleteOne({ email });
 
-    return NextResponse.json(
-      { message: "User deleted successfully" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Delete user error:", error);
     return NextResponse.json(
-      { error: "An error occurred while trying to delete the user" },
+      { error: "Failed to delete user" },
       { status: 500 }
     );
   }
