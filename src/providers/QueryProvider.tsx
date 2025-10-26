@@ -14,8 +14,7 @@ export default function QueryProvider({
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5 * 60 * 1000,
-            gcTime: 10 * 60 * 1000,
+            staleTime: 0,
             retry: process.env.NODE_ENV === "production" ? 1 : 3,
             refetchOnWindowFocus: process.env.NODE_ENV === "production",
             networkMode: "online",
