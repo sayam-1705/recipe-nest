@@ -28,8 +28,9 @@ function SearchResults() {
   } = useQuery({
     queryKey: ["search", searchQuery, additionalFilters],
     queryFn: async (): Promise<Recipe[]> => {
-      if (!searchQuery.trim() && Object.keys(additionalFilters).length === 0) return [];
-      
+      if (!searchQuery.trim() && Object.keys(additionalFilters).length === 0)
+        return [];
+
       const response = await fetch("/api/getRecipeByFilter", {
         method: "POST",
         headers: {
@@ -56,7 +57,9 @@ function SearchResults() {
     e.preventDefault();
     if (searchInput.trim()) {
       setSearchQuery(searchInput.trim());
-      router.push(`/search?q=${encodeURIComponent(searchInput.trim())}`, { scroll: false });
+      router.push(`/search?q=${encodeURIComponent(searchInput.trim())}`, {
+        scroll: false,
+      });
     }
   };
 
@@ -64,7 +67,8 @@ function SearchResults() {
     setAdditionalFilters(filters);
   };
 
-  const hasSearched = searchQuery.trim() || Object.keys(additionalFilters).length > 0;
+  const hasSearched =
+    searchQuery.trim() || Object.keys(additionalFilters).length > 0;
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 xs:py-6 sm:py-8 px-3 xs:px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
@@ -74,13 +78,16 @@ function SearchResults() {
           <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-3 xs:mb-4 sm:mb-6">
             Search Recipes
           </h1>
-          
+
           {/* Search Form */}
           <div className="bg-white rounded-lg shadow-md p-3 xs:p-4 sm:p-5 md:p-6 mb-4 xs:mb-6">
             <form onSubmit={handleSearch} className="space-y-3 xs:space-y-4">
-              <div className="flex flex-col lg:flex-row gap-3 xs:gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 xs:gap-4">
                 <div className="flex-1">
-                  <label htmlFor="search-input" className="block text-xs xs:text-sm font-medium text-gray-700 mb-1.5 xs:mb-2">
+                  <label
+                    htmlFor="search-input"
+                    className="block text-xs xs:text-sm font-medium text-gray-700 mb-1.5 xs:mb-2"
+                  >
                     Recipe Name
                   </label>
                   <div className="relative">
@@ -114,14 +121,19 @@ function SearchResults() {
                   >
                     Search
                   </button>
-                  <AdvancedFilters onFilter={handleFilter} initialFilters={additionalFilters} />
+                  <AdvancedFilters
+                    onFilter={handleFilter}
+                    initialFilters={additionalFilters}
+                  />
                 </div>
               </div>
-              
+
               {/* Active Filters Display */}
               {(searchQuery || Object.keys(additionalFilters).length > 0) && (
                 <div className="flex flex-wrap items-center gap-1.5 xs:gap-2 pt-2 xs:pt-3 border-t border-gray-200">
-                  <span className="text-xs xs:text-sm font-medium text-gray-600 mb-1 xs:mb-0">Active filters:</span>
+                  <span className="text-xs xs:text-sm font-medium text-gray-600 mb-1 xs:mb-0">
+                    Active filters:
+                  </span>
                   {searchQuery && (
                     <span className="inline-flex items-center px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm font-medium bg-primary-orange-bg text-primary-orange">
                       Name: &quot;{searchQuery}&quot;
@@ -138,7 +150,7 @@ function SearchResults() {
                       </button>
                     </span>
                   )}
-                  {Object.entries(additionalFilters).map(([key, value]) => 
+                  {Object.entries(additionalFilters).map(([key, value]) =>
                     value ? (
                       <span
                         key={key}
@@ -185,19 +197,22 @@ function SearchResults() {
               Find Your Perfect Recipe
             </h2>
             <p className="text-sm xs:text-base text-gray-600 max-w-md mx-auto px-4">
-              Enter a recipe name or use advanced filters to discover delicious dishes
+              Enter a recipe name or use advanced filters to discover delicious
+              dishes
             </p>
           </div>
         ) : isLoading ? (
           <div className="text-center py-8 xs:py-12 sm:py-16 bg-white rounded-lg shadow-md">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-4 border-primary-orange mx-auto mb-3 xs:mb-4"></div>
-            <p className="text-sm xs:text-base text-gray-600 font-medium">Searching for recipes...</p>
+            <p className="text-sm xs:text-base text-gray-600 font-medium">
+              Searching for recipes...
+            </p>
           </div>
         ) : error ? (
           <div className="flex items-center justify-center py-8 xs:py-12 sm:py-16">
             <ErrorMessage
               title="Search Failed"
-              message="We couldn&apos;t complete your search. Please try again."
+              message="We couldn't complete your search. Please try again."
               onAction={() => refetch()}
               variant="error"
               className="max-w-md"
@@ -255,7 +270,9 @@ export default function SearchPage() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-8 xs:py-12 sm:py-16">
               <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-4 border-primary-orange mx-auto mb-3 xs:mb-4"></div>
-              <p className="text-sm xs:text-base text-gray-600 font-medium">Loading search page...</p>
+              <p className="text-sm xs:text-base text-gray-600 font-medium">
+                Loading search page...
+              </p>
             </div>
           </div>
         </div>

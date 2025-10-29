@@ -101,7 +101,7 @@ const Navbar = () => {
           <div className="hidden lg:block">
             <SearchBar />
           </div>
-          
+
           <button
             onClick={toggleMobileMenu}
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-orange z-60"
@@ -177,7 +177,7 @@ const Navbar = () => {
           <div className="mb-4">
             <SearchBar isMobile />
           </div>
-          
+
           <MobileNavLink href="#home" onClick={closeMobileMenu}>
             🏠 Home
           </MobileNavLink>

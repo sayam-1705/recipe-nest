@@ -7,7 +7,10 @@ interface AdvancedFiltersProps {
   initialFilters?: FilterOptions;
 }
 
-const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => {
+const AdvancedFilters = ({
+  onFilter,
+  initialFilters,
+}: AdvancedFiltersProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>(initialFilters || {});
 
@@ -65,18 +68,21 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
             className="fixed inset-0 z-40 bg-black bg-opacity-30"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed bottom-0 left-0 right-0 sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:mt-2 w-full max-w-[98vw] sm:max-w-[400px] md:max-w-[480px] bg-white rounded-t-2xl sm:rounded-lg shadow-2xl z-50 border-t sm:border border-gray-200 max-h-[85vh] overflow-hidden mx-auto">
-            <div className="p-3 xs:p-4 sm:p-5 md:p-6">
-              <div className="flex items-center justify-between mb-4 xs:mb-5">
-                <h3 className="text-base xs:text-lg font-semibold text-gray-900">
+          {/* Mobile: Bottom sheet, Desktop: Dropdown */}
+          <div className="fixed left-0 right-0 bottom-0 sm:absolute sm:right-0 sm:left-auto sm:top-full sm:bottom-auto sm:mt-2 w-full sm:w-80 md:w-96 bg-white rounded-t-2xl sm:rounded-lg shadow-2xl z-50 border-t sm:border border-gray-200 max-h-[85vh] sm:max-h-[600px] flex flex-col">
+            {/* Header - Fixed */}
+            <div className="flex-shrink-0 px-4 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">
                   Advanced Filters
                 </h3>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 xs:p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  aria-label="Close filters"
                 >
                   <svg
-                    className="w-5 h-5 xs:w-6 xs:h-6 text-gray-500"
+                    className="w-5 h-5 text-gray-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -90,16 +96,21 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                   </svg>
                 </button>
               </div>
+            </div>
 
-              <div className="space-y-3 xs:space-y-4 max-h-[calc(85vh-180px)] xs:max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Dietary Type
                   </label>
                   <select
                     value={filters.dietaryType || ""}
-                    onChange={(e) => handleFilterChange("dietaryType", e.target.value)}
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    onChange={(e) =>
+                      handleFilterChange("dietaryType", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   >
                     <option value="">All</option>
                     <option value="Vegetarian">Vegetarian</option>
@@ -109,13 +120,13 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Meal Type
                   </label>
                   <select
                     value={filters.meal || ""}
                     onChange={(e) => handleFilterChange("meal", e.target.value)}
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   >
                     <option value="">All</option>
                     <option value="Breakfast">Breakfast</option>
@@ -127,13 +138,15 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Difficulty
                   </label>
                   <select
                     value={filters.difficulty || ""}
-                    onChange={(e) => handleFilterChange("difficulty", e.target.value)}
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    onChange={(e) =>
+                      handleFilterChange("difficulty", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   >
                     <option value="">All</option>
                     <option value="Easy">Easy</option>
@@ -143,13 +156,15 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Season
                   </label>
                   <select
                     value={filters.season || ""}
-                    onChange={(e) => handleFilterChange("season", e.target.value)}
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    onChange={(e) =>
+                      handleFilterChange("season", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   >
                     <option value="">All</option>
                     <option value="Spring">Spring</option>
@@ -161,20 +176,22 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Occasion
                   </label>
                   <input
                     type="text"
                     value={filters.occasion || ""}
-                    onChange={(e) => handleFilterChange("occasion", e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("occasion", e.target.value)
+                    }
                     placeholder="e.g., Party, Holiday, Casual"
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-1 xs:mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Recipe Type
                   </label>
                   <input
@@ -182,21 +199,24 @@ const AdvancedFilters = ({ onFilter, initialFilters }: AdvancedFiltersProps) => 
                     value={filters.type || ""}
                     onChange={(e) => handleFilterChange("type", e.target.value)}
                     placeholder="e.g., Italian, Chinese, Indian"
-                    className="w-full px-2.5 xs:px-3 py-2 xs:py-2.5 text-sm xs:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-orange focus:border-transparent"
                   />
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-2 xs:gap-3 mt-4 xs:mt-5 pt-4 border-t border-gray-200">
+            {/* Footer - Fixed */}
+            <div className="flex-shrink-0 px-4 py-4 border-t border-gray-200 bg-white">
+              <div className="flex gap-3">
                 <button
                   onClick={clearFilters}
-                  className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-xs xs:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
                   Clear All
                 </button>
                 <button
                   onClick={applyFilters}
-                  className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-xs xs:text-sm font-medium text-white bg-primary-orange hover:bg-primary-orange-hover rounded-lg transition-colors duration-200"
+                  className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-primary-orange hover:bg-primary-orange-hover rounded-lg transition-colors duration-200"
                 >
                   Apply Filters
                 </button>
