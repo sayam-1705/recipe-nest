@@ -2,6 +2,7 @@
 
 import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import AlertDialog from "@/components/common/AlertDialog";
 import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +17,8 @@ const UpdateRecipe = ({
   const router = useRouter();
   const queryClient = useQueryClient();
   const [canAccess, setCanAccess] = useState<boolean | null>(null);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     data: recipe,
@@ -135,7 +138,10 @@ const UpdateRecipe = ({
         await updateRecipeMutation.mutateAsync(updateData);
       } catch (error) {
         console.error("Error updating recipe:", error);
-        alert("An error occurred while updating the recipe");
+        setErrorMessage(
+          "An error occurred while updating the recipe. Please try again."
+        );
+        setShowErrorAlert(true);
       }
     },
     [recipe?.image, updateRecipeMutation]
@@ -230,6 +236,14 @@ const UpdateRecipe = ({
           isSubmitting={updateRecipeMutation.isPending}
         />
       </div>
+
+      <AlertDialog
+        isOpen={showErrorAlert}
+        title="Update Failed"
+        message={errorMessage}
+        type="error"
+        onClose={() => setShowErrorAlert(false)}
+      />
     </ProtectedRoute>
   );
 };

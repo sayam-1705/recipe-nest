@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
@@ -58,6 +58,7 @@ const useCurrentUser = () => {
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: user } = useCurrentUser();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -66,6 +67,26 @@ const Navbar = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        isMobileMenuOpen
+      ) {
+        closeMobileMenu();
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -99,7 +120,7 @@ const Navbar = () => {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="hidden lg:block">
-            <SearchBar />
+            <SearchBar onSearch={closeMobileMenu} />
           </div>
 
           <button
@@ -115,7 +136,7 @@ const Navbar = () => {
           </button>
 
           <div className="relative z-50 flex gap-2 sm:gap-3 md:gap-4 font-medium text-xs sm:text-sm md:text-base animate-fade-in-up delay-800">
-            <AuthLinks isMobile={true} />
+            <AuthLinks isMobile={true} onNavigate={closeMobileMenu} />
           </div>
         </div>
       </nav>
@@ -128,6 +149,7 @@ const Navbar = () => {
       )}
 
       <div
+        ref={mobileMenuRef}
         className={`fixed top-0 left-0 h-full w-72 sm:w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 lg:hidden ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
@@ -175,7 +197,7 @@ const Navbar = () => {
 
         <div className="flex flex-col p-4 sm:p-6 space-y-1">
           <div className="mb-4">
-            <SearchBar isMobile />
+            <SearchBar isMobile onSearch={closeMobileMenu} />
           </div>
 
           <MobileNavLink href="#home" onClick={closeMobileMenu}>
