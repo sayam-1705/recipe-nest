@@ -4,6 +4,7 @@ import MenuCarousel from "../menuCarousel/MenuCarousel";
 import { Skeleton } from "../common/Loading";
 import ErrorMessage from "../common/Error";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 const Menu = ({ initialRecipes = [] }: MenuProps) => {
   const {
@@ -130,8 +131,30 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
           cooks around the world. Find the perfect dish for any occasion.
         </p>
 
+        <div className="flex gap-3 animate-fade-in-up delay-300">
+          <Link
+            href="/search"
+            className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base font-medium text-white bg-primary-orange hover:bg-primary-orange-hover rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            Search Recipes
+          </Link>
+        </div>
+
         {displayRecipes.length > 0 && (
-          <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-300">
+          <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-400">
             Showing {displayRecipes.length} recipe
             {displayRecipes.length !== 1 ? "s" : ""}
           </div>

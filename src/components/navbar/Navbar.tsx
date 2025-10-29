@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
 import MobileNavLink from "./MobileNavLink";
+import SearchBar from "./SearchBar";
 
 const useCurrentUser = () => {
   const queryClient = useQueryClient();
@@ -97,6 +98,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden lg:block">
+            <SearchBar />
+          </div>
+          
           <button
             onClick={toggleMobileMenu}
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-orange z-60"
@@ -169,6 +174,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-col p-4 sm:p-6 space-y-1">
+          <div className="mb-4">
+            <SearchBar isMobile />
+          </div>
+          
           <MobileNavLink href="#home" onClick={closeMobileMenu}>
             🏠 Home
           </MobileNavLink>
