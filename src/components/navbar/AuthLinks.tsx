@@ -1,15 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getUser, clearAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 
-const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
+interface AuthLinksProps {
+  isMobile?: boolean;
+  onNavigate?: () => void;
+}
+
+const AuthLinks = ({ isMobile = false, onNavigate }: AuthLinksProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const queryClient = useQueryClient();
   const user = getUser();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -22,7 +47,7 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
     <>
       {user ? (
         <>
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
               className="flex items-center gap-2 sm:gap-3 group relative overflow-hidden"
               onClick={() => setShowDropdown(!showDropdown)}
@@ -42,7 +67,10 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
                 <Link
                   href="/profile"
                   className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                  onClick={() => setShowDropdown(false)}
+                  onClick={() => {
+                    setShowDropdown(false);
+                    onNavigate?.();
+                  }}
                 >
                   <div className="flex items-center gap-2">
                     <svg
@@ -64,7 +92,10 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
                 <Link
                   href="/createRecipe"
                   className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                  onClick={() => setShowDropdown(false)}
+                  onClick={() => {
+                    setShowDropdown(false);
+                    onNavigate?.();
+                  }}
                 >
                   <div className="flex items-center gap-2">
                     <svg
@@ -112,13 +143,6 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
                 </button>
               </div>
             )}
-
-            {showDropdown && (
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setShowDropdown(false)}
-              />
-            )}
           </div>
         </>
       ) : (
@@ -126,6 +150,7 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
           <Link
             className="relative border-2 border-secondary-green-light px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2 rounded-full font-medium text-secondary-green-light transition-all duration-300 hover:bg-secondary-green-light hover:text-white hover:scale-105 hover:shadow-lg active:scale-95 transform overflow-hidden group text-xs sm:text-sm md:text-base"
             href="/login"
+            onClick={onNavigate}
           >
             <span className="relative z-10">Login</span>
             <div className="absolute inset-0 bg-secondary-green-light transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
@@ -134,6 +159,7 @@ const AuthLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
             <Link
               className="relative border border-orange-500 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2 rounded-full font-medium bg-gradient-to-r from-orange-500 to-orange-600 text-white transition-all duration-300 hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-xl active:scale-95 transform overflow-hidden group text-xs sm:text-sm md:text-base"
               href="/signup"
+              onClick={onNavigate}
             >
               <span className="relative z-10">Sign Up</span>
             </Link>

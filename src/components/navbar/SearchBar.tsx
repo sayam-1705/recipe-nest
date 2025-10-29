@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 
 interface SearchBarProps {
   isMobile?: boolean;
+  onSearch?: () => void;
 }
 
-const SearchBar = ({ isMobile = false }: SearchBarProps) => {
+const SearchBar = ({ isMobile = false, onSearch }: SearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
@@ -27,6 +28,8 @@ const SearchBar = ({ isMobile = false }: SearchBarProps) => {
       if (!isMobile) {
         setIsExpanded(false);
       }
+      // Call the onSearch callback to close mobile menu or dropdown
+      onSearch?.();
     }
   };
 
