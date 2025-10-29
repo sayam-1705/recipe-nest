@@ -98,6 +98,16 @@ declare global {
     occasion?: string;
   }
 
+  interface FilterOptions {
+    name?: string;
+    dietaryType?: string;
+    type?: string;
+    meal?: string;
+    difficulty?: string;
+    season?: string;
+    occasion?: string;
+  }
+
   interface RecipeFormData extends Omit<RecipeBaseData, "image"> {
     image: File | string | null;
   }
