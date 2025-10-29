@@ -2,13 +2,18 @@
 
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import { useRef } from "react";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import AlertDialog from "@/components/common/AlertDialog";
+import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { clearAuth, getUser } from "@/lib/auth";
 
 const Profile = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const currentUser = getUser();
   const userId = currentUser?.id;
@@ -44,6 +49,14 @@ const Profile = () => {
       queryClient.clear();
       window.location.replace("/");
     },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Failed to delete account. Please try again."
+      );
+      setShowErrorAlert(true);
+    },
   });
 
   const handleLogOut = () => {
@@ -51,20 +64,15 @@ const Profile = () => {
     window.location.replace("/");
   };
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = () => {
     if (!currentUser?.email) return;
+    setShowDeleteConfirm(true);
+  };
 
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
-      )
-    ) {
-      try {
-        await deleteUserMutation.mutateAsync(currentUser.email);
-      } catch (error) {
-        console.error("Failed to delete account:", error);
-        alert("Failed to delete account. Please try again.");
-      }
+  const confirmDeleteAccount = async () => {
+    setShowDeleteConfirm(false);
+    if (currentUser?.email) {
+      await deleteUserMutation.mutateAsync(currentUser.email);
     }
   };
 
@@ -216,6 +224,25 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Account"
+        message="Are you sure you want to delete your account? This action cannot be undone and all your recipes will be permanently deleted."
+        confirmText="Delete Account"
+        cancelText="Cancel"
+        type="danger"
+        onConfirm={confirmDeleteAccount}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
+
+      <AlertDialog
+        isOpen={showErrorAlert}
+        title="Error"
+        message={errorMessage}
+        type="error"
+        onClose={() => setShowErrorAlert(false)}
+      />
     </ProtectedRoute>
   );
 };
