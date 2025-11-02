@@ -97,7 +97,25 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
     lastInteractionRef.current = Date.now();
   };
 
+  // Handle scroll for mobile to update current index
+  const handleScroll = useCallback(() => {
+    if (screenSize !== "mobile" || !carouselRef.current) return;
+
+    updateLastInteraction();
+
+    const scrollLeft = carouselRef.current.scrollLeft;
+    const cardWidthWithGap = responsiveCardWidth + 16; // 16px is the margin-right
+    const newIndex = Math.round((scrollLeft - 20) / cardWidthWithGap); // 20px is the left padding
+
+    if (newIndex >= 0 && newIndex < totalCards && newIndex !== currentIndex) {
+      setCurrentIndex(newIndex);
+    }
+  }, [screenSize, responsiveCardWidth, totalCards, currentIndex]);
+
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Only enable drag for desktop/tablet, not mobile
+    if (screenSize === "mobile") return;
+
     setIsDragging(true);
     setStartX(e.pageX);
     setDragDistance(0);
@@ -105,7 +123,7 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || screenSize === "mobile") return;
     e.preventDefault();
     const distance = e.pageX - startX;
     setDragDistance(distance);
@@ -113,12 +131,20 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   };
 
   const handleMouseUp = () => {
+    if (screenSize === "mobile") return;
+
     setIsDragging(false);
     handleDragEnd();
     updateLastInteraction();
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // For mobile, let native scroll handle touch events
+    if (screenSize === "mobile") {
+      updateLastInteraction();
+      return;
+    }
+
     setIsDragging(true);
     setStartX(e.touches[0].pageX);
     setDragDistance(0);
@@ -126,13 +152,15 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || screenSize === "mobile") return;
     const distance = e.touches[0].pageX - startX;
     setDragDistance(distance);
     updateLastInteraction();
   };
 
   const handleTouchEnd = () => {
+    if (screenSize === "mobile") return;
+
     setIsDragging(false);
     handleDragEnd();
     updateLastInteraction();
@@ -168,6 +196,15 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
     startAutoScroll();
     return () => stopAutoScroll();
   }, [currentIndex, startAutoScroll]);
+
+  // Add scroll listener for mobile devices
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel || screenSize !== "mobile") return;
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [screenSize, handleScroll]);
 
   const getCardStyle = (index: number) => {
     const isFocused = index === currentIndex;
@@ -214,8 +251,13 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
     <div className="relative">
       <div
         ref={carouselRef}
-        className={`flex overflow-x-auto scrollbar-hide ${
-          isDragging ? "cursor-grabbing" : "cursor-grab"
+        className={`flex ${
+          screenSize === "mobile"
+            ? "overflow-x-auto cursor-auto touch-pan-x" // Scrollable for mobile
+            : "overflow-hidden" // No scroll for desktop/tablet
+        } scrollbar-hide ${
+          screenSize !== "mobile" &&
+          (isDragging ? "cursor-grabbing" : "cursor-grab")
         } select-none items-center ${
           screenSize === "mobile"
             ? "py-4 px-4"
@@ -224,8 +266,9 @@ const MenuCarousel: React.FC<MenuCarouselProps> = ({
             : "py-20"
         }`}
         style={{
-          scrollBehavior: "smooth",
-          scrollSnapType: "x mandatory",
+          scrollBehavior: screenSize === "mobile" ? "smooth" : "auto",
+          scrollSnapType: screenSize === "mobile" ? "x mandatory" : "none",
+          WebkitOverflowScrolling: screenSize === "mobile" ? "touch" : "auto",
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
