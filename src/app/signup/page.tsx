@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { setAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 const Signup = () => {
   const router = useRouter();
@@ -51,6 +52,35 @@ const Signup = () => {
       }
     },
   });
+
+  const googleSignupMutation = useMutation({
+    mutationFn: async (credential: string) => {
+      const response = await fetch("/api/google-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Google signup failed");
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAuth(data.token, data.user);
+      router.push("/");
+    },
+  });
+
+  const handleGoogleSuccess = (credential: string) => {
+    googleSignupMutation.mutate(credential);
+  };
+
+  const handleGoogleError = (error: string) => {
+    console.error("Google Sign-Up error:", error);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -100,6 +130,10 @@ const Signup = () => {
       ? signupMutation.error instanceof Error
         ? signupMutation.error.message
         : "Signup failed. Please try again."
+      : googleSignupMutation.isError
+      ? googleSignupMutation.error instanceof Error
+        ? googleSignupMutation.error.message
+        : "Google signup failed. Please try again."
       : "");
 
   return (
@@ -228,6 +262,20 @@ const Signup = () => {
             >
               {signupMutation.isPending ? "Creating Account..." : "Sign Up"}
             </button>
+            
+            <div className="flex items-center gap-3 w-full my-2">
+              <div className="flex-1 h-px bg-white/30"></div>
+              <span className="text-white/70 text-xs sm:text-sm">OR</span>
+              <div className="flex-1 h-px bg-white/30"></div>
+            </div>
+
+            <div className="w-full">
+              <GoogleSignInButton
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                text="signup_with"
+              />
+            </div>
           </div>
           <p className="text-white/80 mt-4 sm:mt-6 text-center text-sm sm:text-base">
             Already have an account?{" "}
