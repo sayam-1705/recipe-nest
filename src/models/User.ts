@@ -14,7 +14,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: function(this: { authProvider?: string }) {
-        return !this.authProvider || this.authProvider === 'email';
+        return this.authProvider === undefined || this.authProvider === null || this.authProvider === 'email';
       },
       minlength: [6, "Password must be at least 6 characters long"],
     },

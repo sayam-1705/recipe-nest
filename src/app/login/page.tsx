@@ -62,6 +62,16 @@ const Login = () => {
     console.error("Google Sign-In error:", error);
   };
 
+  const getErrorMessage = () => {
+    if (loginMutation.isError && loginMutation.error instanceof Error) {
+      return loginMutation.error.message;
+    }
+    if (googleLoginMutation.isError && googleLoginMutation.error instanceof Error) {
+      return googleLoginMutation.error.message;
+    }
+    return "Login failed. Please try again.";
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -144,11 +154,7 @@ const Login = () => {
             </div>
             {(loginMutation.isError || googleLoginMutation.isError) && (
               <p className="text-red-500 text-xs sm:text-sm mt-2 text-center px-2">
-                {loginMutation.isError && loginMutation.error instanceof Error
-                  ? loginMutation.error.message
-                  : googleLoginMutation.isError && googleLoginMutation.error instanceof Error
-                  ? googleLoginMutation.error.message
-                  : "Login failed. Please try again."}
+                {getErrorMessage()}
               </p>
             )}
             <button

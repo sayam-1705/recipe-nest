@@ -45,9 +45,15 @@ export async function POST(req: NextRequest) {
     let user = await User.findOne({ email });
 
     if (user) {
-      // User exists - update Google ID if not already set
-      if (!user.googleId && user.authProvider === 'email') {
+      // User exists - handle account merging
+      if (user.authProvider === 'email' && !user.googleId) {
+        // Upgrade email account to support Google authentication
         user.authProvider = 'google';
+        user.googleId = googleId;
+        user.picture = picture;
+        await user.save();
+      } else if (user.authProvider === 'google' && !user.googleId) {
+        // Fix inconsistent data: Google user without googleId
         user.googleId = googleId;
         user.picture = picture;
         await user.save();
