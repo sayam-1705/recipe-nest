@@ -67,9 +67,6 @@ SECRET_KEY=your_jwt_secret_minimum_32_characters_long
 WEATHER_API_KEY=your_openweathermap_api_key
 EDAMAM_API_KEY=your_edamam_nutrition_api_key
 EDAMAM_APP_ID=your_edamam_app_id
-
-# Google OAuth (for Sign-In with Google)
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
