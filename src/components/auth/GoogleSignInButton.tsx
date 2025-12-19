@@ -61,9 +61,9 @@ export default function GoogleSignInButton({
     const initializeGoogleSignIn = () => {
       if (!window.google || !buttonRef.current) return;
 
-      const clientId = process.env.GOOGLE_CLIENT_ID;
+      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
       if (!clientId) {
-        onError("Google Client ID not configured. Please set GOOGLE_CLIENT_ID in your environment variables.");
+        onError("Google Client ID not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID in your environment variables.");
         return;
       }
 
