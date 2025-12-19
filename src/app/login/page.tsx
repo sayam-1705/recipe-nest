@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { setAuth } from "@/lib/auth";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 const Login = () => {
   const router = useRouter();
@@ -31,6 +32,45 @@ const Login = () => {
       router.push("/");
     },
   });
+
+  const googleLoginMutation = useMutation({
+    mutationFn: async (credential: string) => {
+      const response = await fetch("/api/google-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Google login failed");
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAuth(data.token, data.user);
+      router.push("/");
+    },
+  });
+
+  const handleGoogleSuccess = (credential: string) => {
+    googleLoginMutation.mutate(credential);
+  };
+
+  const handleGoogleError = (error: string) => {
+    console.error("Google Sign-In error:", error);
+  };
+
+  const getErrorMessage = () => {
+    if (loginMutation.isError && loginMutation.error instanceof Error) {
+      return loginMutation.error.message;
+    }
+    if (googleLoginMutation.isError && googleLoginMutation.error instanceof Error) {
+      return googleLoginMutation.error.message;
+    }
+    return "Login failed. Please try again.";
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -112,11 +152,9 @@ const Login = () => {
                 )}
               </button>
             </div>
-            {loginMutation.isError && (
+            {(loginMutation.isError || googleLoginMutation.isError) && (
               <p className="text-red-500 text-xs sm:text-sm mt-2 text-center px-2">
-                {loginMutation.error instanceof Error
-                  ? loginMutation.error.message
-                  : "Login failed. Please try again."}
+                {getErrorMessage()}
               </p>
             )}
             <button
@@ -136,6 +174,20 @@ const Login = () => {
                 <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
               </svg>
             </button>
+            
+            <div className="flex items-center gap-3 w-full my-2">
+              <div className="flex-1 h-px bg-white/30"></div>
+              <span className="text-white/70 text-xs sm:text-sm">OR</span>
+              <div className="flex-1 h-px bg-white/30"></div>
+            </div>
+
+            <div className="w-full">
+              <GoogleSignInButton
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                text="signin_with"
+              />
+            </div>
           </div>
           <p className="text-white/80 mt-4 sm:mt-6 text-center text-sm sm:text-base">
             Don&apos;t have an account?{" "}

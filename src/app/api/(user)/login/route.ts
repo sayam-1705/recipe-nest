@@ -21,6 +21,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    // Check if user is using Google auth
+    if (user.authProvider === 'google') {
+      return NextResponse.json(
+        { error: "Please use Google Sign-In for this account" },
+        { status: 400 }
+      );
+    }
+
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return NextResponse.json(
