@@ -147,21 +147,18 @@ export default function FuturisticNavbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              <NavLink href="/" closeMobileMenu={closeMobileMenu}>
+              <NavLink href="/">
                 Home
               </NavLink>
-              <NavLink href="/search" closeMobileMenu={closeMobileMenu}>
+              <NavLink href="/search">
                 Search
               </NavLink>
               {user && (
                 <>
-                  <NavLink href="/profile" closeMobileMenu={closeMobileMenu}>
+                  <NavLink href="/profile">
                     Profile
                   </NavLink>
-                  <NavLink
-                    href="/createRecipe"
-                    closeMobileMenu={closeMobileMenu}
-                  >
+                  <NavLink href="/createRecipe">
                     Create
                   </NavLink>
                 </>
@@ -175,7 +172,7 @@ export default function FuturisticNavbar() {
 
             {/* Auth Links */}
             <div className="hidden lg:flex items-center gap-4">
-              <AuthLinks user={user} closeMobileMenu={closeMobileMenu} />
+              <AuthLinks isMobile={false} onNavigate={closeMobileMenu} />
             </div>
 
             {/* Mobile Menu Button */}
@@ -222,23 +219,23 @@ export default function FuturisticNavbar() {
 
             {/* Mobile Nav Links */}
             <div className="flex flex-col gap-4">
-              <MobileNavLink href="/" closeMobileMenu={closeMobileMenu}>
+              <MobileNavLink href="/" onClick={closeMobileMenu}>
                 Home
               </MobileNavLink>
-              <MobileNavLink href="/search" closeMobileMenu={closeMobileMenu}>
+              <MobileNavLink href="/search" onClick={closeMobileMenu}>
                 Search
               </MobileNavLink>
               {user && (
                 <>
                   <MobileNavLink
                     href="/profile"
-                    closeMobileMenu={closeMobileMenu}
+                    onClick={closeMobileMenu}
                   >
                     Profile
                   </MobileNavLink>
                   <MobileNavLink
                     href="/createRecipe"
-                    closeMobileMenu={closeMobileMenu}
+                    onClick={closeMobileMenu}
                   >
                     Create Recipe
                   </MobileNavLink>
@@ -248,7 +245,7 @@ export default function FuturisticNavbar() {
 
             {/* Mobile Auth Links */}
             <div className="mt-auto pt-6 border-t border-neon-purple/30">
-              <AuthLinks user={user} closeMobileMenu={closeMobileMenu} />
+              <AuthLinks isMobile={true} onNavigate={closeMobileMenu} />
             </div>
           </div>
         </div>

@@ -193,17 +193,17 @@ export default function FuturisticCarousel() {
                       </h3>
                       
                       <p className="text-gray-300 text-sm line-clamp-3">
-                        {recipe.description}
+                        {recipe.instructions[0] || "Delicious recipe"}
                       </p>
 
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-2 text-neon-purple">
                           <span>⏱️</span>
-                          <span>{recipe.cookTime || "30"} min</span>
+                          <span>{recipe.time || "30 min"}</span>
                         </div>
                         <div className="flex items-center gap-2 text-neon-green">
                           <span>👥</span>
-                          <span>{recipe.servings || "4"} servings</span>
+                          <span>{recipe.servings || 4} servings</span>
                         </div>
                       </div>
 
@@ -257,7 +257,7 @@ export default function FuturisticCarousel() {
         <div className="absolute bottom-10 right-10 glassmorphism-dark px-6 py-4 rounded-lg border border-neon-purple/30 z-10">
           <p className="text-sm text-gray-400 mb-1">Recommended for</p>
           <p className="text-lg font-semibold text-neon-purple">
-            {weatherData.weather.description} • {Math.round(weatherData.weather.temp)}°C
+            {weatherData.weather.description} • {Math.round(weatherData.weather.temperature)}°C
           </p>
         </div>
       )}
