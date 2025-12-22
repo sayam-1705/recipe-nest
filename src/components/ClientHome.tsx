@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import About from "@/components/about/About";
 import FuturisticCarousel from "@/components/carousel/FuturisticCarousel";
-import Footer from "@/components/footer/Footer";
+import FuturisticFooter from "@/components/footer/FuturisticFooter";
 import HowItWorks from "@/components/howItWorks/HowItWorks";
 import Menu from "@/components/menu/Menu";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
@@ -38,7 +38,7 @@ export default function ClientHome() {
           <HowItWorks />
           <Menu />
           <About />
-          <Footer />
+          <FuturisticFooter />
         </div>
       </ErrorBoundary>
     </div>
