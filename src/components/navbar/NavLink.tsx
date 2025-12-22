@@ -54,11 +54,14 @@ const NavLink = ({
 
   return (
     <Link
-      className={`relative transition-all duration-500 hover:text-primary-orange hover:scale-105 transform hover:-translate-y-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-orange after:transition-all after:duration-500 hover:after:w-full animate-fade-in-up delay-75`}
+      className={`relative px-4 py-2 rounded-lg transition-all duration-500 hover:scale-105 transform group glassmorphism border border-transparent hover:border-neon-blue/50 animate-fade-in-up delay-75`}
       href={href}
       onClick={handleClick}
     >
-      {children}
+      <span className="relative z-10 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-neon-blue group-hover:to-neon-purple transition-all duration-300">
+        {children}
+      </span>
+      <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/0 to-neon-purple/0 group-hover:from-neon-blue/10 group-hover:to-neon-purple/10 rounded-lg transition-all duration-300"></div>
     </Link>
   );
 };

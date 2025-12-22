@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar/Navbar";
+import FuturisticNavbar from "@/components/navbar/FuturisticNavbar";
 import QueryProvider from "@/providers/QueryProvider";
 import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
 
@@ -91,12 +91,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#f97316" />
       </head>
       <body
-        className={`${poppins.variable} antialiased bg-primary-orange-bg font-poppins overflow-x-hidden`}
+        className={`${poppins.variable} antialiased font-poppins overflow-x-hidden`}
       >
         <GlobalErrorBoundary>
           <QueryProvider>
-            <Navbar />
-            <main className="min-h-screen w-full">{children}</main>
+            <FuturisticNavbar />
+            <main className="min-h-screen w-full z-10 pt-20">{children}</main>
           </QueryProvider>
         </GlobalErrorBoundary>
       </body>

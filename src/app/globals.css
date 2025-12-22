@@ -2,20 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #0a0e27;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: theme("colors.primary.orange");
+  background: linear-gradient(180deg, #00F0FF, #B026FF);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: theme("colors.primary.orange-hover");
+  background: linear-gradient(180deg, #B026FF, #FF006E);
 }
+
+/* Futuristic Global Styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-cyber-darker via-cyber-dark to-cyber-medium;
+    @apply text-white;
+    background-attachment: fixed;
+  }
+
+  /* Cyber Grid Background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Particle overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(176, 38, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: particleFloat 20s ease-in-out infinite;
+  }
+}
+
+@layer components {
+  /* Futuristic Button Styles */
+  .btn-futuristic {
+    @apply relative overflow-hidden;
+    @apply bg-gradient-to-r from-neon-blue to-neon-purple;
+    @apply px-6 py-3 rounded-lg font-semibold;
+    @apply transition-all duration-300;
+    @apply hover:shadow-[0_0_30px_rgba(0,240,255,0.6)];
+    @apply hover:scale-105;
+  }
+
+  .btn-futuristic::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn-futuristic:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Futuristic Card */
+  .card-futuristic {
+    @apply glassmorphism-dark rounded-xl;
+    @apply border border-neon-blue/30;
+    @apply transition-all duration-300;
+    @apply hover:border-neon-purple/50;
+    @apply hover:shadow-[0_0_30px_rgba(176,38,255,0.3)];
+  }
+
+  /* Neon Input */
+  .input-neon {
+    @apply bg-cyber-medium/50 border border-neon-blue/30;
+    @apply rounded-lg px-4 py-3;
+    @apply text-white placeholder-gray-400;
+    @apply focus:border-neon-purple focus:ring-2 focus:ring-neon-purple/50;
+    @apply transition-all duration-300;
+    @apply backdrop-blur-sm;
+  }
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: white;
+}
+
+/* Smooth transitions for all elements */
+* {
+  position: relative;
+}
+
