@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import About from "@/components/about/About";
-import Carousel from "@/components/carousel/Carousel";
-import Footer from "@/components/footer/Footer";
+import FuturisticCarousel from "@/components/carousel/FuturisticCarousel";
+import FuturisticFooter from "@/components/footer/FuturisticFooter";
 import HowItWorks from "@/components/howItWorks/HowItWorks";
 import Menu from "@/components/menu/Menu";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
@@ -21,8 +21,8 @@ export default function ClientHome() {
         <div className="min-w-[320px] max-w-[1920px] mx-auto">
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading RecipeNest...</p>
+              <div className="w-20 h-20 border-4 border-neon-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-xl text-neon-blue neon-text">Loading RecipeNest...</p>
             </div>
           </div>
         </div>
@@ -34,11 +34,11 @@ export default function ClientHome() {
     <div className="w-full overflow-x-hidden">
       <ErrorBoundary>
         <div className="min-w-[320px] max-w-[1920px] mx-auto">
-          <Carousel />
+          <FuturisticCarousel />
           <HowItWorks />
           <Menu />
           <About />
-          <Footer />
+          <FuturisticFooter />
         </div>
       </ErrorBoundary>
     </div>
