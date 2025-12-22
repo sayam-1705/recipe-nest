@@ -87,7 +87,7 @@ const FuturisticSignup = () => {
         
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-neon-green/20 rounded-full blur-3xl animate-float-3d"></div>
-          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-neon-purple/20 rounded-full blur-3xl animate-float-3d" style={{ animationDelay: '3s' }}></div>
+          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-neon-purple/20 rounded-full blur-3xl animate-float-3d animate-delay-3"></div>
         </div>
 
         <form

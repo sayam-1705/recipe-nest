@@ -105,7 +105,7 @@ export default function FuturisticNavbar() {
           <div className="flex justify-between items-center py-4">
             {/* Logo */}
             <Link
-              className="flex items-center gap-3 group transition-all duration-300 hover:scale-105 z-60"
+              className="flex items-center gap-3 group transition-all duration-300 hover:scale-105 z-20"
               href="/"
               onClick={closeMobileMenu}
             >

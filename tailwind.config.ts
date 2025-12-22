@@ -341,6 +341,15 @@ export default {
             transform: "scale(1.05)",
           },
         },
+        ".animate-delay-2": {
+          animationDelay: "2s",
+        },
+        ".animate-delay-3": {
+          animationDelay: "3s",
+        },
+        ".animate-delay-4": {
+          animationDelay: "4s",
+        },
       });
     },
   ],
