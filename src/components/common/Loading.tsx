@@ -2,7 +2,7 @@ import React from "react";
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = "md",
-  color = "text-primary-orange",
+  color = "text-neon-blue",
   className = "",
 }) => {
   const sizeClasses = {
@@ -44,7 +44,7 @@ const LoadingSection: React.FC<LoadingSectionProps> = ({
   children,
 }) => {
   const containerClasses = fullPage
-    ? "fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50 px-4"
+    ? "fixed inset-0 flex items-center justify-center glassmorphism-dark z-50 px-4"
     : "flex items-center justify-center py-8 sm:py-12 px-4";
 
   return (
@@ -53,7 +53,7 @@ const LoadingSection: React.FC<LoadingSectionProps> = ({
         {children || (
           <>
             <LoadingSpinner size="lg" className="mx-auto mb-3 sm:mb-4" />
-            <p className="text-gray-600 text-base sm:text-lg font-medium px-2">
+            <p className="text-gray-300 text-base sm:text-lg font-medium px-2 neon-text">
               {message}
             </p>
           </>
@@ -70,7 +70,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   height,
   animation = "pulse",
 }) => {
-  const baseClasses = "bg-gray-200";
+  const baseClasses = "bg-gradient-to-r from-cyber-medium/50 to-cyber-light/50";
 
   const variantClasses = {
     text: "h-4 w-full rounded",
@@ -91,7 +91,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
 
   return (
     <div
-      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
+      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className} border border-neon-blue/20`}
       style={styles}
     />
   );

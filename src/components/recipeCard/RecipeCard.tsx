@@ -84,33 +84,33 @@ const RecipeCard = ({
 
   return (
     <>
-      <div className="group flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:w-80 bg-neutral-white shadow-sm transition-all duration-300 ease-smooth transform-gpu focus-within:ring-2 focus-within:ring-primary-orange focus-within:ring-offset-2 rounded-xl sm:rounded-2xl overflow-hidden border border-neutral-200 animate-fade-in-up">
+      <div className="group flex flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:w-80 glassmorphism border border-neon-blue/30 shadow-[0_0_20px_rgba(0,240,255,0.2)] transition-all duration-300 ease-smooth transform-gpu focus-within:ring-2 focus-within:ring-neon-purple focus-within:shadow-[0_0_40px_rgba(176,38,255,0.4)] rounded-xl sm:rounded-2xl overflow-hidden animate-fade-in-up hover:scale-105 hover:shadow-[0_0_50px_rgba(0,240,255,0.5)] hover:-translate-y-2">
         <div className="relative overflow-hidden rounded-t-xl sm:rounded-t-2xl">
           <Image
-            className="w-full h-40 sm:h-44 md:h-48 object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            className="w-full h-40 sm:h-44 md:h-48 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
             src={recipe.image}
             alt={recipe.name}
             height={192}
             width={320}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
         </div>
         <div className="p-3 sm:p-4 md:p-5 flex-1 flex flex-col">
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div className="flex items-center gap-2 sm:gap-3 animate-fade-in-up delay-200">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gradient-to-br from-primary-orange to-primary-orange-hover rounded-full flex items-center justify-center shadow-sm">
-                <span className="text-neutral-white font-semibold text-xs sm:text-sm">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gradient-to-br from-neon-blue to-neon-purple rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                <span className="text-white font-semibold text-xs sm:text-sm">
                   {userData?.name?.charAt(0) || "U"}
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 font-medium tracking-wide text-clamp-1">
+              <p className="text-xs sm:text-sm text-gray-300 font-medium tracking-wide text-clamp-1">
                 {userData?.name || "Loading..."}
               </p>
             </div>
             {isModified && (
               <div className="flex items-center gap-1 animate-fade-in-left delay-300">
                 <button
-                  className="group/edit relative p-1.5 sm:p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
+                  className="group/edit relative p-1.5 sm:p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 hover:bg-neon-blue/20"
                   onClick={editRecipeHandler}
                 >
                   <svg
@@ -118,14 +118,14 @@ const RecipeCard = ({
                     height="16px"
                     viewBox="0 -960 960 960"
                     width="16px"
-                    className="fill-gray-500 group-hover/edit:fill-orange-500 transition-colors duration-300 sm:w-5 sm:h-5"
+                    className="fill-gray-400 group-hover/edit:fill-neon-blue transition-colors duration-300 sm:w-5 sm:h-5"
                   >
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                   </svg>
                 </button>
 
                 <button
-                  className="group/delete relative p-1.5 sm:p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group/delete relative p-1.5 sm:p-2 rounded-lg transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neon-pink/20"
                   onClick={deleteRecipeHandler}
                   disabled={deleteRecipeMutation.isPending}
                 >
@@ -134,7 +134,7 @@ const RecipeCard = ({
                     height="16px"
                     viewBox="0 -960 960 960"
                     width="16px"
-                    className="fill-gray-500 group-hover/delete:fill-red-500 transition-colors duration-300 sm:w-5 sm:h-5"
+                    className="fill-gray-400 group-hover/delete:fill-neon-pink transition-colors duration-300 sm:w-5 sm:h-5"
                   >
                     <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                   </svg>
@@ -143,13 +143,13 @@ const RecipeCard = ({
             )}
           </div>
 
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-3 sm:mb-4 text-clamp-2 animate-fade-in-up delay-400 leading-tight">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4 text-clamp-2 animate-fade-in-up delay-400 leading-tight">
             {recipe.name}
           </h3>
 
           <button
             onClick={() => router.push(`/showRecipe/${recipe._id}`)}
-            className="mt-auto inline-flex items-center justify-center px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-primary-orange to-primary-orange-hover text-neutral-white font-semibold rounded-lg sm:rounded-xl hover:from-primary-orange-hover hover:to-primary-orange hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-xs sm:text-sm animate-fade-in-up delay-600"
+            className="mt-auto inline-flex items-center justify-center px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-gradient-to-r from-neon-blue to-neon-purple text-white font-semibold rounded-lg sm:rounded-xl hover:from-neon-purple hover:to-neon-pink hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transform hover:-translate-y-0.5 transition-all duration-300 text-xs sm:text-base animate-fade-in-up delay-600 neon-border"
           >
             View Recipe
             <svg

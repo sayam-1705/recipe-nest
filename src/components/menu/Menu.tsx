@@ -95,38 +95,47 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
 
   return (
     <section
-      className="bg-primary-orange-bg grid grid-cols-1 lg:grid-cols-2 p-4 py-6 sm:p-6 md:p-8 lg:px-10 lg:py-0 xl:px-12 xl:py-0 gap-6 sm:gap-8 md:gap-10 xl:gap-12"
+      className="glassmorphism-dark border-t border-b border-neon-blue/20 grid grid-cols-1 lg:grid-cols-2 p-4 py-6 sm:p-6 md:p-8 lg:px-10 lg:py-10 xl:px-12 xl:py-12 gap-6 sm:gap-8 md:gap-10 xl:gap-12 relative overflow-hidden"
       id="menu"
       role="region"
       aria-labelledby="menu-title"
     >
-      <div className="flex flex-col justify-center gap-4 sm:gap-5 md:gap-6 lg:pr-6 xl:pr-10">
+      {/* Animated gradient orb */}
+      <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-gradient-to-br from-neon-blue/10 to-neon-purple/10 rounded-full blur-3xl animate-float-3d"></div>
+      <div className="relative flex flex-col justify-center gap-4 sm:gap-5 md:gap-6 lg:pr-6 xl:pr-10 z-10">
         <div className="flex flex-col gap-1 sm:gap-2">
           <h2
             id="menu-title"
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-800 animate-fade-in-up leading-tight"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white animate-fade-in-up leading-tight"
           >
             Discover Amazing
           </h2>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in-up leading-tight">
-            <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-primary-orange-hover bg-clip-text text-transparent mr-1 sm:mr-2">
+            <span className="bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink bg-clip-text text-transparent mr-1 sm:mr-2">
               Recipes
             </span>
             <svg
-              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 inline-block fill-primary-orange animate-bounce-horizontal transition-transform duration-300"
+              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 inline-block animate-bounce-horizontal transition-transform duration-300"
               xmlns="http://www.w3.org/2000/svg"
               height="40px"
               viewBox="0 -960 960 960"
               width="40px"
-              fill="currentColor"
+              fill="url(#menu-gradient)"
               aria-hidden="true"
             >
+              <defs>
+                <linearGradient id="menu-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style={{ stopColor: '#00F0FF', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#B026FF', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#FF006E', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
               <path d="M673-446.67H160v-66.66h513l-240-240L480-800l320 320-320 320-47-46.67 240-240Z" />
             </svg>
           </h2>
         </div>
 
-        <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-6 sm:leading-7 md:leading-8 animate-fade-in-up delay-200">
+        <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-6 sm:leading-7 md:leading-8 animate-fade-in-up delay-200">
           Explore our curated collection of delicious recipes from talented home
           cooks around the world. Find the perfect dish for any occasion.
         </p>
@@ -134,7 +143,7 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
         <div className="flex gap-3 animate-fade-in-up delay-300">
           <Link
             href="/search"
-            className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base font-medium text-white bg-primary-orange hover:bg-primary-orange-hover rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
+            className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-purple hover:to-neon-pink rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] neon-border"
           >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
@@ -154,14 +163,14 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
         </div>
 
         {displayRecipes.length > 0 && (
-          <div className="text-xs sm:text-sm text-gray-500 animate-fade-in-up delay-400">
+          <div className="text-xs sm:text-sm text-gray-400 animate-fade-in-up delay-400">
             Showing {displayRecipes.length} recipe
             {displayRecipes.length !== 1 ? "s" : ""}
           </div>
         )}
       </div>
 
-      <div className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px]">
+      <div className="relative min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px] z-10">
         {renderContent()}
       </div>
     </section>
