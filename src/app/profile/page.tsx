@@ -86,20 +86,24 @@ const Profile = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-4 sm:p-6 lg:p-8">
-        <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+      <div className="min-h-screen glassmorphism-dark p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+        {/* Animated gradient orbs */}
+        <div className="absolute top-20 right-10 w-64 h-64 bg-gradient-to-br from-neon-blue/10 to-neon-purple/10 rounded-full blur-3xl animate-float-3d pointer-events-none"></div>
+        <div className="absolute bottom-20 left-10 w-64 h-64 bg-gradient-to-br from-neon-pink/10 to-neon-orange/10 rounded-full blur-3xl animate-float-3d delay-500 pointer-events-none"></div>
+        
+        <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0">
             <div className="animate-fade-in-up">
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-1 sm:mb-2">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2 bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink bg-clip-text text-transparent">
                 Hey, {currentUser?.name || "User"} 👋
               </div>
-              <p className="text-sm sm:text-base text-gray-600">
+              <p className="text-sm sm:text-base text-gray-300">
                 Welcome back to your culinary journey
               </p>
             </div>
             <div className="animate-fade-in-up">
               <button
-                className="group relative overflow-hidden bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover-lift animate-glow w-full sm:w-auto sm:min-w-[160px] md:min-w-[200px] text-sm sm:text-base"
+                className="group relative overflow-hidden bg-gradient-to-r from-cyber-light to-cyber-accent text-white font-semibold px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 w-full sm:w-auto sm:min-w-[160px] md:min-w-[200px] text-sm sm:text-base hover:shadow-[0_0_30px_rgba(77,91,158,0.6)] neon-border"
                 onClick={handleLogOut}
               >
                 <span className="relative z-10">Sign Out</span>
@@ -108,12 +112,12 @@ const Profile = () => {
           </div>
 
           <div className="animate-fade-in delay-100">
-            <div className="bg-white rounded-2xl shadow-sm border border-orange-100 p-4 sm:p-6 hover-lift">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+            <div className="glassmorphism border border-neon-blue/30 rounded-2xl shadow-[0_0_30px_rgba(0,240,255,0.2)] p-4 sm:p-6 hover:shadow-[0_0_40px_rgba(0,240,255,0.3)] transition-all duration-300">
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                 Email Address
               </label>
               <input
-                className="w-full border-2 border-gray-200 rounded-xl p-3 sm:p-4 focus:border-orange-400 focus:ring-0 transition-all duration-300 text-sm sm:text-base text-gray-700 placeholder-gray-400"
+                className="w-full border-2 border-neon-blue/40 rounded-xl p-3 sm:p-4 focus:border-neon-purple focus:ring-2 focus:ring-neon-purple transition-all duration-300 text-sm sm:text-base text-white placeholder-gray-500 bg-cyber-dark/50"
                 type="email"
                 name="email"
                 placeholder="Enter your email"
@@ -125,10 +129,10 @@ const Profile = () => {
 
           <div className="animate-fade-in delay-200">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
                 Your Recipes
               </h1>
-              <div className="text-xs sm:text-sm text-gray-500 animate-gentle-float">
+              <div className="text-xs sm:text-sm text-gray-400 animate-gentle-float">
                 Swipe to explore more
               </div>
             </div>
@@ -136,11 +140,11 @@ const Profile = () => {
             <div className="relative">
               <button
                 onClick={scrollLeft}
-                className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-20 backdrop-blur-glass rounded-full shadow-lg p-2 sm:p-3 hover:scale-110 transition-all duration-300 opacity-80 hover:opacity-100 hover-lift-subtle"
+                className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-20 glassmorphism border border-neon-blue/40 rounded-full shadow-lg p-2 sm:p-3 hover:scale-110 transition-all duration-300 opacity-80 hover:opacity-100 hover:shadow-[0_0_20px_rgba(0,240,255,0.5)]"
                 aria-label="Previous recipes"
               >
                 <svg
-                  className="w-4 h-4 sm:w-6 sm:h-6 text-gray-700"
+                  className="w-4 h-4 sm:w-6 sm:h-6 text-neon-blue"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -159,17 +163,17 @@ const Profile = () => {
                 className="flex overflow-x-auto scroll-smooth gap-3 sm:gap-4 md:gap-6 py-4 px-12 sm:px-16 md:px-20 lg:px-24 scrollbar-hide"
               >
                 {isLoading ? (
-                  <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">
+                  <div className="text-gray-300 text-sm sm:text-base md:text-lg flex-shrink-0">
                     Loading recipes...
                   </div>
                 ) : error ? (
-                  <div className="text-red-500 text-sm sm:text-base md:text-lg flex-shrink-0 max-w-xs sm:max-w-sm">
+                  <div className="text-neon-pink text-sm sm:text-base md:text-lg flex-shrink-0 max-w-xs sm:max-w-sm">
                     {error instanceof Error
                       ? error.message
                       : "Failed to fetch recipes"}
                   </div>
                 ) : recipes.length === 0 ? (
-                  <div className="text-gray-500 text-sm sm:text-base md:text-lg flex-shrink-0">
+                  <div className="text-gray-300 text-sm sm:text-base md:text-lg flex-shrink-0">
                     No recipes found.
                   </div>
                 ) : (
@@ -189,11 +193,11 @@ const Profile = () => {
 
               <button
                 onClick={scrollRight}
-                className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-20 backdrop-blur-glass rounded-full shadow-lg p-2 sm:p-3 hover:scale-110 transition-all duration-300 opacity-80 hover:opacity-100 hover-lift-subtle"
+                className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-20 glassmorphism border border-neon-blue/40 rounded-full shadow-lg p-2 sm:p-3 hover:scale-110 transition-all duration-300 opacity-80 hover:opacity-100 hover:shadow-[0_0_20px_rgba(0,240,255,0.5)]"
                 aria-label="Next recipes"
               >
                 <svg
-                  className="w-4 h-4 sm:w-6 sm:h-6 text-gray-700"
+                  className="w-4 h-4 sm:w-6 sm:h-6 text-neon-blue"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -211,7 +215,7 @@ const Profile = () => {
 
           <div className="animate-fade-in delay-300 flex items-center justify-center px-4">
             <button
-              className="group relative overflow-hidden bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover-lift w-full sm:w-auto sm:min-w-[160px] md:min-w-[200px] text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative overflow-hidden bg-gradient-to-r from-neon-pink to-red-600 text-white font-semibold px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 w-full sm:w-auto sm:min-w-[160px] md:min-w-[200px] text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(255,0,110,0.6)] neon-border"
               onClick={handleDeleteAccount}
               disabled={deleteUserMutation.isPending}
             >

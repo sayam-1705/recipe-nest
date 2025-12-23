@@ -9,21 +9,21 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
   className = "",
 }) => {
   const variantClasses = {
-    error: "bg-red-50 border-red-200 text-red-800",
-    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    info: "bg-blue-50 border-blue-200 text-blue-800",
+    error: "glassmorphism border-neon-pink/40 text-white",
+    warning: "glassmorphism border-neon-yellow/40 text-white",
+    info: "glassmorphism border-neon-blue/40 text-white",
   };
 
   const iconColor = {
-    error: "text-red-500",
-    warning: "text-yellow-500",
-    info: "text-blue-500",
+    error: "text-neon-pink",
+    warning: "text-neon-yellow",
+    info: "text-neon-blue",
   };
 
   const buttonColor = {
-    error: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-    warning: "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500",
-    info: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
+    error: "bg-gradient-to-r from-neon-pink to-red-600 hover:from-red-600 hover:to-neon-pink hover:shadow-[0_0_30px_rgba(255,0,110,0.6)] neon-border",
+    warning: "bg-gradient-to-r from-neon-yellow to-neon-orange hover:from-neon-orange hover:to-neon-yellow hover:shadow-[0_0_30px_rgba(255,214,10,0.6)] neon-border",
+    info: "bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-purple hover:to-neon-blue hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] neon-border",
   };
 
   const Icon = () => {
@@ -82,24 +82,24 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
   return (
     <div
-      className={`rounded-lg border p-4 sm:p-6 ${variantClasses[variant]} ${className}`}
+      className={`rounded-lg border p-4 sm:p-6 shadow-[0_0_30px_rgba(0,240,255,0.2)] ${variantClasses[variant]} ${className}`}
     >
       <div className="flex items-start space-x-3">
-        <div className={`flex-shrink-0 ${iconColor[variant]} mt-0.5`}>
+        <div className={`flex-shrink-0 ${iconColor[variant]} mt-0.5 animate-neon-pulse`}>
           <Icon />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-base sm:text-lg font-semibold leading-tight">
             {title}
           </h3>
-          <p className="mt-2 text-xs sm:text-sm opacity-90 leading-relaxed break-words">
+          <p className="mt-2 text-xs sm:text-sm text-gray-300 leading-relaxed break-words">
             {message}
           </p>
           {onAction && (
             <div className="mt-3 sm:mt-4">
               <button
                 onClick={onAction}
-                className={`w-full sm:w-auto inline-flex items-center justify-center px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${buttonColor[variant]}`}
+                className={`w-full sm:w-auto inline-flex items-center justify-center px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:scale-105 ${buttonColor[variant]}`}
               >
                 {actionLabel}
               </button>
@@ -127,11 +127,11 @@ const NotFound: React.FC<NotFoundProps> = ({
   };
 
   return (
-    <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center bg-gray-50 px-4 py-6">
-      <div className="text-center p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-md mx-auto">
+    <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center glassmorphism-dark px-4 py-6">
+      <div className="text-center p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-md mx-auto glassmorphism border border-neon-purple/30 rounded-2xl shadow-[0_0_30px_rgba(176,38,255,0.2)]">
         <div className="mb-4 sm:mb-6">
           <svg
-            className="mx-auto h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-gray-400"
+            className="mx-auto h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-neon-purple animate-neon-pulse"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -144,16 +144,16 @@ const NotFound: React.FC<NotFoundProps> = ({
             />
           </svg>
         </div>
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 leading-tight">
+        <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 leading-tight">
           {title}
         </h2>
-        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
+        <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
           {message}
         </p>
         {showHome && (
           <button
             onClick={handleGoHome}
-            className="w-full sm:w-auto bg-primary-orange hover:bg-primary-orange-hover text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors duration-200 text-sm sm:text-base"
+            className="w-full sm:w-auto bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-purple hover:to-neon-pink text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base hover:scale-105 hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] neon-border"
           >
             {actionLabel}
           </button>
