@@ -50,7 +50,6 @@ function SearchResults() {
       return data.recipes || [];
     },
     enabled: !!searchQuery.trim() || Object.keys(additionalFilters).length > 0,
-    staleTime: 2 * 60 * 1000,
   });
 
   const handleSearch = (e: React.FormEvent) => {

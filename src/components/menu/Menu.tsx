@@ -20,8 +20,6 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
       const data = await response.json();
       return data.recipes || [];
     },
-    staleTime: 5 * 60 * 1000,
-    retry: 3,
   });
 
   const displayRecipes =

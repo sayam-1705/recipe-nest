@@ -49,9 +49,6 @@ const useCurrentUser = () => {
       }
       return null;
     },
-    staleTime: 0, // Always check for fresh data
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
   });
 };
 

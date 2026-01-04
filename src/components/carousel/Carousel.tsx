@@ -14,7 +14,6 @@ const useGetAllRecipes = () => {
       const data = await response.json();
       return data.recipes;
     },
-    staleTime: 5 * 60 * 1000,
   });
 };
 
@@ -40,7 +39,6 @@ const useGetRecipesByWeather = (
       return response.json();
     },
     enabled: enabled && lat !== undefined && lon !== undefined,
-    staleTime: 10 * 60 * 1000,
   });
 };
 
