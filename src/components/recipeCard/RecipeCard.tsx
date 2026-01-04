@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAuthToken } from "@/lib/auth";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import AlertDialog from "@/components/common/AlertDialog";
 
@@ -29,7 +30,10 @@ const useDeleteRecipe = () => {
 
   return useMutation({
     mutationFn: async (recipeId: string): Promise<void> => {
-      const token = localStorage.getItem("authToken");
+      const token = getAuthToken();
+      if (!token)
+        throw new Error("Authentication token expired. Please log in again.");
+
       const response = await fetch(`/api/deleteRecipe/${recipeId}`, {
         method: "DELETE",
         headers: {

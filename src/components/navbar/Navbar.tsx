@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { isAuthenticated, getUser } from "@/lib/auth";
 import NavLink from "./NavLink";
 import AuthLinks from "./AuthLinks";
 import MobileNavLink from "./MobileNavLink";
@@ -17,8 +18,6 @@ const useCurrentUser = () => {
     };
 
     window.addEventListener("storage", handleStorageChange);
-
-    // Custom event for same-window auth changes
     window.addEventListener("authChange", handleStorageChange);
 
     return () => {
@@ -31,21 +30,8 @@ const useCurrentUser = () => {
     queryKey: ["auth", "me"],
     queryFn: () => {
       if (typeof window !== "undefined") {
-        try {
-          const userData = localStorage.getItem("user");
-          const token = localStorage.getItem("authToken");
-
-          if (!token || !userData) {
-            return null;
-          }
-
-          return JSON.parse(userData);
-        } catch (error) {
-          console.error("Error parsing user data from localStorage:", error);
-          localStorage.removeItem("user");
-          localStorage.removeItem("authToken");
-          return null;
-        }
+        if (!isAuthenticated()) return null;
+        return getUser();
       }
       return null;
     },

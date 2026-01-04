@@ -6,7 +6,7 @@ import AlertDialog from "@/components/common/AlertDialog";
 import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getUser } from "@/lib/auth";
+import { getUser, getAuthToken } from "@/lib/auth";
 
 const UpdateRecipe = ({
   params,
@@ -48,7 +48,10 @@ const UpdateRecipe = ({
 
   const updateRecipeMutation = useMutation({
     mutationFn: async (recipeData: UpdateRecipeData): Promise<Recipe> => {
-      const token = localStorage.getItem("authToken");
+      const token = getAuthToken();
+      if (!token)
+        throw new Error("Authentication token expired. Please log in again.");
+
       const response = await fetch(
         `/api/updateRecipe/${resolvedParams.recipeId}`,
         {

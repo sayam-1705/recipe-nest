@@ -2,7 +2,7 @@
 
 import MenuCarousel from "../menuCarousel/MenuCarousel";
 import { Skeleton } from "../common/Loading";
-import ErrorMessage from "../common/Error";
+import ErrorDisplay from "../common/ErrorDisplay";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -47,12 +47,11 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
     if (error) {
       return (
         <div className="flex items-center justify-center">
-          <ErrorMessage
+          <ErrorDisplay
             title="Failed to load recipes"
             message="We couldn't load the recipes. Please try again."
-            onAction={() => refetch()}
+            onRetry={() => refetch()}
             variant="error"
-            className="max-w-md"
           />
         </div>
       );

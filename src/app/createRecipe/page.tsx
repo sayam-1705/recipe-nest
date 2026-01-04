@@ -4,6 +4,7 @@ import RecipeForm from "@/components/recipeForm/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAuthToken } from "@/lib/auth";
 
 const CreateRecipe = () => {
   const router = useRouter();
@@ -11,7 +12,10 @@ const CreateRecipe = () => {
 
   const createRecipeMutation = useMutation({
     mutationFn: async (recipeData: CreateRecipeData): Promise<Recipe> => {
-      const token = localStorage.getItem("authToken");
+      const token = getAuthToken();
+      if (!token)
+        throw new Error("Authentication token expired. Please log in again.");
+
       const response = await fetch("/api/createRecipe", {
         method: "POST",
         headers: {
