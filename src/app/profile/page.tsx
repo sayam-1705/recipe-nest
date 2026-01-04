@@ -25,12 +25,16 @@ const Profile = () => {
   } = useQuery({
     queryKey: ["recipes", "byUserId", userId],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await fetch(`/api/getRecipeByUserId/${userId}`);
+      const response = await fetch(`/api/getRecipeByUserId/${userId}`, {
+        cache: "no-store",
+      });
       if (!response.ok) throw new Error("Failed to fetch recipes");
       const data = await response.json();
       return data.recipes;
     },
     enabled: !!userId,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const deleteUserMutation = useMutation({

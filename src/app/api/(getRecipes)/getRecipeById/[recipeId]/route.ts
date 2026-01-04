@@ -3,6 +3,9 @@ import { dbConnect } from "@/app/api/mongodb";
 import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ recipeId: string }> }
