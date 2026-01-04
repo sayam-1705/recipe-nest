@@ -20,6 +20,10 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "X-Requested-With, Content-Type, Authorization"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, revalidate"
         }
       ]
     },
@@ -49,23 +53,10 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/recipe/:recipeId",
-      "destination": "/showRecipe/:recipeId",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/sitemap.xml",
       "destination": "/sitemap"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/revalidate",
-      "schedule": "0 0 * * *"
     }
   ]
 }
