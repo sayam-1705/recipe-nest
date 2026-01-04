@@ -5,6 +5,9 @@ declare global {
     id?: string;
     email?: string;
     name?: string;
+    picture?: string;
+    authProvider?: 'email' | 'google';
+    googleId?: string;
   }
 
   interface AuthData {

@@ -20,7 +20,7 @@ RecipeNest is a modern full-stack web application for discovering, and managing 
 - **Recipe Discovery** - Browse and search recipes with advanced filters
 - **Weather Recommendations** - Get recipe suggestions based on your local weather
 - **Nutrition Analysis** - Detailed nutritional breakdowns using Edamam API
-- **User Authentication** - Secure JWT-based login and registration
+- **User Authentication** - Secure JWT-based login and registration with Google OAuth support
 - **Recipe Management** - Create, edit, and delete your own recipes
 - **Responsive Design** - Mobile-first, optimized for all devices
 
@@ -67,12 +67,14 @@ SECRET_KEY=your_jwt_secret_minimum_32_characters_long
 WEATHER_API_KEY=your_openweathermap_api_key
 EDAMAM_API_KEY=your_edamam_nutrition_api_key
 EDAMAM_APP_ID=your_edamam_app_id
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
 Get API keys from:
 
 - [OpenWeatherMap](https://openweathermap.org/api)
 - [Edamam Developer](https://developer.edamam.com/)
+- [Google Cloud Console](https://console.cloud.google.com/) - Create OAuth 2.0 credentials
 
 ## 📝 API Endpoints
 
