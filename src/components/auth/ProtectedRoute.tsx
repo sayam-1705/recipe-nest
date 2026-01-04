@@ -18,13 +18,11 @@ const ProtectedRoute = ({
       const authenticated = isAuthenticated();
       const user = getUser();
 
-      // If requireAuth is true (default): redirect to login if not authenticated
       if (requireAuth && (!authenticated || !user)) {
         router.push(redirectTo);
         return;
       }
 
-      // If requireAuth is false: redirect to home if authenticated (for login/signup pages)
       if (!requireAuth && authenticated && user) {
         router.push("/");
         return;
@@ -35,6 +33,13 @@ const ProtectedRoute = ({
     };
 
     checkAuth();
+
+    const handleAuthChange = () => checkAuth();
+    window.addEventListener("authChange", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("authChange", handleAuthChange);
+    };
   }, [router, redirectTo, requireAuth]);
 
   if (isLoading) {

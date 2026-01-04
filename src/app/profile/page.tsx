@@ -6,7 +6,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import AlertDialog from "@/components/common/AlertDialog";
 import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { clearAuth, getUser } from "@/lib/auth";
+import { clearAuth, getUser, getAuthToken } from "@/lib/auth";
 
 const Profile = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,10 @@ const Profile = () => {
 
   const deleteUserMutation = useMutation({
     mutationFn: async (email: string) => {
-      const token = localStorage.getItem("authToken");
+      const token = getAuthToken();
+      if (!token)
+        throw new Error("Authentication token expired. Please log in again.");
+
       const response = await fetch(`/api/delete/${email}`, {
         method: "DELETE",
         headers: {

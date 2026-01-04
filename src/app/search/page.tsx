@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import RecipeCard from "@/components/recipeCard/RecipeCard";
-import ErrorMessage from "@/components/common/Error";
+import ErrorDisplay from "@/components/common/ErrorDisplay";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import { Suspense, useState, useEffect } from "react";
 
@@ -209,12 +209,11 @@ function SearchResults() {
           </div>
         ) : error ? (
           <div className="flex items-center justify-center py-8 xs:py-12 sm:py-16">
-            <ErrorMessage
+            <ErrorDisplay
               title="Search Failed"
               message="We couldn't complete your search. Please try again."
-              onAction={() => refetch()}
+              onRetry={() => refetch()}
               variant="error"
-              className="max-w-md"
             />
           </div>
         ) : recipes.length === 0 ? (
