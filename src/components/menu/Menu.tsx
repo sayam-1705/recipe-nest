@@ -15,13 +15,15 @@ const Menu = ({ initialRecipes = [] }: MenuProps) => {
   } = useQuery({
     queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await fetch("/api/getAllRecipes");
+      const response = await fetch("/api/getAllRecipes", {
+        cache: "no-store",
+      });
       if (!response.ok) return [];
       const data = await response.json();
       return data.recipes || [];
     },
-    staleTime: 5 * 60 * 1000,
-    retry: 3,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const displayRecipes =

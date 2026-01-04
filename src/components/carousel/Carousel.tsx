@@ -9,12 +9,15 @@ const useGetAllRecipes = () => {
   return useQuery({
     queryKey: ["recipes"],
     queryFn: async (): Promise<Recipe[]> => {
-      const response = await fetch("/api/getAllRecipes");
+      const response = await fetch("/api/getAllRecipes", {
+        cache: "no-store",
+      });
       if (!response.ok) throw new Error("Failed to fetch recipes");
       const data = await response.json();
       return data.recipes;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -35,12 +38,14 @@ const useGetRecipesByWeather = (
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ lat, lon }),
+        cache: "no-store",
       });
       if (!response.ok) throw new Error("Failed to fetch weather recipes");
       return response.json();
     },
     enabled: enabled && lat !== undefined && lon !== undefined,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 

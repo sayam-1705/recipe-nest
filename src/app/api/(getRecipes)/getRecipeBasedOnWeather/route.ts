@@ -3,6 +3,9 @@ import { getWeatherResponse } from "./getWeatherResponse";
 import { dbConnect } from "../../mongodb";
 import Recipe from "@/models/Recipe";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const isRainy = (desc: string, details: string) =>
   ["rain", "drizzle", "shower"].some(
     (term) =>

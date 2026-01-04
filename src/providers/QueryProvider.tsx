@@ -15,8 +15,11 @@ export default function QueryProvider({
         defaultOptions: {
           queries: {
             staleTime: 0,
+            gcTime: 0,
             retry: process.env.NODE_ENV === "production" ? 1 : 3,
-            refetchOnWindowFocus: process.env.NODE_ENV === "production",
+            refetchOnWindowFocus: true,
+            refetchOnMount: true,
+            refetchOnReconnect: true,
             networkMode: "online",
           },
           mutations: {
