@@ -96,9 +96,9 @@ const Login = () => {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.02)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-md px-6 py-12">
+        <div className="relative z-10 w-full max-w-md px-4 sm:px-6 py-8 sm:py-12">
           {/* Brand Logo/Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-[0.2em] mb-4">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-stitch opacity-75"></span>
@@ -106,7 +106,7 @@ const Login = () => {
               </span>
               Security First
             </div>
-            <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
               Welcome <span className="text-gradient">Back</span>
             </h1>
             <p className="text-slate-500 dark:text-slate-400 font-medium">
@@ -115,7 +115,7 @@ const Login = () => {
           </div>
 
           {/* Form Container */}
-          <div className="glass-panel rounded-[2.5rem] p-8 sm:p-10 shadow-2xl shadow-primary-stitch/5 border-white/40 dark:border-white/5">
+          <div className="glass-panel rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] p-5 xs:p-6 sm:p-8 md:p-10 shadow-2xl shadow-primary-stitch/5 border-white/40 dark:border-white/5">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">

@@ -14,7 +14,7 @@ const steps = [
 
 const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) => {
   return (
-    <div className="mb-10 px-4 max-w-4xl mx-auto w-full">
+    <div className="mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4 max-w-4xl mx-auto w-full">
       <div className="flex justify-between items-center relative">
         {/* Progress Line Background */}
         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 dark:bg-gray-700 -z-10 rounded-full"></div>
@@ -32,7 +32,7 @@ const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) 
           return (
             <div key={step.id} className={`flex flex-col items-center gap-2 ${!isActive && !isCompleted ? 'opacity-60' : ''}`}>
               <div 
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-4 z-10 ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 sm:border-4 z-10 ${
                   isCompleted 
                     ? "bg-primary-stitch text-white shadow-glow border-white dark:border-gray-900" 
                     : isActive 
@@ -40,11 +40,11 @@ const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) 
                       : "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400"
                 }`}
               >
-                <span className="material-symbols-outlined text-xl">
+                <span className="material-symbols-outlined text-base sm:text-xl">
                   {isCompleted ? "check" : step.icon}
                 </span>
               </div>
-              <span className={`text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-primary-stitch' : 'text-gray-500 dark:text-gray-400'}`}>
+              <span className={`text-[8px] sm:text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-primary-stitch' : 'text-gray-500 dark:text-gray-400'}`}>
                 {step.label}
               </span>
             </div>

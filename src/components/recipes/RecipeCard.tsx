@@ -96,9 +96,9 @@ const RecipeCard = ({
     <>
       <div 
         onClick={handleCardClick}
-        className="glass-card rounded-[2.5rem] p-4 group cursor-pointer relative"
+        className="glass-card rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] p-3 sm:p-4 group cursor-pointer relative"
       >
-        <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+        <div className="relative aspect-[4/5] rounded-xl sm:rounded-[1.5rem] md:rounded-[2rem] overflow-hidden mb-3 sm:mb-4 md:mb-6">
           <Image
             src={recipe.image}
             alt={recipe.name}
@@ -108,7 +108,7 @@ const RecipeCard = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
           
           {/* Top Indicators */}
-          <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+          <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex justify-between items-start">
             <div className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
               <span className="material-symbols-outlined text-primary text-base">schedule</span>
               <span className="text-xs font-black text-slate-900 dark:text-white">{recipe.time || "30 min"}</span>
@@ -133,23 +133,23 @@ const RecipeCard = ({
             )}
           </div>
 
-          <div className="absolute bottom-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-lg">
+          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 px-2.5 py-1 sm:px-3 sm:py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-lg">
             <span className="text-xs font-black text-slate-900 dark:text-white">{recipe.difficulty || "Medium"}</span>
           </div>
         </div>
 
-        <div className="px-2">
+        <div className="px-1 sm:px-2">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-3 py-0.5 rounded-full bg-primary-stitch/10 text-primary-stitch text-[10px] font-black uppercase">
               {recipe.type || "Recipe"}
             </span>
             <span className="text-slate-400 text-xs font-bold">• {recipe.dietaryType || "Any"}</span>
           </div>
-          <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary-stitch transition-colors">
+          <h3 className="text-base sm:text-lg md:text-xl font-extrabold text-slate-900 dark:text-white mb-1 sm:mb-2 line-clamp-1 group-hover:text-primary-stitch transition-colors">
             {recipe.name}
           </h3>
           
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-3 sm:mt-4 md:mt-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-stitch to-orange-400 flex items-center justify-center shadow-lg ring-2 ring-primary-stitch/20 overflow-hidden">
                 {userData?.picture ? (

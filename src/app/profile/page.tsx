@@ -92,13 +92,13 @@ const Profile = () => {
           <div className="absolute bottom-[-10%] right-[-5%] w-[40vw] h-[40vw] bg-blue-100/50 rounded-full blur-[90px] dark:bg-indigo-950/20"></div>
         </div>
 
-        <div className="relative z-10 pt-28 pb-32 px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
+        <div className="relative z-10 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
           {/* Profile Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <span className="inline-block py-1.5 px-4 rounded-full bg-primary-stitch/10 text-primary-stitch text-xs font-bold uppercase tracking-widest border border-primary-stitch/20 mb-6 transition-all animate-fade-in text-[10px]">
               User Dashboard
             </span>
-            <h1 className="text-4xl lg:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tight leading-tight">
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-6xl font-black text-slate-900 dark:text-white mb-3 sm:mb-4 tracking-tight leading-tight">
               Hey, {currentUser?.name || "Chef"} 👋
             </h1>
             <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
@@ -107,15 +107,15 @@ const Profile = () => {
           </div>
 
           {/* Profile Card Section */}
-          <div className="glass-panel rounded-[2.5rem] p-8 lg:p-12 mb-20 flex flex-col lg:flex-row items-center justify-between gap-12 relative overflow-hidden shadow-2xl shadow-primary-stitch/5">
+          <div className="glass-panel rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] p-5 sm:p-6 md:p-8 lg:p-12 mb-10 sm:mb-14 md:mb-20 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 md:gap-12 relative overflow-hidden shadow-2xl shadow-primary-stitch/5">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary-stitch/5 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div className="flex flex-col lg:flex-row items-center gap-10 text-center lg:text-left z-10 w-full lg:w-auto">
+            <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 md:gap-10 text-center lg:text-left z-10 w-full lg:w-auto">
               {/* Avatar */}
               <div className="relative">
-                <div className="h-40 w-40 rounded-full bg-gradient-to-br from-primary-stitch to-orange-600 p-1 shadow-2xl shadow-primary-stitch/20 ring-4 ring-white dark:ring-slate-800">
+                <div className="h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-primary-stitch to-orange-600 p-1 shadow-2xl shadow-primary-stitch/20 ring-4 ring-white dark:ring-slate-800">
                   <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-                    <span className="text-5xl font-bold bg-gradient-to-br from-primary-stitch to-orange-600 bg-clip-text text-transparent">
+                    <span className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-br from-primary-stitch to-orange-600 bg-clip-text text-transparent">
                       {(currentUser?.name || "C").charAt(0).toUpperCase()}
                     </span>
                   </div>
@@ -126,19 +126,19 @@ const Profile = () => {
               {/* User Info */}
               <div className="flex flex-col">
                 <div className="flex items-center justify-center lg:justify-start gap-3 mb-2">
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                  <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                     {currentUser?.name}
                   </h2>
                   <span className="material-symbols-outlined text-blue-500 text-2xl" title="Verified Chef">
                     verified
                   </span>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400 font-medium text-lg mb-6">
+                <p className="text-slate-500 dark:text-slate-400 font-medium text-sm sm:text-base md:text-lg mb-4 sm:mb-6">
                   {currentUser?.email}
                 </p>
                 
                 {/* Stats Grid */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 sm:gap-8 md:gap-10">
                   <div className="text-center lg:text-left">
                     <div className="text-3xl font-black text-slate-900 dark:text-white">{recipes.length}</div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Recipes</div>
@@ -177,9 +177,9 @@ const Profile = () => {
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="glass-card h-[450px] rounded-[2.5rem] animate-pulse"></div>
+                  <div key={i} className="glass-card h-[350px] sm:h-[400px] md:h-[450px] rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] animate-pulse"></div>
                 ))}
               </div>
             ) : recipes.length === 0 ? (
@@ -201,7 +201,7 @@ const Profile = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {recipes.map((recipe: Recipe) => (
                   <RecipeCard key={recipe._id} recipe={recipe} />
                 ))}

@@ -21,12 +21,62 @@ const useGetAllRecipes = () => {
   });
 };
 
+const useGetRecipesByWeather = (
+  lat?: number,
+  lon?: number,
+  enabled: boolean = false
+) => {
+  return useQuery({
+    queryKey: ["recipes", "byWeather", lat, lon],
+    queryFn: async (): Promise<{
+      recipes: Recipe[];
+      weather: WeatherInfo;
+      searchStrategy?: string;
+      totalRecipes?: number;
+    }> => {
+      const response = await fetch("/api/getRecipeBasedOnWeather", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat, lon }),
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("Failed to fetch weather recipes");
+      return response.json();
+    },
+    enabled: enabled && lat !== undefined && lon !== undefined,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+};
+
 export default function ClientHome() {
   const [mounted, setMounted] = useState(false);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
   const { data: recipes = [] } = useGetAllRecipes();
+
+  const { data: weatherData, isLoading: weatherLoading } = useGetRecipesByWeather(
+    coordinates?.lat,
+    coordinates?.lon,
+    !!coordinates
+  );
 
   useEffect(() => {
     setMounted(true);
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCoordinates({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        },
+        () => {
+          console.log("Geolocation permission denied, using general recipes");
+        },
+        { timeout: 10000, maximumAge: 300000 }
+      );
+    }
   }, []);
 
   if (!mounted) {
@@ -40,13 +90,21 @@ export default function ClientHome() {
     );
   }
 
-  const featuredRecipe = recipes.length > 0 ? recipes[0] : undefined;
+  // Prefer weather-recommended recipe, fall back to first general recipe
+  const weatherRecipes = weatherData?.recipes;
+  const featuredRecipe = weatherRecipes && weatherRecipes.length > 0
+    ? weatherRecipes[0]
+    : recipes.length > 0 ? recipes[0] : undefined;
 
   return (
     <div className="w-full bg-background-light dark:bg-background-dark min-h-screen font-sans selection:bg-primary selection:text-white">
       <ErrorBoundary>
         <main>
-          <HomeHero featuredRecipe={featuredRecipe} />
+          <HomeHero
+            featuredRecipe={featuredRecipe}
+            weatherInfo={weatherData?.weather}
+            weatherLoading={weatherLoading && !!coordinates}
+          />
           <DiscoverySection recipes={recipes} />
           <WorkflowSection />
         </main>

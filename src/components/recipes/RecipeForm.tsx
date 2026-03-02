@@ -369,12 +369,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       <div className="fixed top-32 left-10 w-64 h-64 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-orange-900/30"></div>
       <div className="fixed bottom-32 right-10 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-purple-900/30"></div>
 
-      <main className="pt-28 pb-32 lg:pb-12 px-5 max-w-7xl mx-auto w-full">
+      <main className="pt-20 sm:pt-24 md:pt-28 pb-24 sm:pb-28 md:pb-32 lg:pb-12 px-3 sm:px-5 max-w-7xl mx-auto w-full">
         <StepProgress currentStep={currentStep} totalSteps={4} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">
           {/* Main Form Area */}
-          <div className="lg:col-span-12 xl:col-span-7 bg-white/70 dark:bg-black/30 backdrop-blur-xl border border-white dark:border-white/10 rounded-3xl p-6 lg:p-10 shadow-glass">
+          <div className="lg:col-span-12 xl:col-span-7 bg-white/70 dark:bg-black/30 backdrop-blur-xl border border-white dark:border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-10 shadow-glass">
             <form onSubmit={handleSubmit}>
               {renderCurrentStep()}
 
@@ -463,26 +463,26 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       </main>
 
       {/* Mobile Sticky Footer */}
-      <footer className="lg:hidden fixed bottom-10 left-5 right-5 z-40">
-        <div className="glass-panel rounded-2xl p-4 shadow-2xl flex items-center gap-3">
-          <button type="button" className="flex-1 py-4 px-2 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs shadow-sm border border-gray-100 dark:border-gray-800">
+      <footer className="lg:hidden fixed bottom-6 sm:bottom-10 left-3 right-3 sm:left-5 sm:right-5 z-40">
+        <div className="glass-panel rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-2xl flex items-center gap-2 sm:gap-3">
+          <button type="button" className="flex-1 py-3 sm:py-4 px-2 rounded-lg sm:rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold text-[10px] sm:text-xs shadow-sm border border-gray-100 dark:border-gray-800">
             Draft
           </button>
           {currentStep > 1 && (
-            <button onClick={handlePrev} className="p-4 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-gray-800">
+            <button onClick={handlePrev} className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-gray-800">
               ←
             </button>
           )}
           {currentStep < 4 ? (
             <button 
-              className="flex-[2] py-4 px-4 rounded-xl bg-gradient-to-r from-primary-stitch to-orange-600 text-white font-bold text-sm shadow-glow flex items-center justify-center gap-2"
+              className="flex-[2] py-3 sm:py-4 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary-stitch to-orange-600 text-white font-bold text-xs sm:text-sm shadow-glow flex items-center justify-center gap-2"
               onClick={handleNext}
             >
               Next Step <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
           ) : (
             <button 
-              className="flex-[2] py-4 px-4 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2"
+              className="flex-[2] py-3 sm:py-4 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2"
               onClick={handleSubmit}
               disabled={isSubmitting}
             >

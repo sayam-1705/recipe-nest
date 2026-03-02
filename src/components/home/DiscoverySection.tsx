@@ -9,15 +9,15 @@ interface DiscoverySectionProps {
 
 export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
   return (
-    <section className="py-24 px-6 relative bg-white dark:bg-slate-900/30 overflow-hidden">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 relative bg-white dark:bg-slate-900/30 overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-8 sm:mb-12 md:mb-16 gap-6 sm:gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="w-12 h-1 bg-primary rounded-full"></span>
               <span className="text-primary font-black uppercase tracking-[0.2em] text-[10px] md:text-sm">Dynamic Discovery</span>
             </div>
-            <h2 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl text-slate-900 dark:text-white leading-tight">
+            <h2 className="font-display font-bold text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-slate-900 dark:text-white leading-tight">
               TRENDING <br className="hidden md:block lg:hidden"/> COLLECTIONS
             </h2>
           </div>
@@ -31,12 +31,12 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-10">
           {recipes.length > 0 ? (
             recipes.slice(0, 3).map((recipe, index) => (
               <div key={recipe._id} className="group">
-                <div className="glass-panel p-6 rounded-[2.5rem] h-full flex flex-col hover:shadow-2xl transition-all duration-500 border border-white/40 dark:border-white/10">
-                  <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8">
+                <div className="glass-panel p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] h-full flex flex-col hover:shadow-2xl transition-all duration-500 border border-white/40 dark:border-white/10">
+                  <div className="relative aspect-[4/5] rounded-xl sm:rounded-[1.5rem] md:rounded-[2rem] overflow-hidden mb-4 sm:mb-6 md:mb-8">
                     <Image 
                       alt={recipe.name} 
                       fill
@@ -50,10 +50,10 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
                       </div>
                     )}
                   </div>
-                  <h3 className="font-display font-bold text-2xl md:text-3xl text-slate-900 dark:text-white mb-4 leading-tight">
+                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-3xl text-slate-900 dark:text-white mb-2 sm:mb-4 leading-tight">
                     {recipe.name}
                   </h3>
-                  <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mb-8 line-clamp-2">
+                  <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-400 mb-4 sm:mb-6 md:mb-8 line-clamp-2">
                     {recipe.type} - {recipe.meal}
                   </p>
                   <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-700">
@@ -79,7 +79,7 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
           )}
         </div>
         
-        <div className="mt-16 flex justify-center">
+        <div className="mt-8 sm:mt-12 md:mt-16 flex justify-center">
           <Link href="/search" className="px-10 py-4 rounded-full border-2 border-slate-200 dark:border-slate-700 text-sm md:text-base font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all">
             View All Collections
           </Link>

@@ -58,7 +58,7 @@ const RecipePreview: React.FC<RecipePreviewProps> = ({ formData }) => {
           </h2>
         </div>
       </div>
-      <div className="p-6 sm:p-8">
+      <div className="p-4 sm:p-6 md:p-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary-stitch/20 flex items-center justify-center text-primary-stitch">

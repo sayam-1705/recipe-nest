@@ -4,19 +4,19 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full py-12 px-6 md:px-12 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 transition-colors duration-500">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-12 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 transition-colors duration-500">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12">
         {/* Brand */}
         <div className="col-span-1 md:col-span-2 space-y-6 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-2">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-orange-500/20">
               <span className="material-symbols-outlined text-white text-2xl">restaurant_menu</span>
             </div>
-            <span className="font-display font-bold text-3xl tracking-tight text-slate-900 dark:text-white">
+            <span className="font-display font-bold text-2xl sm:text-3xl tracking-tight text-slate-900 dark:text-white">
               RecipeNest
             </span>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 text-lg leading-relaxed max-w-md mx-auto md:mx-0">
+          <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-md mx-auto md:mx-0">
             Elevate your culinary journey with premium recipes, seasonal inspirations, and professional chef insights.
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function Footer() {
         </div>
       </div>
       
-      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="max-w-7xl mx-auto mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
         <p className="text-slate-400 dark:text-slate-600 text-sm font-medium">
           © 2026 RecipeNest. Handcrafted for food enthusiasts.
         </p>

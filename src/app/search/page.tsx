@@ -77,9 +77,9 @@ function SearchResults() {
         <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-orange-400/10 rounded-full blur-[80px] dark:bg-orange-600/5"></div>
       </div>
 
-      <div className="relative z-10 pt-20 pb-32 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+      <div className="relative z-10 pt-20 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         {/* Search Header */}
-        <div className="text-center mb-12 lg:mb-20">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-widest mb-6">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-stitch opacity-75"></span>
@@ -87,7 +87,7 @@ function SearchResults() {
             </span>
             Explore Flavors
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-4 sm:mb-6">
             Find Your Next <br />
             <span className="text-gradient">Masterpiece</span>
           </h1>
@@ -97,7 +97,7 @@ function SearchResults() {
         </div>
 
         {/* Search Input Section */}
-        <div className="max-w-4xl mx-auto mb-16 px-2">
+        <div className="max-w-4xl mx-auto mb-8 sm:mb-12 md:mb-16 px-0 sm:px-2 relative">
           <form
             onSubmit={handleSearch}
             className="glass-panel rounded-3xl p-2 sm:p-3 flex flex-col sm:flex-row gap-2 shadow-2xl shadow-primary-stitch/5"
@@ -168,11 +168,11 @@ function SearchResults() {
         </div>
 
         {/* Results Metadata */}
-        <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-6 transition-all">
+        <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 dark:border-white/10 pb-4 sm:pb-6 transition-all">
           <div className="flex items-center gap-4">
             <div className="w-1 h-8 bg-primary-stitch rounded-full"></div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+              <h2 className="text-xl xs:text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
                 {hasSearched ? "Search Results" : "Curated For You"}
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">
