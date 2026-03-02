@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RecipeNest - Find Your Next Masterpiece</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF9F43",
+                        "primary-glow": "#FFB870",
+                        "background-light": "#FDFBF7",
+                        "background-dark": "#0F172A",
+                        "text-dark": "#1F2937",
+                        "text-light": "#F3F4F6",
+                    },
+                    fontFamily: {
+                        sans: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '2.5rem',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer components {
+            .glass-nav {
+                @apply bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-sm;
+            }
+            .glass-search {
+                @apply bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-2xl shadow-orange-500/5;
+            }
+            .glass-card {
+                @apply bg-white/50 dark:bg-slate-800/40 backdrop-blur-md border border-white/60 dark:border-white/10 transition-all duration-500;
+            }
+            .glass-card:hover {
+                @apply bg-white/80 dark:bg-slate-800/60 -translate-y-2 shadow-2xl shadow-black/5 dark:shadow-black/20;
+            }
+            .bg-grid {
+                background-size: 50px 50px;
+                background-image: linear-gradient(to right, rgba(255,159,67,0.05) 1px, transparent 1px),
+                                  linear-gradient(to bottom, rgba(255,159,67,0.05) 1px, transparent 1px);
+            }
+        }
+    </style>
+<script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-dark dark:text-text-light transition-colors duration-500 min-h-screen selection:bg-primary/30">
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="absolute inset-0 bg-grid opacity-40"></div>
+<div class="absolute top-[-15%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[140px] dark:bg-primary/5"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-[120px] dark:bg-blue-600/5"></div>
+</div>
+<nav class="fixed top-8 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50">
+<div class="glass-nav rounded-full px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-primary-glow flex items-center justify-center shadow-lg shadow-primary/30 group-hover:rotate-12 transition-transform duration-500">
+<span class="material-symbols-outlined text-white text-2xl">chef_hat</span>
+</div>
+<span class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">RecipeNest</span>
+</div>
+<div class="hidden lg:flex items-center gap-2 p-1 bg-black/5 dark:bg-white/5 rounded-full">
+<a class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" href="#">Home</a>
+<a class="px-6 py-2 rounded-full text-sm font-semibold transition-all bg-white dark:bg-primary text-slate-900 dark:text-white shadow-sm font-bold" href="#">Search</a>
+<a class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" href="#">Meal Planner</a>
+<a class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" href="#">Community</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors" onclick="toggleTheme()">
+<span class="material-symbols-outlined block dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block text-primary">light_mode</span>
+</button>
+<div class="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-1"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<div class="text-xs font-bold text-slate-900 dark:text-white">Sayam M.</div>
+<div class="text-[10px] text-primary font-bold tracking-widest uppercase">Premium</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/50 cursor-pointer hover:scale-105 transition-transform">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoq5XG8rrNoZYvwxpnELxZm25ntEhNRqNFuBHxdO1ACHaU5Ri7-IwiQKxYPZFinHNl16dBXlZVOEXIk2tEfoeEfbFPMwJWIoCtLliwLPfyIIWS2rG-T1osQ47NXQNVBDpa1o2gO-nCSxRsnviOhVoTQ0djTkSOycbSjrMSpHQMeBgSr8_KWR8a8IgQp3D4y_yz_Vqr9BLuZTST0kS4BTJB6B5jelFVNJEy_IOYk5TGDQF9GmTAscewiFMAd0KVJHgoSFrMnfMGhyqz"/>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<main class="relative z-10 pt-48 pb-32 px-6 max-w-[1500px] mx-auto">
+<div class="text-center mb-16">
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-extrabold uppercase tracking-widest mb-6">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                New Recipes Daily
+            </div>
+<h1 class="text-5xl lg:text-7xl xl:text-8xl font-[900] text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-8">
+                Find Your Next <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-500 to-rose-500">Masterpiece</span>
+</h1>
+<p class="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
+                Elevate your home cooking with our AI-powered search. Discovery meets world-class culinary expertise.
+            </p>
+</div>
+<div class="glass-search max-w-5xl mx-auto rounded-[2.5rem] p-4 mb-12">
+<div class="flex flex-col lg:flex-row gap-4">
+<div class="flex-1 relative flex items-center bg-white/80 dark:bg-slate-900/80 rounded-3xl px-6 py-5 border border-slate-200 dark:border-slate-700/50 group focus-within:ring-2 focus-within:ring-primary/40 transition-all">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors text-3xl mr-4">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-xl font-medium text-slate-900 dark:text-white placeholder-slate-400" placeholder="Search by ingredients, dish, or cuisine..." type="text"/>
+<div class="hidden sm:flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-400 text-xs font-bold border border-slate-200 dark:border-slate-700">
+<span>⌘</span><span>K</span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-3 px-8 py-5 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">tune</span>
+<span>Filters</span>
+<span class="flex items-center justify-center w-6 h-6 bg-primary text-white text-[11px] rounded-full">4</span>
+</button>
+<button class="flex items-center gap-3 px-12 py-5 rounded-3xl bg-slate-900 dark:bg-primary text-white font-black shadow-xl shadow-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all">
+<span>Search</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap justify-center gap-3 mb-24">
+<span class="text-slate-400 dark:text-slate-500 text-sm font-bold uppercase tracking-widest py-2 mr-2">Popular:</span>
+<a class="px-5 py-2 rounded-full glass-card hover:border-primary/40 hover:text-primary text-xs font-bold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">local_fire_department</span> High Protein
+            </a>
+<a class="px-5 py-2 rounded-full glass-card hover:border-primary/40 hover:text-primary text-xs font-bold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">spa</span> Vegan
+            </a>
+<a class="px-5 py-2 rounded-full glass-card hover:border-primary/40 hover:text-primary text-xs font-bold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">timer</span> Under 20m
+            </a>
+<a class="px-5 py-2 rounded-full glass-card hover:border-primary/40 hover:text-primary text-xs font-bold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">egg</span> Breakfast
+            </a>
+<a class="px-5 py-2 rounded-full glass-card hover:border-primary/40 hover:text-primary text-xs font-bold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">restaurant</span> Dinner
+            </a>
+</div>
+<div class="mb-12 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-1 h-8 bg-primary rounded-full"></div>
+<div>
+<h2 class="text-3xl font-black text-slate-900 dark:text-white">Curated For You</h2>
+<p class="text-sm text-slate-500 font-medium">1,248 exceptional recipes found</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-slate-400">View:</span>
+<div class="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
+<button class="p-2 rounded-lg bg-white dark:bg-slate-700 shadow-sm">
+<span class="material-symbols-outlined text-xl">grid_view</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400">
+<span class="material-symbols-outlined text-xl">view_list</span>
+</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPpaStwwejwQ6DegesYOZjHYUOeZdUCDtUgS7yM55Ym95i1MhhdBZoDES_EIKGFC3ld11O3DniywaFCRDE4b5F4k3Vn4tkIOFslU4YzsmPtrc7oUMXOrekPI-nmh1lG6wELxP-AXB2_GTZdyC2Pr4cNhxjJAdi8GgqDONrsRYT8V61lH_-yVheOPDYoOLMKYh61KlqTuHXS84tdiZkxocsDy0dDzeHmNDPHiLE_igAZAGl84bWbdW2u3H4zC4IW6z5jB1Lbpkm_Gra"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.9</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Main Course</span>
+<span class="text-slate-400 text-xs font-bold">• 45 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Golden Herb Roasted Chicken</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAZ2Mx1_e2uJHzmArxhMvz8KB4ni36DYlUp9kDAHYWbem4-v2YywUirImwxqgKP4SJpGzviiOjdOuqxPnEQk2K3vrNh-mqZyExGMGA8xGiCHqoyNxizHK6bgj-eNMLe3TWaZU4o4xZMpUC4rPinlX6qv_psw64ea0339kirF04MFb5YwvYQLnAphuWQA1005gcaAQ0tJ-onBZF14SHy-7Tz_refUD-NSmoUjE051-ndpz6XWH9E4aIQSukdsh4HzmysCLqpyXyrM-Z"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Marcus Chen</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG1bzOrfpvMltV2omyf2yY6Fktcj-igqwpcogWx86p41PAdXh25BiOYuyYY9Visbyl-JB9ZogL8B7btfyFOGm-Tww9wNLXFUg9jpbWwyBvY0G5ASfbOcVLT8oVaiZhUJdhaZ2ldxOXZeQBgbXHK7yHg52Ap3Vc2a3OJDux4uU7Hadyr99hTG1_5WtA4XdbDuq-M1Bel7VQBQ8UimWE53-qocRW_45Wk3z9sDvwR8iqBy3JYAMQVgGQxSW-ceqBwR1GaOscM4DO3bwD"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.7</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Italian</span>
+<span class="text-slate-400 text-xs font-bold">• 35 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Spicy Seafood Linguine</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiFfUBfQvimbeOoDaeV5-s_I9nI8tuUgKVis1Y-tq1uGYll2kHl0575QYZsiPEkQPkAd2aOA8GuPatWO9Hb1Wu844_VyH9FuWfqSq4fYiPUPae3KBeA9krsThp_K59dM7oT3grcuP-_56XEp8kGW0bUkijbi6f3h1a7FWo0pV435_7bjiT0W3gxmcn_4vsxdTXK8Z0TxW-qCqGLqOSIlHBzX9AttU1tc-ZXwZfu3skSl1PGdOpgCeaJOmijswW4GeaGhYtT4DFtKsc"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Elena Rossi</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn5uBOQjGBlMQKveKFE5h3RE9d_gjgPQZMrVHAjbUWMxWH6sV_s8d15TMyhz6sFLhBnvWdzqobOa7sY9OspM7Ys935APtCP4vhWcd9hZqcjZZs0zf2-s0kol5V3p37fDbwihPQeGYFYTgRvoMJZxK9m5iHRtfoixJvEm45lXiolQmfc2gwmUNiB4C-dEK31qbWnj9ZB7FntJWdAg5TfnVgUJA4hK2OfXASBgFgTM6Oki_29c9LhO9pcuC7h-uSvmRBIzP04j3TXJLX"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">5.0</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Healthy</span>
+<span class="text-slate-400 text-xs font-bold">• 15 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Mediterranean Harvest Bowl</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbgEIGwRfxXHxgoPPGPnnEJcjvMRv2zPWSJpPmDxHIrb8UPG1iQyND_VEalqBcQNNfHCwquZp2yKa_NMrVSne9-OdBGcKbpPU4Ti6nMAZaZ_NylqXBOzo7qxysKQ2LvdpCo9O9yI5EL_KlVGCdBEkkqOG-tYfF_kgP8yw8N5aVArGWlU8i7heBHeR_YMEM2xyrAdNKNMYPDY8f_4ejKezxmVGydYYz-0AhZO_nB4LpsV1eND_G0ChqLYxQH5Yidey6l9YfkxUla4rU"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Sofia G.</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFUr5cFxFUHds517Pptp_W4wjS3QKOQ81omQbXer4nveDW0RHZUPTOnYArwLWjX3VWli9k-QPhSeX4AfoYF5w0-qUP8Smk0GP3iH90sPKhYTeaKTHk6WBphrg-8CsgztIHewwMddWDXzJpZQeHIj4bFssYeQ-XDF56stbb4OrMz6UwCgkMJgBG_ZsDryd2NSkZLLqpy-aKkVd6KADsgKH3ytAZT6MbYDLbq9WDc31rnak8-7BoDJKIajQ02jFcufMscS0JDRk0jsVc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.8</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Gourmet</span>
+<span class="text-slate-400 text-xs font-bold">• 60 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Ribeye with Peppercorn Crust</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDeGIKortpZ-MO-IMpaQ2byppRNiRWwi-TH5Y9qPc0hrSRr5AlqmcdBKeaqYEHWWq_8Ahq820d20G87Hekxhc8EmC3uGzxz1Sj1Nnll5Z4hbY7jOJwgKqLqWDYqHqNh7O-jxNCfO7Ypz2isKGzL9EAZFqHPuPTJ4Mu3sXfieojf-46gPI9D807MheYyUJfiJTfSYF7cQ9X9Lh4pjb2aW-1MFWw5NSFvBxMT_FQG2AKc_gXS6c04msTPJaulv2CR1XjYCTQ9Zw0TtYl"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Jack Thorne</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-Fr1GQKgY6hzh-_ez0zS3rAXGQwjpSInbZBsku9NjDGuBY6EVxIzhztbSk_H8WAug_Q66vb8-CNYFALTAEVLf0jPbzwMkLMt0-6FIlKwfxAE73m4E3GobW5kYyvrhdplTzluY5Vp7H94A_LWetFipF5ZK8S3dLtQdH5XuacVYXxZftwEUsSGai_LXOzvebOGoSLyXA_2n_iUTKu--ssDx-ND-9eE8x8gXj_m8WkYUFXCslSLRlXcyu7tjyOJ_wwKE1Yap5gT65EfN"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.6</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Soup</span>
+<span class="text-slate-400 text-xs font-bold">• 25 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Roasted Tomato &amp; Basil Silk</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOeDjfrGutl81PQgbkuNdA56_dqHnOcq7vpwTz0wZR8F9LxOKqDpZvtwvcYrNapP0S7W3CNVrrtHMLT78DhNcWP3oLvWzkZefnue5hQLUV8aRHuDGW7zljzAhufneBIp2ps-huhj89O5w7yXnk3d7tlTo1yh_Qpp1dYlwX1afLPyKRZfh9DJ5YybnAIoSJ3At8atOQtpFCVOCuJrHflZBBN7oQGFNRW3qgq60pEkEm6a8ADOPuCdCfjuW9nUUoqGith1XFUrLtp1xN"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Marcus Chen</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTXVzfULx3Xi9Yh9K2tmH8qglVVUjBrur3qCHaQP3lTAWpn1zswPQXjGhwWeXYCPVYnr06AgNBrNHb7tT8G7wmgIs9u1MAi4maEltR0df-9DhbX5pAT_13AiXE1nnI27LEacSOyI0EZ7EXaYl_ghARos84FA9Dk0nZUFnKtM1uyuYwWkwL4te_ZWFHOodPge5b2mFDQobVHHxmJV6H6FsvZ0UyERJXka4_vBrBuYMcLSLqKLu9buq3Su63HtoWVjnjK01kP45PM0yc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.4</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Curry</span>
+<span class="text-slate-400 text-xs font-bold">• 50 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Creamy Butter Chicken</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIrWdBav7xZxBP107OGvWWQx6FK52-YjuXyXz0ndxeEg5bAl0PZ4vMrJcOPFQsyLHHhgZRJdm7QTHQSXH51-jdUlpfpdqh-MkqVSgO_fHHDonqgECSHMcd0cf_1PaPe_E955k9RLGPwzX9CQcb5uKTsbvM--OGT-iY7Ol5Y0jDbeuPWyOIh3xyPMa4ghru0z7DazEePG8YM2cWsJ-G3ZB5oGtA2I2oJ6vqCwKvVy7TILZSN3EELNKMNp5r7rdrXZqv0uanBEJX9Tfa"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Aarav Patel</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYl_ul-d5JBG0uQgKeMPwk-YdzOtAtDXh56_cG20bB4CPWAPcylrdaYMOq2tdolF_8tA9IaP49uCAkBUKtlPgJPAJd8YEHNGqzK01UMlJyG7gHo0ywhcTg1PaJp2WvOmeGSdcKJWY8dMVq7acHqsRE2b6rfhBxb-f0Wo6W1HQkF6Ky4uEUEcQy-YFMu-t591KTdZo4zDDwO-KmQ2GpfVWd9Ta7n93lZ0qcWhDyjrVRLOCZ8AIWd9TbGhwIlQ6WkLQ4SyWuLJg40_xx"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.9</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Breakfast</span>
+<span class="text-slate-400 text-xs font-bold">• 15 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Truffle Oil Avocado Toast</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf6aABIoTtU18xEcOKrqBrgYC1TptICBmQh_mDihrMeH5B9FketiYn8HQi1RqInlWGgQgE57LgVhmAawYdDeNF1iQhYuF8PUDBCXGjFgr823ALrcX4aMEYnc9_Zn7AUwbfWiLzClQfea9ukxJuIZ32bZWdHBB0F3pV-4Z41qEcxwvn1hYUitkEc74mvRggFRc1AMhMAwxXsdVwB-P_kjofUb8pw9yBIz6zJ16D8ol2x72Mf8LK662UKGlOtwWelBMe_A8EWpbnb-iO"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Sofia G.</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2.5rem] p-4 group">
+<div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6">
+<img alt="Recipe" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtfET3fVw7akTzx1aoINSsSPjjFSE3d2-PMvidI4KgLYn5z_wVlaXXBpTLGc6NPbAOU4gSLpyn2Fd9eXuNLAlKS2ngx0y2vmZkpkDin5Fr28eCnGnU60MQMveHkfstMQ2elQ6KpnmuZR7MLpRz_5fLski4fDnmVM1-VyHM2rafOtis-O0nFiyrXGqiCoh9gkpRbtRcgNP29unTNiDgrdW4Mm5iX01YclZwrkCAtK4ImxRAFiy9ib0li17EOrV5xBfz5Yt6_mjezkNE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
+<span class="text-xs font-black text-slate-900 dark:text-white">4.8</span>
+</div>
+<button class="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="px-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase">Vegan</span>
+<span class="text-slate-400 text-xs font-bold">• 30 min</span>
+</div>
+<h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">Rainbow Quinoa Buddha Bowl</h3>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu6sf_HmpKHBDQDp04PZE7K4_IT7solSIkFEnvzG8n1i0WpKhZSs8xgNfmJGrcZfBhmcIdNhGEt5mPgyyikqFBpYQCZXC47NHKXcBmxD-cB6L4QICcAjIKVrhtws-Gd2SUQwJhsD8ltBAGHAlXZtP5V-piGNgYjZ7IzTWDTasOpuNcYjO6oG9kbDGhdO1U6JSyf5_o2zG0BwRNVioat5CI6S_zc-1lRaUVspPedYvkVPVKXE3FivPbxPyeLAW2h82nFN8lQjCv_Q0D"/>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Elena Rossi</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-24 text-center">
+<button class="inline-flex items-center gap-3 px-10 py-5 bg-white/40 dark:bg-slate-800/40 border border-white dark:border-slate-700 text-slate-900 dark:text-white font-black rounded-3xl hover:bg-white/60 dark:hover:bg-slate-800/60 hover:scale-105 active:scale-95 transition-all shadow-xl">
+<span class="material-symbols-outlined">refresh</span>
+                Show 24 More Recipes
+            </button>
+</div>
+</main>
+<footer class="relative z-10 border-t border-slate-200 dark:border-slate-800 py-12 px-6 bg-white/30 dark:bg-slate-900/30 backdrop-blur-md">
+<div class="max-w-[1500px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg">chef_hat</span>
+</div>
+<span class="text-xl font-extrabold text-slate-900 dark:text-white">RecipeNest</span>
+</div>
+<div class="flex items-center gap-8 text-sm font-bold text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">About Us</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-xl">language</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-xl">share</span>
+</button>
+</div>
+</div>
+<div class="max-w-[1500px] mx-auto text-center mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest">© 2024 RecipeNest Premium Culinary Network</p>
+</div>
+</footer>
+
+</body></html>
