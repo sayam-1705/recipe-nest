@@ -14,17 +14,13 @@ export default function QueryProvider({
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 0,
-            gcTime: 0,
-            retry: process.env.NODE_ENV === "production" ? 1 : 3,
-            refetchOnWindowFocus: true,
-            refetchOnMount: true,
-            refetchOnReconnect: true,
-            networkMode: "online",
+            staleTime: 5 * 60 * 1000,
+            gcTime: 10 * 60 * 1000,
+            retry: 1,
+            refetchOnWindowFocus: false,
           },
           mutations: {
             retry: 1,
-            networkMode: "online",
           },
         },
       })

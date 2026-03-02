@@ -184,23 +184,6 @@ function SearchResults() {
               </p>
             </div>
           </div>
-          {hasSearched && (
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold text-slate-400">View:</span>
-              <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 pointer-events-none opacity-50">
-                <button className="p-1.5 rounded-lg bg-white dark:bg-slate-700 shadow-sm text-primary-stitch">
-                  <span className="material-symbols-outlined text-lg">
-                    grid_view
-                  </span>
-                </button>
-                <button className="p-1.5 rounded-lg text-slate-400">
-                  <span className="material-symbols-outlined text-lg">
-                    view_list
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Dynamic Content */}
@@ -260,18 +243,7 @@ function SearchResults() {
               <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
           </div>
-        )}
-
-        {/* Load More Mockup (if needed) */}
-        {recipes.length > 0 && (
-          <div className="mt-20 text-center">
-            <button className="inline-flex items-center gap-2 px-10 py-4 glass-card border border-white dark:border-white/5 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl">
-              <span className="material-symbols-outlined">refresh</span>
-              Show 24 More Recipes
-            </button>
-          </div>
-        ) }
-      </div>
+        )}      </div>
       
       {/* Footer Gradient Over */}
       <div className="pointer-events-none fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background-light dark:from-slate-950 to-transparent z-40"></div>

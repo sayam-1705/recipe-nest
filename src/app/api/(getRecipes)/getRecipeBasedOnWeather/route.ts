@@ -85,38 +85,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log(`Fetching weather data for lat: ${lat}, lon: ${lon}`);
-
     const weatherResponse = await getWeatherResponse(Number(lat), Number(lon));
-    const {
-      temperature,
-      place,
-      weatherDescription,
-      weatherDetails,
-      humidity,
-      windSpeed,
-      clouds,
-    } = weatherResponse;
+    const { temperature, place, weatherDescription, weatherDetails, humidity, windSpeed, clouds } = weatherResponse;
 
-    console.log(
-      `Weather data received: ${temperature}°C, ${weatherDescription} in ${place}`
-    );
-
-    const type = getRecipeTypeFromWeather(
-      temperature,
-      weatherDescription,
-      weatherDetails
-    );
+    const type = getRecipeTypeFromWeather(temperature, weatherDescription, weatherDetails);
     const meal = getMealByCurrentTime();
-    const difficulty = getDifficultyFromWeather(
-      temperature,
-      weatherDescription
-    );
+    const difficulty = getDifficultyFromWeather(temperature, weatherDescription);
     const season = getSeasonFromWeather(temperature, humidity);
-
-    console.log(
-      `Recipe recommendations: type=${type}, meal=${meal}, difficulty=${difficulty}, season=${season}`
-    );
 
     let recipes: Recipe[] = [];
     let searchStrategy = "exact";
@@ -128,12 +103,8 @@ export async function POST(req: NextRequest) {
       ...(season && buildRegexFilter("season", season)),
     };
     recipes = await Recipe.find(exactQuery).limit(20);
-    console.log(
-      `Strategy 1 - Found ${recipes.length} recipes with exact criteria`
-    );
 
     if (recipes.length < 5) {
-      console.log("Trying flexible OR strategy...");
       searchStrategy = "flexible";
 
       const orConditions = [
@@ -156,13 +127,9 @@ export async function POST(req: NextRequest) {
         (r) => !existingIds.has(r._id.toString())
       );
       recipes = [...recipes, ...newRecipes].slice(0, 20);
-      console.log(
-        `Strategy 2 - Total: ${recipes.length} recipes with flexible criteria`
-      );
     }
 
     if (recipes.length < 3) {
-      console.log("Trying broad search...");
       searchStrategy = "broad";
 
       const broadQuery = {
@@ -179,59 +146,31 @@ export async function POST(req: NextRequest) {
         (r) => !existingIds.has(r._id.toString())
       );
       recipes = [...recipes, ...newRecipes].slice(0, 20);
-      console.log(
-        `Strategy 3 - Total: ${recipes.length} recipes with broad criteria`
-      );
     }
 
     if (recipes.length === 0) {
-      console.log("Getting random recipes as fallback...");
       searchStrategy = "random";
       recipes = await Recipe.aggregate([{ $sample: { size: 10 } }]);
-      console.log(`Strategy 4 - Found ${recipes.length} random recipes`);
     }
 
     return NextResponse.json({
-      recipes: recipes,
+      recipes,
       weather: {
-        temperature: temperature,
-        place,
+        temperature, place,
         description: weatherDescription,
         details: weatherDetails,
-        humidity,
-        windSpeed,
+        humidity, windSpeed,
         cloudCover: clouds,
         recommendedType: type,
         recommendedMeal: meal,
         recommendedDifficulty: difficulty,
         season,
       },
-      searchStrategy: searchStrategy,
+      searchStrategy,
       totalRecipes: recipes.length,
     });
   } catch (error) {
-    console.error("Error fetching recipes based on weather:", error);
-
-    if (error instanceof Error) {
-      if (error.message.includes("weather")) {
-        return NextResponse.json(
-          {
-            error:
-              "Failed to fetch weather data. Please check your coordinates and try again.",
-          },
-          { status: 500 }
-        );
-      } else if (
-        error.message.includes("MongoDB") ||
-        error.message.includes("database")
-      ) {
-        return NextResponse.json(
-          { error: "Database connection error. Please try again later." },
-          { status: 500 }
-        );
-      }
-    }
-
+    console.error("Weather recipe error:", error);
     return NextResponse.json(
       { error: "Failed to fetch recipes based on weather. Please try again." },
       { status: 500 }

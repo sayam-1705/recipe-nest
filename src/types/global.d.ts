@@ -237,16 +237,6 @@ declare global {
     requireAuth?: boolean;
   }
 
-  interface MenuCarouselProps {
-    totalCards?: number;
-    cardWidth?: number;
-    recipes: Recipe[];
-  }
-
-  interface MenuProps {
-    initialRecipes?: Recipe[];
-  }
-
   interface NutritionChartProps {
     nutritionData: NutritionData;
   }

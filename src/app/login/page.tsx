@@ -58,10 +58,6 @@ const Login = () => {
     googleLoginMutation.mutate(credential);
   };
 
-  const handleGoogleError = (error: string) => {
-    console.error("Google Sign-In error:", error);
-  };
-
   const getErrorMessage = () => {
     if (loginMutation.isError && loginMutation.error instanceof Error) {
       return loginMutation.error.message;
@@ -210,7 +206,7 @@ const Login = () => {
               <div className="w-full">
                 <GoogleSignInButton
                   onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
+                  onError={() => {}}
                   text="signin_with"
                 />
               </div>

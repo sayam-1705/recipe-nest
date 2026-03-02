@@ -59,7 +59,7 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
                   <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-700">
                     <span className="flex items-center gap-2 text-xs md:text-sm font-bold text-slate-500 uppercase tracking-tighter">
                       <span className="material-symbols-outlined text-primary text-xl">schedule</span> 
-                      25 min
+                      {recipe.time}
                     </span>
                     <Link 
                       href={`/showRecipe/${recipe._id}`}

@@ -4,7 +4,6 @@ import Recipe from "@/models/Recipe";
 import mongoose from "mongoose";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET(
   req: NextRequest,
@@ -26,9 +25,6 @@ export async function GET(
     return NextResponse.json({ recipe });
   } catch (error) {
     console.error("Get recipe error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch recipe" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch recipe" }, { status: 500 });
   }
 }

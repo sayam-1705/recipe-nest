@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/providers/QueryProvider";
-import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -111,13 +111,13 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${outfit.variable} ${playfair.variable} antialiased bg-background-light text-slate-800 font-sans transition-colors duration-500 selection:bg-primary selection:text-white`}
       >
-        <GlobalErrorBoundary>
+        <ErrorBoundary>
           <QueryProvider>
             <Navbar />
             <main className="min-h-screen w-full">{children}</main>
             <Footer />
           </QueryProvider>
-        </GlobalErrorBoundary>
+        </ErrorBoundary>
       </body>
     </html>
   );

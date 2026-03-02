@@ -78,22 +78,13 @@ const Signup = () => {
     googleSignupMutation.mutate(credential);
   };
 
-  const handleGoogleError = (error: string) => {
-    console.error("Google Sign-Up error:", error);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (validationError) setValidationError("");
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -111,17 +102,7 @@ const Signup = () => {
 
     setValidationError("");
 
-    try {
-      await signupMutation.mutateAsync({
-        name,
-        email,
-        password,
-        confirmPassword,
-      });
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("Signup failed:", error);
-    }
+    signupMutation.mutate({ name, email, password, confirmPassword });
   };
 
   const displayError =
@@ -310,7 +291,7 @@ const Signup = () => {
               <div className="w-full">
                 <GoogleSignInButton
                   onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
+                  onError={() => {}}
                   text="signup_with"
                 />
               </div>

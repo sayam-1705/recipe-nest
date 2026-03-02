@@ -47,10 +47,14 @@ const Profile = () => {
       const response = await fetch(`/api/delete/${email}`, {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) throw new Error("Failed to delete user");
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to delete user");
+      }
     },
     onSuccess: () => {
       clearAuth();
@@ -139,28 +143,12 @@ const Profile = () => {
                     <div className="text-3xl font-black text-slate-900 dark:text-white">{recipes.length}</div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Recipes</div>
                   </div>
-                  <div className="w-px h-10 bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
-                  <div className="text-center lg:text-left">
-                    <div className="text-3xl font-black text-slate-900 dark:text-white">45</div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Followers</div>
-                  </div>
-                  <div className="w-px h-10 bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
-                  <div className="text-center lg:text-left">
-                    <div className="text-3xl font-black text-slate-900 dark:text-white">128</div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Following</div>
-                  </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-4 w-full lg:w-64 z-10">
-              <button
-                className="w-full px-8 py-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-black transition-all hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-center gap-3 border border-slate-200 dark:border-white/5 active:scale-95 duration-200"
-              >
-                <span className="material-symbols-outlined">settings</span>
-                Account Settings
-              </button>
               <button
                 onClick={handleLogOut}
                 className="w-full px-8 py-4 rounded-2xl bg-slate-900 dark:bg-primary-stitch text-white font-black shadow-lg shadow-primary-stitch/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 duration-200"
