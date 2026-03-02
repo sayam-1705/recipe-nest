@@ -1,6 +1,6 @@
 "use client";
 
-import RecipeForm from "@/components/recipeForm/RecipeForm";
+import RecipeForm from "@/components/recipes/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import AlertDialog from "@/components/common/AlertDialog";
 import { use, useCallback, useEffect, useState } from "react";

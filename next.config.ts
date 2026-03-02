@@ -5,34 +5,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "imgs.search.brave.com",
+        hostname: "*",
         port: "",
         pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "media.istockphoto.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "t4.ftcdn.net",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "www.recipetineats.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
+      }
     ],
   },
 

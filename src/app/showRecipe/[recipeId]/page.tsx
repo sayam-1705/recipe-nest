@@ -1,4 +1,4 @@
-import RecipeDisplay from "@/components/recipe/RecipeDisplay";
+import RecipeDisplay from "@/components/recipes/RecipeDisplay";
 
 const ShowRecipe = async ({
   params,

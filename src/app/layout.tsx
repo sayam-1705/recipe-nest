@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar/Navbar";
 import QueryProvider from "@/providers/QueryProvider";
 import GlobalErrorBoundary from "@/components/common/GlobalErrorBoundary";
 
@@ -11,6 +10,21 @@ const poppins = Poppins({
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-poppins",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-outfit",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["600"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -77,6 +91,9 @@ export const metadata: Metadata = {
   },
 };
 
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
 export default function RootLayout({
   children,
 }: {
@@ -89,14 +106,16 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#f97316" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       <body
-        className={`${poppins.variable} antialiased bg-primary-orange-bg font-poppins overflow-x-hidden`}
+        className={`${poppins.variable} ${outfit.variable} ${playfair.variable} antialiased bg-background-light text-slate-800 font-sans transition-colors duration-500 selection:bg-primary selection:text-white`}
       >
         <GlobalErrorBoundary>
           <QueryProvider>
             <Navbar />
             <main className="min-h-screen w-full">{children}</main>
+            <Footer />
           </QueryProvider>
         </GlobalErrorBoundary>
       </body>

@@ -2,9 +2,9 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import RecipeCard from "@/components/recipeCard/RecipeCard";
+import RecipeCard from "@/components/recipes/RecipeCard";
 import ErrorDisplay from "@/components/common/ErrorDisplay";
-import AdvancedFilters from "@/components/search/AdvancedFilters";
+import AdvancedFilters from "../../components/recipes/AdvancedFilters";
 import { Suspense, useState, useEffect } from "react";
 
 function SearchResults() {
@@ -70,145 +70,170 @@ function SearchResults() {
     searchQuery.trim() || Object.keys(additionalFilters).length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 xs:py-6 sm:py-8 px-3 xs:px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-      <div className="max-w-[1920px] mx-auto w-full">
+    <div className="relative min-h-screen bg-background-light dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden">
+      {/* Background Orbs */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary-stitch/10 rounded-full blur-[100px] dark:bg-primary-stitch/5"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-orange-400/10 rounded-full blur-[80px] dark:bg-orange-600/5"></div>
+      </div>
+
+      <div className="relative z-10 pt-20 pb-32 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         {/* Search Header */}
-        <div className="mb-4 xs:mb-6 sm:mb-8">
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-3 xs:mb-4 sm:mb-6">
-            Search Recipes
+        <div className="text-center mb-12 lg:mb-20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-widest mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-stitch opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-stitch"></span>
+            </span>
+            Explore Flavors
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+            Find Your Next <br />
+            <span className="text-gradient">Masterpiece</span>
           </h1>
+          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed font-medium">
+            Unlock curated collection of premium recipes tailored to your taste. Discovery meets world-class culinary expertise.
+          </p>
+        </div>
 
-          {/* Search Form */}
-          <div className="bg-white rounded-lg shadow-md p-3 xs:p-4 sm:p-5 md:p-6 mb-4 xs:mb-6">
-            <form onSubmit={handleSearch} className="space-y-3 xs:space-y-4">
-              <div className="flex flex-col sm:flex-row gap-3 xs:gap-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="search-input"
-                    className="block text-xs xs:text-sm font-medium text-gray-700 mb-1.5 xs:mb-2"
-                  >
-                    Recipe Name
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="search-input"
-                      type="text"
-                      value={searchInput}
-                      onChange={(e) => setSearchInput(e.target.value)}
-                      placeholder="Search for recipes by name..."
-                      className="w-full px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 pl-9 xs:pl-10 sm:pl-12 text-sm xs:text-base text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-orange focus:border-transparent transition-all duration-200"
-                    />
-                    <svg
-                      className="absolute left-2.5 xs:left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 xs:w-5 xs:h-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex flex-col xs:flex-row items-stretch xs:items-end gap-2 xs:gap-3">
-                  <button
-                    type="submit"
-                    className="w-full xs:w-auto px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 text-sm xs:text-base text-white bg-primary-orange hover:bg-primary-orange-hover rounded-lg transition-all duration-200 font-medium transform hover:scale-105 hover:shadow-lg whitespace-nowrap"
-                  >
-                    Search
-                  </button>
-                  <AdvancedFilters
-                    onFilter={handleFilter}
-                    initialFilters={additionalFilters}
-                  />
-                </div>
+        {/* Search Input Section */}
+        <div className="max-w-4xl mx-auto mb-16 px-2">
+          <form
+            onSubmit={handleSearch}
+            className="glass-panel rounded-3xl p-2 sm:p-3 flex flex-col sm:flex-row gap-2 shadow-2xl shadow-primary-stitch/5"
+          >
+            <div className="flex-1 relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-white/60 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
+              <span className="material-symbols-outlined text-slate-400 text-2xl mr-3">
+                search
+              </span>
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search recipes, ingredients..."
+                className="w-full bg-transparent border-none p-0 focus:ring-0 text-base sm:text-lg font-medium text-slate-900 dark:text-white placeholder-slate-400"
+              />
+              <div className="hidden md:flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-slate-400 text-[10px] font-bold border border-slate-200 dark:border-slate-600">
+                <span>⌘</span>
+                <span>K</span>
               </div>
+            </div>
+            <div className="flex gap-2">
+              <AdvancedFilters
+                onFilter={handleFilter}
+                initialFilters={additionalFilters}
+              />
+              <button
+                type="submit"
+                className="flex-1 sm:flex-none px-8 py-3 rounded-2xl bg-slate-900 dark:bg-primary-stitch text-white font-bold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-stitch/20"
+              >
+                Search
+              </button>
+            </div>
+          </form>
 
-              {/* Active Filters Display */}
-              {(searchQuery || Object.keys(additionalFilters).length > 0) && (
-                <div className="flex flex-wrap items-center gap-1.5 xs:gap-2 pt-2 xs:pt-3 border-t border-gray-200">
-                  <span className="text-xs xs:text-sm font-medium text-gray-600 mb-1 xs:mb-0">
-                    Active filters:
-                  </span>
-                  {searchQuery && (
-                    <span className="inline-flex items-center px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm font-medium bg-primary-orange-bg text-primary-orange">
-                      Name: &quot;{searchQuery}&quot;
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSearchInput("");
-                          setSearchQuery("");
-                          router.push("/search", { scroll: false });
-                        }}
-                        className="ml-1.5 xs:ml-2 text-base xs:text-lg hover:text-primary-orange-hover"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  )}
-                  {Object.entries(additionalFilters).map(([key, value]) =>
-                    value ? (
-                      <span
-                        key={key}
-                        className="inline-flex items-center px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm font-medium bg-secondary-green-light text-white"
-                      >
-                        {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newFilters = { ...additionalFilters };
-                            delete newFilters[key as keyof FilterOptions];
-                            setAdditionalFilters(newFilters);
-                          }}
-                          className="ml-1.5 xs:ml-2 text-base xs:text-lg hover:opacity-80"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ) : null
-                  )}
-                </div>
-              )}
-            </form>
+          {/* Popular/Trending Tags */}
+          <div className="flex flex-wrap justify-center gap-2 mt-6">
+            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest py-2 mr-2">
+              Popular:
+            </span>
+            {["Chicken", "Pasta", "Vegan", "Healthy", "Dessert"].map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => {
+                  setSearchInput(tag);
+                  setSearchQuery(tag);
+                  router.push(`/search?q=${encodeURIComponent(tag)}`, {
+                    scroll: false,
+                  });
+                }}
+                className="px-4 py-1.5 rounded-full glass-card text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-primary-stitch hover:border-primary-stitch transition-colors flex items-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-[14px]">
+                  {tag === "Chicken"
+                    ? "lunch_dining"
+                    : tag === "Pasta"
+                    ? "ramen_dining"
+                    : tag === "Vegan"
+                    ? "spa"
+                    : tag === "Healthy"
+                    ? "favorite"
+                    : "cake"}
+                </span>
+                {tag}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Results Section */}
-        {!hasSearched ? (
-          <div className="text-center py-8 xs:py-12 sm:py-16 bg-white rounded-lg shadow-md">
-            <svg
-              className="mx-auto h-12 w-12 xs:h-16 xs:w-16 sm:h-20 sm:w-20 text-primary-orange mb-3 xs:mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <h2 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-              Find Your Perfect Recipe
-            </h2>
-            <p className="text-sm xs:text-base text-gray-600 max-w-md mx-auto px-4">
-              Enter a recipe name or use advanced filters to discover delicious
-              dishes
-            </p>
+        {/* Results Metadata */}
+        <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-6 transition-all">
+          <div className="flex items-center gap-4">
+            <div className="w-1 h-8 bg-primary-stitch rounded-full"></div>
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                {hasSearched ? "Search Results" : "Curated For You"}
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                {isLoading
+                  ? "Searching exceptional recipes..."
+                  : `${recipes.length} exceptional recipe${
+                      recipes.length !== 1 ? "s" : ""
+                    } found`}
+              </p>
+            </div>
+          </div>
+          {hasSearched && (
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-bold text-slate-400">View:</span>
+              <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 pointer-events-none opacity-50">
+                <button className="p-1.5 rounded-lg bg-white dark:bg-slate-700 shadow-sm text-primary-stitch">
+                  <span className="material-symbols-outlined text-lg">
+                    grid_view
+                  </span>
+                </button>
+                <button className="p-1.5 rounded-lg text-slate-400">
+                  <span className="material-symbols-outlined text-lg">
+                    view_list
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Dynamic Content */}
+        {!hasSearched && !isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {/* Recommendation placeholders or static featured content could go here */}
+            <div className="col-span-full py-10 sm:py-20 text-center glass-card rounded-[2.5rem]">
+              <span className="material-symbols-outlined text-5xl sm:text-7xl text-primary-stitch/20 mb-4 block">
+                search_spark
+              </span>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-400 mb-2 px-4">
+                Ready to find your next masterpiece?
+              </h3>
+              <p className="text-sm sm:text-base text-slate-400/60 max-w-xs mx-auto px-4">
+                Start searching above or explore one of the popular categories.
+              </p>
+            </div>
           </div>
         ) : isLoading ? (
-          <div className="text-center py-8 xs:py-12 sm:py-16 bg-white rounded-lg shadow-md">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-4 border-primary-orange mx-auto mb-3 xs:mb-4"></div>
-            <p className="text-sm xs:text-base text-gray-600 font-medium">
-              Searching for recipes...
-            </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="glass-card rounded-[2.5rem] p-4 bg-white/20 dark:bg-white/5 animate-pulse"
+              >
+                <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 dark:bg-slate-800 mb-6"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/2 mb-3"></div>
+                <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+              </div>
+            ))}
           </div>
         ) : error ? (
-          <div className="flex items-center justify-center py-8 xs:py-12 sm:py-16">
+          <div className="glass-panel rounded-[2.5rem] p-10 sm:p-20 text-center border-rose-500/20">
             <ErrorDisplay
               title="Search Failed"
               message="We couldn't complete your search. Please try again."
@@ -217,45 +242,39 @@ function SearchResults() {
             />
           </div>
         ) : recipes.length === 0 ? (
-          <div className="text-center py-8 xs:py-12 sm:py-16 bg-white rounded-lg shadow-md px-4">
-            <svg
-              className="mx-auto h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 text-gray-400 mb-3 xs:mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <h3 className="text-base xs:text-lg font-medium text-gray-900 mb-2">
+          <div className="glass-panel rounded-[2.5rem] p-10 sm:p-20 text-center">
+            <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-6 block">
+              sentiment_dissatisfied
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3">
               No recipes found
             </h3>
-            <p className="text-sm xs:text-base text-gray-600 mb-2 xs:mb-4">
-              We couldn&apos;t find any recipes matching your search criteria
-            </p>
-            <p className="text-xs xs:text-sm text-gray-500">
-              Try adjusting your filters or search with different keywords
+            <p className="text-sm sm:text-base text-slate-500 max-w-xs mx-auto leading-relaxed">
+              We couldn&apos;t find any recipes matching your search criteria.
+              Try adjusting your filters.
             </p>
           </div>
         ) : (
-          <>
-            <div className="mb-4 xs:mb-5 sm:mb-6 flex items-center justify-between">
-              <div className="text-xs xs:text-sm text-gray-600 font-medium">
-                Found {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
-              </div>
-            </div>
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
-              {recipes.map((recipe: Recipe) => (
-                <RecipeCard key={recipe._id} recipe={recipe} />
-              ))}
-            </div>
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {recipes.map((recipe: Recipe) => (
+              <RecipeCard key={recipe._id} recipe={recipe} />
+            ))}
+          </div>
         )}
+
+        {/* Load More Mockup (if needed) */}
+        {recipes.length > 0 && (
+          <div className="mt-20 text-center">
+            <button className="inline-flex items-center gap-2 px-10 py-4 glass-card border border-white dark:border-white/5 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl">
+              <span className="material-symbols-outlined">refresh</span>
+              Show 24 More Recipes
+            </button>
+          </div>
+        ) }
       </div>
+      
+      {/* Footer Gradient Over */}
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background-light dark:from-slate-950 to-transparent z-40"></div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import RecipeForm from "@/components/recipeForm/RecipeForm";
+import RecipeForm from "@/components/recipes/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
