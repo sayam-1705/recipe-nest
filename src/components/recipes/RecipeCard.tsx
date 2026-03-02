@@ -110,8 +110,8 @@ const RecipeCard = ({
           {/* Top Indicators */}
           <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
             <div className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
-              <span className="material-symbols-outlined text-yellow-500 text-base fill-1">star</span>
-              <span className="text-xs font-black text-slate-900 dark:text-white">4.8</span>
+              <span className="material-symbols-outlined text-primary text-base">schedule</span>
+              <span className="text-xs font-black text-slate-900 dark:text-white">{recipe.time || "30 min"}</span>
             </div>
 
             {isModified && (
@@ -133,12 +133,9 @@ const RecipeCard = ({
             )}
           </div>
 
-          <button 
-            onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-4 right-4 w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-xl"
-          >
-            <span className="material-symbols-outlined">favorite</span>
-          </button>
+          <div className="absolute bottom-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-lg">
+            <span className="text-xs font-black text-slate-900 dark:text-white">{recipe.difficulty || "Medium"}</span>
+          </div>
         </div>
 
         <div className="px-2">
@@ -146,7 +143,7 @@ const RecipeCard = ({
             <span className="px-3 py-0.5 rounded-full bg-primary-stitch/10 text-primary-stitch text-[10px] font-black uppercase">
               {recipe.type || "Recipe"}
             </span>
-            <span className="text-slate-400 text-xs font-bold">• {recipe.time || "30 min"}</span>
+            <span className="text-slate-400 text-xs font-bold">• {recipe.dietaryType || "Any"}</span>
           </div>
           <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-primary-stitch transition-colors">
             {recipe.name}

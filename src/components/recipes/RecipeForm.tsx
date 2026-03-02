@@ -156,7 +156,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           <div className="space-y-6 animate-fade-in">
             <header className="mb-6">
               <h1 className="text-2xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white leading-tight">Recipe Essentials</h1>
-              <p className="text-sm lg:text-base text-gray-500 mt-1">First, the fundamental details.</p>
+              <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 mt-1">First, the fundamental details.</p>
             </header>
             <Input 
               label="Recipe Title" 
@@ -204,7 +204,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           <div className="space-y-6 animate-fade-in">
             <header className="mb-6">
               <h1 className="text-2xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white leading-tight">Recipe Details</h1>
-              <p className="text-sm lg:text-base text-gray-500 mt-1">Define the personality of your dish.</p>
+              <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 mt-1">Define the personality of your dish.</p>
             </header>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input 
@@ -250,7 +250,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           <div className="space-y-6 animate-fade-in">
             <header className="mb-6">
               <h1 className="text-2xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white leading-tight">Ingredients & Portions</h1>
-              <p className="text-sm lg:text-base text-gray-500 mt-1">The building blocks of your masterpiece.</p>
+              <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 mt-1">The building blocks of your masterpiece.</p>
             </header>
             <Input 
               label="Servings" 
@@ -306,7 +306,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           <div className="space-y-6 animate-fade-in">
             <header className="mb-6">
               <h1 className="text-2xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white leading-tight">Instructions & Image</h1>
-              <p className="text-sm lg:text-base text-gray-500 mt-1">Guide others through the cooking process.</p>
+              <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 mt-1">Guide others through the cooking process.</p>
             </header>
             <div className="space-y-4">
               <div className="flex items-center justify-between">

@@ -31,10 +31,10 @@ export default function ClientHome() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background-light">
+      <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-slate-600 font-medium">Loading RecipeNest...</p>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">Loading RecipeNest...</p>
         </div>
       </div>
     );
@@ -43,7 +43,7 @@ export default function ClientHome() {
   const featuredRecipe = recipes.length > 0 ? recipes[0] : undefined;
 
   return (
-    <div className="w-full bg-background-light min-h-screen font-sans selection:bg-primary selection:text-white">
+    <div className="w-full bg-background-light dark:bg-background-dark min-h-screen font-sans selection:bg-primary selection:text-white">
       <ErrorBoundary>
         <main>
           <HomeHero featuredRecipe={featuredRecipe} />

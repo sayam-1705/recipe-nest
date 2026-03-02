@@ -15,7 +15,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
       <div className="max-w-md text-center p-8">
         <div className="mb-6">
           <svg
@@ -32,22 +32,22 @@ export default function Error({
             />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
           Something went wrong!
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-slate-600 dark:text-slate-400 mb-6">
           We apologize for the inconvenience. Please try again.
         </p>
         <div className="space-y-4">
           <button
             onClick={reset}
-            className="w-full bg-primary-orange hover:bg-primary-orange-hover text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            className="w-full bg-primary-orange hover:bg-primary-orange-hover text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
           >
             Try again
           </button>
           <Link
             href="/"
-            className="block w-full bg-gray-200 hover:bg-gray-300 text-gray-900 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            className="block w-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
           >
             Go home
           </Link>

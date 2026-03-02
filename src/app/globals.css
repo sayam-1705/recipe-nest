@@ -27,6 +27,18 @@
   .dark .text-gradient {
     @apply bg-gradient-to-r from-orange-400 to-rose-500;
   }
+  .glass-input {
+    @apply bg-white/60 backdrop-blur-md border border-slate-200 shadow-sm transition-all duration-300;
+  }
+  .glass-input:focus {
+    @apply border-primary-stitch/50 shadow-[0_0_15px_rgba(255,145,77,0.15)];
+  }
+  .dark .glass-input {
+    @apply bg-slate-800/50 border-white/10;
+  }
+  .dark .glass-input:focus {
+    @apply border-primary-stitch/40 shadow-[0_0_15px_rgba(255,145,77,0.1)];
+  }
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -44,6 +56,10 @@
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -69,11 +69,6 @@ export default function HomeHero({ featuredRecipe }: HomeHeroProps) {
               <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] md:text-xs font-black uppercase tracking-widest">
                 Masterpiece of the Day
               </span>
-              <div className="flex gap-2">
-                <button className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-red-500 shadow-sm border border-white/20">
-                  <span className="material-symbols-outlined fill-1 text-lg">favorite</span>
-                </button>
-              </div>
             </div>
 
             <div className="relative aspect-square rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-6 md:mb-8 shadow-2xl">
@@ -131,12 +126,6 @@ export default function HomeHero({ featuredRecipe }: HomeHeroProps) {
       </div>
 
       <style jsx>{`
-        .text-gradient {
-          background-clip: text;
-          -webkit-background-clip: text;
-          color: transparent;
-          background-image: linear-gradient(135deg, #F97316, #EA580C);
-        }
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }

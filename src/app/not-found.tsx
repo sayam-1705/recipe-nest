@@ -4,11 +4,11 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
       <div className="max-w-md text-center p-8">
         <div className="mb-6">
-          <h1 className="text-6xl font-bold text-gray-400 mb-4">404</h1>
-          <div className="mx-auto h-16 w-16 text-gray-400 mb-4 flex items-center justify-center">
+          <h1 className="text-6xl font-bold text-slate-400 dark:text-slate-600 mb-4">404</h1>
+          <div className="mx-auto h-16 w-16 text-slate-400 dark:text-slate-600 mb-4 flex items-center justify-center">
             <svg
               fill="none"
               stroke="currentColor"
@@ -25,16 +25,16 @@ export default function NotFound() {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
           Page Not Found
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-slate-600 dark:text-slate-400 mb-6">
           The page you are looking for does not exist. It might have been moved
           or deleted.
         </p>
         <Link
           href="/"
-          className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+          className="inline-block bg-primary-orange hover:bg-primary-orange-hover text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
         >
           Go home
         </Link>

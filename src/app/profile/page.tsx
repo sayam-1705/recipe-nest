@@ -85,7 +85,7 @@ const Profile = () => {
 
   return (
     <ProtectedRoute>
-      <div className="relative min-h-screen bg-background-light dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden">
+      <div className="relative min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden">
         {/* Background Blobs */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-10%] left-[-5%] w-[45vw] h-[45vw] bg-orange-100/50 rounded-full blur-[100px] dark:bg-orange-950/20"></div>

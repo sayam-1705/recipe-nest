@@ -70,7 +70,7 @@ function SearchResults() {
     searchQuery.trim() || Object.keys(additionalFilters).length > 0;
 
   return (
-    <div className="relative min-h-screen bg-background-light dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden">
+    <div className="relative min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-500 overflow-x-hidden">
       {/* Background Orbs */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary-stitch/10 rounded-full blur-[100px] dark:bg-primary-stitch/5"></div>
@@ -246,7 +246,7 @@ function SearchResults() {
         )}      </div>
       
       {/* Footer Gradient Over */}
-      <div className="pointer-events-none fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background-light dark:from-slate-950 to-transparent z-40"></div>
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent z-40"></div>
     </div>
   );
 }
@@ -255,11 +255,11 @@ export default function SearchPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-50 py-4 xs:py-6 sm:py-8 px-3 xs:px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-background-light dark:bg-background-dark py-4 xs:py-6 sm:py-8 px-3 xs:px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-8 xs:py-12 sm:py-16">
               <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-4 border-primary-orange mx-auto mb-3 xs:mb-4"></div>
-              <p className="text-sm xs:text-base text-gray-600 font-medium">
+              <p className="text-sm xs:text-base text-slate-600 dark:text-slate-400 font-medium">
                 Loading search page...
               </p>
             </div>

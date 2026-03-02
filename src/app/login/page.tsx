@@ -88,7 +88,7 @@ const Login = () => {
 
   return (
     <ProtectedRoute requireAuth={false}>
-      <div className="relative min-h-screen flex items-center justify-center bg-background-light dark:bg-slate-950 transition-colors duration-500 overflow-hidden font-outfit">
+      <div className="relative min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark transition-colors duration-500 overflow-hidden font-outfit">
         {/* Background Decorative Elements */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary-stitch/10 rounded-full blur-[120px] dark:bg-primary-stitch/5 animate-pulse"></div>

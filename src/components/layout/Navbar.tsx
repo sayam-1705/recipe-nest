@@ -24,17 +24,24 @@ export default function Navbar() {
       setUser(getUser());
     }
 
-    // Check dark mode
-    if (document.documentElement.classList.contains("dark")) {
+    // Initialize dark mode from localStorage or system preference
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.classList.add("dark");
       setIsDarkMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setIsDarkMode(false);
     }
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
   const toggleDarkMode = () => {
-    document.documentElement.classList.toggle("dark");
-    setIsDarkMode(!isDarkMode);
+    const next = !isDarkMode;
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+    setIsDarkMode(next);
   };
 
   const navLinks = [
@@ -149,17 +156,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-      
-      <style jsx>{`
-        .glass-nav {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-        }
-        :global(.dark) .glass-nav {
-          background: rgba(15, 23, 42, 0.8);
-        }
-      `}</style>
     </nav>
   );
 }
