@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RecipeNest - Create Recipe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF914D",
+                        secondary: "#FFB082",
+                        "background-light": "#F8F9FC", 
+                        "background-dark": "#0f0f11",
+                    },
+                    fontFamily: {
+                        display: ["Outfit", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'xl': '1.5rem',
+                        '2xl': '2rem',
+                        '3xl': '2.5rem',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+                        'glow': '0 0 20px rgba(255, 145, 77, 0.3)',
+                        'glow-hover': '0 0 30px rgba(255, 145, 77, 0.5)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-[#F8F9FC] transition-colors duration-300;
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(255, 145, 77, 0.1) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(100, 116, 139, 0.1) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(255, 145, 77, 0.1) 0px, transparent 50%);
+                background-attachment: fixed;
+            }
+            .dark body {
+                @apply bg-[#0f0f11];
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(255, 145, 77, 0.05) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(100, 116, 139, 0.05) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(255, 145, 77, 0.05) 0px, transparent 50%);
+            }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .glass-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #FF914D;
+            box-shadow: 0 0 0 4px rgba(255, 145, 77, 0.1);
+        }
+        .dark .glass-input:focus {
+            background: rgba(40, 40, 40, 0.8);
+            border-color: #FF914D;
+            box-shadow: 0 0 0 4px rgba(255, 145, 77, 0.15);
+        }
+        select.glass-input {
+            background-image: none;
+        }
+    </style>
+<script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="font-body text-gray-800 dark:text-gray-100 min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white">
+<header class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-orange-600 flex items-center justify-center text-white shadow-glow">
+<span class="material-symbols-outlined text-2xl">restaurant_menu</span>
+</div>
+<span class="font-display font-bold text-2xl text-gray-900 dark:text-white tracking-tight">Recipe<span class="text-primary">Nest</span></span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-gray-500 hover:text-primary font-medium transition-colors" href="#">Discover</a>
+<a class="text-gray-500 hover:text-primary font-medium transition-colors" href="#">Meal Planner</a>
+<a class="text-gray-500 hover:text-primary font-medium transition-colors" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4">
+<button aria-label="Toggle Dark Mode" class="p-2 rounded-full text-gray-400 hover:text-primary hover:bg-orange-50 dark:hover:bg-gray-800 transition-all" onclick="toggleTheme()">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<div class="flex items-center gap-3 pr-4 border-r border-gray-200 dark:border-gray-700">
+<button class="p-2 rounded-full text-gray-400 hover:text-primary hover:bg-orange-50 dark:hover:bg-gray-800 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<a class="flex items-center gap-3 pl-2 group" href="#">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">Elena C.</p>
+<p class="text-xs text-gray-500">Master Chef</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent group-hover:ring-primary transition-all">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmsG0XgBT-qZJ-TMf2EZNBK10UWrCX3TLaLKsL-dDy6n1Y5G6JSBlne-gsIpk7DepsYblN2afJovqj7NRo12pekCwddkB4e9cP-bN6YQkT5NcyWn8r628y4AQT61mAcA65PJQIWtvjNe2TlFTnktGwYiqRJ0VYz23Er14kGjn39_6f0GjrNSFtAw1RLHoLcMxNdTFkPlP42kCqRhGHqsByejVjwm_BTh1RpOVoBb1rY8K4Of4e4_Xn1MVe7WcFnjkaU68n_XYvOPHj"/>
+</div>
+</a>
+</div>
+</div>
+</header>
+<main class="flex-grow pt-28 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="fixed top-32 left-10 w-72 h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:bg-orange-900/40 dark:mix-blend-normal pointer-events-none"></div>
+<div class="fixed top-32 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:bg-purple-900/40 dark:mix-blend-normal pointer-events-none"></div>
+<div class="max-w-7xl mx-auto">
+<div class="max-w-4xl mx-auto mb-16">
+<div class="flex justify-between items-center relative">
+<div class="absolute left-0 top-1/2 w-full h-1 bg-gray-200 dark:bg-gray-700 -z-10 rounded-full -translate-y-1/2"></div>
+<div class="absolute left-0 top-1/2 w-1/4 h-1 bg-gradient-to-r from-primary to-orange-400 -z-10 rounded-full -translate-y-1/2 transition-all duration-500 shadow-[0_0_10px_rgba(255,145,77,0.5)]"></div>
+<div class="flex flex-col items-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-glow transition-transform group-hover:scale-110 border-4 border-white dark:border-gray-900 z-10 relative">
+<span class="material-symbols-outlined text-xl">check</span>
+</div>
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Basics</span>
+</div>
+<div class="flex flex-col items-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-white dark:bg-gray-800 border-4 border-primary text-primary flex items-center justify-center shadow-sm transition-transform group-hover:scale-110 z-10 relative">
+<span class="material-symbols-outlined text-xl">description</span>
+</div>
+<span class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest">Details</span>
+</div>
+<div class="flex flex-col items-center gap-3 cursor-pointer group opacity-50">
+<div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-700 text-gray-400 flex items-center justify-center transition-transform group-hover:scale-110 z-10 relative">
+<span class="material-symbols-outlined text-xl">grocery</span>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Ingredients</span>
+</div>
+<div class="flex flex-col items-center gap-3 cursor-pointer group opacity-50">
+<div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-700 text-gray-400 flex items-center justify-center transition-transform group-hover:scale-110 z-10 relative">
+<span class="material-symbols-outlined text-xl">menu_book</span>
+</div>
+<span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Instructions</span>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-3xl p-10 shadow-glass dark:shadow-glass-dark border-t border-white/50 dark:border-white/10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<div class="lg:col-span-5 flex flex-col h-full">
+<div class="sticky top-32">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-base">visibility</span>
+                                    Live Preview
+                                </h3>
+<span class="px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs font-bold flex items-center gap-2 border border-green-100 dark:border-green-900/30">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Auto-saving
+                                </span>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-500">
+<div class="relative h-80 overflow-hidden">
+<img alt="Recipe Preview" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY9dLa-IMu2lIrqjW2CK3tCwHFzhg2PK7rrdYVVGTC2mb4f9xj4a3uk1GqWJiKzHUMi9MKp4iULUDDiqUfAt7qjLbjosFKyqAM13XuP8iv-k_1AT2AMy00jrGaCS3c4qLLH1KNMTSNfZ_r-ZEI90oQW2UneUky5fe3nmU3zUL2nN95g6UfItNC5BSJ_P3QNqOGZI9VJc7pUDem-x1bVTnjGQk8Jj8iCsJl3jDhSZbJhtSMtGtTzBr_bUOOZRQEKaWcr4DlyJUsxcGm"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex items-center gap-3 text-white/90 text-sm mb-3">
+<div class="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-medium">65m</span>
+</div>
+<div class="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg">
+<span class="material-symbols-outlined text-sm">restaurant</span>
+<span class="font-medium">Main</span>
+</div>
+</div>
+<h2 class="text-3xl font-display font-bold text-white leading-tight drop-shadow-md">Glazed Salmon with Asparagus</h2>
+</div>
+<button class="absolute top-4 right-4 p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all border border-white/20">
+<span class="material-symbols-outlined text-xl">favorite_border</span>
+</button>
+</div>
+<div class="p-8">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<img alt="Chef" class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-700 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjMF9fgBcNh8J7sCKNOJOfQASDwqJjKjCWD8we_o2Btsy8TqjCRD6H9ngw9NHioDL_Inh3nrUczsfx5s3eO7i5feT--KVCZ33xau3ULVLqCHXF4Jizn7L_QEm1cwv6zp76o2dXWmSVZhVDonJjDW4N5s75BrLYJT675oM64DmjbyXzbKygT7aVY6xtXUIpC1i71kMUVS85pZN21P5MQR5wb6WJHJYMJxZxRAXyuKiObbA65am1Ec8jXZYwkRuB5A-aAl9BcLWQk6cr"/>
+<div>
+<p class="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold tracking-widest">Created by</p>
+<span class="text-base font-bold text-gray-900 dark:text-gray-100">Elena C.</span>
+</div>
+</div>
+<div class="flex text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-xl fill-current">star</span>
+<span class="material-symbols-outlined text-xl fill-current">star</span>
+<span class="material-symbols-outlined text-xl fill-current">star</span>
+<span class="material-symbols-outlined text-xl fill-current">star</span>
+<span class="material-symbols-outlined text-xl text-gray-200 dark:text-gray-700">star</span>
+</div>
+</div>
+<div class="flex gap-2 flex-wrap">
+<span class="px-4 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-xl text-xs font-bold border border-orange-100 dark:border-orange-800/30">Gluten-Free</span>
+<span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl text-xs font-bold border border-blue-100 dark:border-blue-800/30">Medium</span>
+</div>
+</div>
+</div>
+<div class="mt-8 p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-white dark:from-gray-800 dark:to-gray-800/50 border border-orange-100 dark:border-gray-700 flex items-start gap-4 shadow-sm">
+<div class="p-2.5 bg-orange-100 dark:bg-orange-900/30 rounded-xl text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-2xl">lightbulb</span>
+</div>
+<div>
+<h4 class="font-bold text-base text-gray-900 dark:text-white">Pro Tip</h4>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">High-quality photos increase recipe engagement by 40%. Use natural lighting near a window for the most appetizing results.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7 flex flex-col h-full">
+<div class="mb-12">
+<h1 class="text-4xl lg:text-5xl font-display font-bold text-gray-900 dark:text-white mb-4">Recipe Essentials</h1>
+<p class="text-gray-500 dark:text-gray-400 text-xl font-medium">Let's start with the basics. Give your dish a name that sparkles.</p>
+</div>
+<div class="space-y-10 flex-grow">
+<div class="group">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Recipe Title</label>
+<div class="relative transition-all duration-300">
+<div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">edit_square</span>
+</div>
+<input class="glass-input w-full rounded-2xl py-5 pl-14 pr-16 text-xl font-semibold text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0 focus:outline-none" placeholder="e.g. Grandma's Spicy Meatballs" type="text" value="Glazed Salmon with Asparagus"/>
+<div class="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
+<span class="text-xs font-mono font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg">26/60</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="group">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Preparation Time</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">timer</span>
+</div>
+<input class="glass-input w-full rounded-2xl py-5 pl-14 pr-5 text-gray-900 dark:text-white font-medium focus:ring-0 focus:outline-none" placeholder="Total minutes" type="text" value="65 minutes"/>
+</div>
+</div>
+<div class="group">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Servings</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">group</span>
+</div>
+<input class="glass-input w-full rounded-2xl py-5 pl-14 pr-5 text-gray-900 dark:text-white font-medium focus:ring-0 focus:outline-none" placeholder="Number of people" type="number" value="4"/>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="group relative">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Difficulty</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">signal_cellular_alt</span>
+</div>
+<select class="glass-input w-full rounded-2xl py-5 pl-14 pr-12 text-gray-900 dark:text-white font-medium focus:ring-0 focus:outline-none appearance-none cursor-pointer">
+<option>Easy</option>
+<option selected="">Medium</option>
+<option>Hard</option>
+<option>Expert</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400">expand_more</span>
+</div>
+</div>
+</div>
+<div class="group relative">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Category</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">restaurant</span>
+</div>
+<select class="glass-input w-full rounded-2xl py-5 pl-14 pr-12 text-gray-900 dark:text-white font-medium focus:ring-0 focus:outline-none appearance-none cursor-pointer">
+<option>Breakfast</option>
+<option selected="">Main Course</option>
+<option>Dessert</option>
+<option>Snack</option>
+<option>Drink</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<div class="group">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 ml-1 tracking-wide">Short Description</label>
+<div class="relative">
+<textarea class="glass-input w-full rounded-2xl p-6 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0 focus:outline-none resize-none leading-relaxed text-base min-h-[160px]" placeholder="Describe the flavors, textures, and why you love this dish..."></textarea>
+<div class="absolute bottom-4 right-5">
+<span class="text-xs font-mono font-bold text-gray-400 bg-white/50 dark:bg-black/30 px-3 py-1.5 rounded-lg">0/300</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 pt-10 border-t border-gray-200/60 dark:border-gray-700/60 flex items-center justify-between">
+<a class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white font-bold px-6 py-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-sm uppercase tracking-widest" href="#">Cancel</a>
+<div class="flex items-center gap-5">
+<button class="px-8 py-4 rounded-2xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm border border-gray-200 dark:border-gray-700 font-bold flex items-center gap-2.5">
+<span class="material-symbols-outlined text-xl">save</span>
+                                    Save Draft
+                                </button>
+<button class="relative group flex items-center gap-3 px-10 py-4 rounded-2xl bg-gradient-to-r from-primary to-orange-600 text-white shadow-glow hover:shadow-glow-hover hover:-translate-y-1 transition-all duration-300">
+<span class="font-bold tracking-widest uppercase text-sm">Next Step</span>
+<span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

@@ -78,22 +78,13 @@ const Signup = () => {
     googleSignupMutation.mutate(credential);
   };
 
-  const handleGoogleError = (error: string) => {
-    console.error("Google Sign-Up error:", error);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (validationError) setValidationError("");
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -111,17 +102,7 @@ const Signup = () => {
 
     setValidationError("");
 
-    try {
-      await signupMutation.mutateAsync({
-        name,
-        email,
-        password,
-        confirmPassword,
-      });
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("Signup failed:", error);
-    }
+    signupMutation.mutate({ name, email, password, confirmPassword });
   };
 
   const displayError =
@@ -138,155 +119,195 @@ const Signup = () => {
 
   return (
     <ProtectedRoute requireAuth={false}>
-      <div
-        className="flex justify-center items-center bg-cover bg-center bg-no-repeat min-h-screen px-4 sm:px-6 lg:px-8 relative"
-        style={{ backgroundImage: "url(/images/form-background.png)" }}
-      >
-        <div className="absolute inset-0 backdrop-blur-sm bg-black/20"></div>
+      <div className="relative min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark transition-colors duration-500 overflow-hidden font-outfit">
+        {/* Background Decorative Elements */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-primary-stitch/10 rounded-full blur-[120px] dark:bg-primary-stitch/5 animate-pulse"></div>
+          <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-orange-400/10 rounded-full blur-[100px] dark:bg-orange-600/5 animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.02)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]"></div>
+        </div>
 
-        <form
-          className="flex flex-col items-center border border-white/30 rounded-xl p-6 sm:p-8 md:p-10 backdrop-blur-lg bg-white/10 shadow-2xl animate-signup-fade-in w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl transform transition-all duration-300 relative z-10"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6 text-center animate-signup-slide-down">
-            Sign Up
-          </h1>
-          <div className="flex flex-col space-y-3 sm:space-y-4 w-full">
-            <input
-              className="bg-white/20 backdrop-blur-md px-3 sm:px-4 py-2.5 sm:py-3 border border-white/30 rounded-lg text-sm sm:text-base text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50"
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              className="bg-white/20 backdrop-blur-md px-3 sm:px-4 py-2.5 sm:py-3 border border-white/30 rounded-lg text-sm sm:text-base text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50"
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <div className="relative">
-              <input
-                className="bg-white/20 backdrop-blur-md px-3 sm:px-4 py-2.5 sm:py-3 pr-10 sm:pr-12 border border-white/30 rounded-lg text-sm sm:text-base text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50 w-full"
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors duration-300 p-1"
-              >
-                {showPassword ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="18px"
-                    viewBox="0 -960 960 960"
-                    width="18px"
-                    fill="currentColor"
-                    className="sm:h-5 sm:w-5"
-                  >
-                    <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="18px"
-                    viewBox="0 -960 960 960"
-                    width="18px"
-                    fill="currentColor"
-                    className="sm:h-5 sm:w-5"
-                  >
-                    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
-                  </svg>
-                )}
-              </button>
+        <div className="relative z-10 w-full max-w-lg px-4 sm:px-6 py-8 sm:py-12">
+          {/* Brand Logo/Header */}
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-stitch opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-stitch"></span>
+              </span>
+              Start Cooking
             </div>
-            <div className="relative">
-              <input
-                className="bg-white/20 backdrop-blur-md px-3 sm:px-4 py-2.5 sm:py-3 pr-10 sm:pr-12 border border-white/30 rounded-lg text-sm sm:text-base text-white placeholder-white/70 transition-all duration-300 focus:border-white/60 focus:bg-white/25 outline-none focus:ring-0 focus:ring-white/20 hover:border-white/50 w-full"
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                required
-              />
-              <button
-                type="button"
-                onClick={toggleConfirmPasswordVisibility}
-                className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors duration-300 p-1"
-              >
-                {showConfirmPassword ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="18px"
-                    viewBox="0 -960 960 960"
-                    width="18px"
-                    fill="currentColor"
-                    className="sm:h-5 sm:w-5"
-                  >
-                    <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="18px"
-                    viewBox="0 -960 960 960"
-                    width="18px"
-                    fill="currentColor"
-                    className="sm:h-5 sm:w-5"
-                  >
-                    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
-                  </svg>
-                )}
-              </button>
-            </div>
-            {displayError && (
-              <p className="text-red-500 text-xs sm:text-sm mt-2 text-center px-2">
-                {displayError}
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={signupMutation.isPending}
-              className="bg-gradient-to-r bg-orange-500 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:scale-105 active:scale-95 outline-none focus:ring-0 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent mt-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {signupMutation.isPending ? "Creating Account..." : "Sign Up"}
-            </button>
-            
-            <div className="flex items-center gap-3 w-full my-2">
-              <div className="flex-1 h-px bg-white/30"></div>
-              <span className="text-white/70 text-xs sm:text-sm">OR</span>
-              <div className="flex-1 h-px bg-white/30"></div>
-            </div>
-
-            <div className="w-full">
-              <GoogleSignInButton
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                text="signup_with"
-              />
-            </div>
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+              Create Your <span className="text-gradient">Account</span>
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 font-medium max-w-sm mx-auto">
+              Join our community of gourmet enthusiasts and share your culinary
+              masterpieces
+            </p>
           </div>
-          <p className="text-white/80 mt-4 sm:mt-6 text-center text-sm sm:text-base">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="text-orange-300 font-medium hover:text-orange-200 transition-colors duration-300 no-underline hover:underline"
-            >
-              Log in
-            </a>
-          </p>
-        </form>
+
+          {/* Form Container */}
+          <div className="glass-panel rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] p-5 xs:p-6 sm:p-8 md:p-10 shadow-2xl shadow-primary-stitch/5 border-white/40 dark:border-white/5">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+                    Your Name
+                  </label>
+                  <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
+                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
+                      person
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Chef G. Ramsay"
+                      className="w-full bg-transparent border-none p-0 focus:ring-0 text-base font-medium text-slate-900 dark:text-white placeholder-slate-400"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+                    Email Address
+                  </label>
+                  <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
+                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
+                      mail
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="chef@nest.com"
+                      className="w-full bg-transparent border-none p-0 focus:ring-0 text-base font-medium text-slate-900 dark:text-white placeholder-slate-400"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+                    Password
+                  </label>
+                  <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
+                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
+                      lock
+                    </span>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="Strong pass"
+                      className="w-full bg-transparent border-none p-0 focus:ring-0 text-base font-medium text-slate-900 dark:text-white placeholder-slate-400"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="ml-2 text-slate-400 hover:text-primary-stitch transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPassword ? "visibility_off" : "visibility"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
+                    Confirm Password
+                  </label>
+                  <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
+                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
+                      verified_user
+                    </span>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      placeholder="Repeat pass"
+                      className="w-full bg-transparent border-none p-0 focus:ring-0 text-base font-medium text-slate-900 dark:text-white placeholder-slate-400"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={toggleConfirmPasswordVisibility}
+                      className="ml-2 text-slate-400 hover:text-primary-stitch transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showConfirmPassword ? "visibility_off" : "visibility"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {displayError && (
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-bold animate-shake">
+                  <span className="material-symbols-outlined text-lg">
+                    error
+                  </span>
+                  {displayError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={signupMutation.isPending}
+                className="w-full py-4 rounded-2xl bg-slate-900 dark:bg-primary-stitch text-white font-bold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-stitch/20 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 mt-4"
+              >
+                {signupMutation.isPending ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    Create Account
+                    <span className="material-symbols-outlined text-xl">
+                      how_to_reg
+                    </span>
+                  </>
+                )}
+              </button>
+
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-200 dark:border-white/10"></div>
+                </div>
+                <div className="relative flex justify-center text-xs font-bold uppercase tracking-wider">
+                  <span className="bg-transparent px-4 text-slate-400 bg-white dark:bg-slate-900">
+                    Or join with
+                  </span>
+                </div>
+              </div>
+
+              <div className="w-full">
+                <GoogleSignInButton
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => {}}
+                  text="signup_with"
+                />
+              </div>
+            </form>
+
+            <p className="mt-8 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="text-primary-stitch font-bold hover:underline transition-all"
+              >
+                Sign in instead
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </ProtectedRoute>
   );

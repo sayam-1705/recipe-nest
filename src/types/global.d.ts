@@ -163,6 +163,7 @@ declare global {
     value: string;
     onChange: (value: string) => void;
     options: SelectOption[] | string[];
+    icon?: string;
   }
 
   interface InputProps {
@@ -175,9 +176,12 @@ declare global {
     name?: string;
     value: string | number;
     onChange: (value: string | number) => void;
-    type?: "text" | "number" | "email" | "password" | "url" | "tel";
+    type?: "text" | "number" | "email" | "password" | "url" | "tel" | "textarea";
     min?: number;
     max?: number;
+    icon?: string;
+    charCount?: number;
+    maxChars?: number;
   }
 
   interface ErrorMessageProps {
@@ -231,16 +235,6 @@ declare global {
     children: React.ReactNode;
     redirectTo?: string;
     requireAuth?: boolean;
-  }
-
-  interface MenuCarouselProps {
-    totalCards?: number;
-    cardWidth?: number;
-    recipes: Recipe[];
-  }
-
-  interface MenuProps {
-    initialRecipes?: Recipe[];
   }
 
   interface NutritionChartProps {

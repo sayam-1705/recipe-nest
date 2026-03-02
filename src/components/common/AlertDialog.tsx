@@ -40,18 +40,18 @@ const AlertDialog = ({
   const typeConfig = {
     success: {
       icon: "✅",
-      iconBg: "bg-green-100",
+      iconBg: "bg-green-100 dark:bg-green-900/30",
       btnStyle:
         "from-green-500 to-green-600 hover:from-green-600 hover:to-green-700",
     },
     error: {
       icon: "❌",
-      iconBg: "bg-red-100",
+      iconBg: "bg-red-100 dark:bg-red-900/30",
       btnStyle: "from-red-500 to-red-600 hover:from-red-600 hover:to-red-700",
     },
     info: {
       icon: "ℹ️",
-      iconBg: "bg-blue-100",
+      iconBg: "bg-blue-100 dark:bg-blue-900/30",
       btnStyle:
         "from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700",
     },
@@ -66,7 +66,7 @@ const AlertDialog = ({
         onClick={onClose}
       />
 
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full">
+      <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full">
         <div className="p-6 sm:p-8">
           <div className="flex items-start gap-4">
             <div
@@ -75,15 +75,15 @@ const AlertDialog = ({
               {config.icon}
             </div>
             <div className="flex-1">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                 {title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-600">{message}</p>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400">{message}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-50 px-6 py-4 sm:px-8 sm:py-5 flex justify-end">
+        <div className="bg-gray-50 dark:bg-slate-800/50 px-6 py-4 sm:px-8 sm:py-5 flex justify-end rounded-b-2xl">
           <button
             onClick={onClose}
             className={`w-full sm:w-auto px-8 py-3 text-white rounded-lg font-medium bg-gradient-to-r ${config.btnStyle} transition-all shadow-lg hover:shadow-xl active:scale-95`}

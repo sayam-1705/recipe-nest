@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,6 +9,15 @@ export default {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+        DEFAULT: "1rem",
+        xl: "1.5rem",
+        "2xl": "2rem",
+        "3xl": "2.5rem",
+      },
       screens: {
         xs: "320px",
         "2xs": "375px",
@@ -16,6 +26,8 @@ export default {
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],
+        display: ["var(--font-playfair)", "serif"],
+        sans: ["var(--font-outfit)", "sans-serif"],
       },
       colors: {
         primary: {
@@ -23,18 +35,32 @@ export default {
           "orange-light": "rgba(255, 112, 9, 0.7)",
           "orange-bg": "rgba(255, 112, 9, 0.15)",
           "orange-hover": "#e6630a",
+          DEFAULT: "#F97316",
         },
         secondary: {
           "green-light": "#184F4F",
           "green-medium": "#0E4343",
           "green-dark": "#003B36",
           "green-darker": "#00312d",
+          DEFAULT: "#EA580C",
         },
+        "primary-stitch": "#FF914D",
         neutral: {
           cream: "#FFEDE0",
           "cream-light": "#FFE0CC",
           white: "#FFFFFF",
         },
+        "background-light": "#FAFAF9",
+        "background-dark": "#0F172A",
+        "surface-light": "#FFFFFF",
+        "surface-dark": "#1E293B",
+        "accent-neon": "#FF8C00",
+      },
+      boxShadow: {
+        glass: "0 8px 32px 0 rgba(31, 38, 135, 0.07)",
+        "glass-dark": "0 8px 32px 0 rgba(0, 0, 0, 0.5)",
+        glow: "0 0 40px -10px rgba(249, 115, 22, 0.5)",
+        "glow-neon": "0 0 20px -5px rgba(255, 140, 0, 0.7)",
       },
       animation: {
         "fade-in-up": "fadeInUp 0.6s ease-out forwards",

@@ -1,12 +1,14 @@
 "use client";
 
-import RecipeForm from "@/components/recipeForm/RecipeForm";
+import RecipeForm from "@/components/recipes/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import AlertDialog from "@/components/common/AlertDialog";
 import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUser, getAuthToken } from "@/lib/auth";
+import { RECIPE_FORM_OPTIONS } from "@/lib/constants";
+import { fileToBase64 } from "@/lib/imageUtils";
 
 const UpdateRecipe = ({
   params,
@@ -73,57 +75,20 @@ const UpdateRecipe = ({
     },
   });
 
-  const staticFormData = {
-    dietaryTypes: [
-      "Vegetarian",
-      "Non-Vegetarian",
-      "Vegan",
-      "Gluten-Free",
-      "Dairy-Free",
-    ],
-    types: [
-      "Appetizer",
-      "Main Course",
-      "Dessert",
-      "Snack",
-      "Beverage",
-      "Salad",
-      "Soup",
-    ],
-    meals: ["Breakfast", "Lunch", "Dinner", "Snack", "Brunch"],
-    difficulties: ["Easy", "Medium", "Hard", "Expert"],
-    seasons: ["Spring", "Summer", "Fall", "Winter", "All Seasons"],
-    occasions: [
-      "Everyday",
-      "Party",
-      "Holiday",
-      "Special",
-      "Quick Meal",
-      "Date Night",
-      "Family Gathering",
-    ],
-  };
+  const staticFormData = RECIPE_FORM_OPTIONS;
 
   const handleUpdateRecipe = useCallback(
     async (formData: RecipeFormData) => {
       try {
         let imageData = recipe?.image;
 
-        if (formData.image && formData.image instanceof File) {
-          const arrayBuffer = await formData.image.arrayBuffer();
-          const uint8Array = new Uint8Array(arrayBuffer);
-          const binaryString = uint8Array.reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-          );
-          const base64String = btoa(binaryString);
-          const mimeType = formData.image.type || "image/png";
-          imageData = `data:${mimeType};base64,${base64String}`;
-        } else if (formData.image && typeof formData.image === "string") {
+        if (formData.image instanceof File) {
+          imageData = await fileToBase64(formData.image);
+        } else if (typeof formData.image === "string") {
           imageData = formData.image;
         }
 
-        const updateData: UpdateRecipeData = {
+        await updateRecipeMutation.mutateAsync({
           name: formData.name,
           type: formData.type,
           meal: formData.meal,
@@ -136,14 +101,9 @@ const UpdateRecipe = ({
           ingredients: formData.ingredients,
           instructions: formData.instructions,
           image: imageData,
-        };
-
-        await updateRecipeMutation.mutateAsync(updateData);
-      } catch (error) {
-        console.error("Error updating recipe:", error);
-        setErrorMessage(
-          "An error occurred while updating the recipe. Please try again."
-        );
+        });
+      } catch {
+        setErrorMessage("An error occurred while updating the recipe. Please try again.");
         setShowErrorAlert(true);
       }
     },
