@@ -56,13 +56,15 @@ export default function Navbar() {
     }`}>
       <div className="glass-nav mx-auto max-w-7xl px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between rounded-full mt-2 md:mt-4 border border-white/20 shadow-glass">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-orange-500/20">
-            <span className="material-symbols-outlined text-white text-lg sm:text-xl md:text-2xl">restaurant_menu</span>
-          </div>
-          <span className="font-display font-bold text-base sm:text-xl md:text-2xl tracking-tight text-slate-900 dark:text-white">
-            RecipeNest
-          </span>
+        <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+          <Image
+            src="/logos/logo-with-text-name.png"
+            alt="RecipeNest"
+            width={220}
+            height={64}
+            priority
+            className="h-9 sm:h-10 md:h-12 w-auto"
+          />
         </Link>
 
         {/* Desktop Navigation */}

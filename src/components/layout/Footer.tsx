@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -8,13 +9,14 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12">
         {/* Brand */}
         <div className="col-span-1 md:col-span-2 space-y-6 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-orange-500/20">
-              <span className="material-symbols-outlined text-white text-2xl">restaurant_menu</span>
-            </div>
-            <span className="font-display font-bold text-2xl sm:text-3xl tracking-tight text-slate-900 dark:text-white">
-              RecipeNest
-            </span>
+          <div className="flex items-center justify-center md:justify-start">
+            <Image
+              src="/logos/logo-with-text-name.png"
+              alt="RecipeNest"
+              width={260}
+              height={80}
+              className="h-12 sm:h-14 w-auto"
+            />
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-md mx-auto md:mx-0">
             Elevate your culinary journey with premium recipes, seasonal inspirations, and professional chef insights.

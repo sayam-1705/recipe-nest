@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import HomeHero from "./home/HomeHero";
@@ -83,8 +84,16 @@ export default function ClientHome() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
         <div className="text-center">
+          <Image
+            src="/logos/logo-with-text-name.png"
+            alt="RecipeNest"
+            width={220}
+            height={64}
+            priority
+            className="h-10 w-auto mx-auto mb-4"
+          />
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400 font-medium">Loading RecipeNest...</p>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">Loading...</p>
         </div>
       </div>
     );
