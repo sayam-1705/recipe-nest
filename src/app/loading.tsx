@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Loading = () => {
@@ -131,9 +132,14 @@ const Loading = () => {
         )}
 
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-2 animate-fade-in leading-tight">
-            RecipeNest
-          </h1>
+          <Image
+            src="/logos/logo-with-text-name.png"
+            alt="RecipeNest"
+            width={320}
+            height={96}
+            priority
+            className="h-12 sm:h-14 md:h-16 w-auto mx-auto mb-2 animate-fade-in"
+          />
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 font-medium bg-gradient-to-r from-slate-600 via-primary-orange to-slate-600 dark:from-slate-300 dark:via-primary-orange dark:to-slate-300 bg-clip-text text-transparent animate-shimmer px-2">
             {loadingText}
           </p>

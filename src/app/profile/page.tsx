@@ -4,6 +4,7 @@ import RecipeCard from "@/components/recipes/RecipeCard";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import AlertDialog from "@/components/common/AlertDialog";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -223,8 +224,17 @@ const Profile = () => {
             </button>
             
             <div className="mt-16 space-y-2">
-              <p className="text-[10px] text-slate-400 font-black tracking-[0.3em] uppercase">
-                RecipeNest © 2024 Premium Culinary Network
+              <div className="flex justify-center">
+                <Image
+                  src="/logos/logo-with-text-name.png"
+                  alt="RecipeNest"
+                  width={180}
+                  height={52}
+                  className="h-8 w-auto opacity-70"
+                />
+              </div>
+              <p className="text-[10px] text-slate-400 font-black tracking-[0.2em] uppercase">
+                © 2024 Premium Culinary Network
               </p>
               <div className="flex justify-center gap-6 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                 <span className="hover:text-primary-stitch cursor-pointer transition-colors">Privacy</span>

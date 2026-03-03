@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import { Poppins, Outfit, Playfair_Display } from "next/font/google";
+import {
+  Poppins,
+  Outfit,
+  Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
+import "material-symbols/outlined.css";
 import QueryProvider from "@/providers/QueryProvider";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 
@@ -106,7 +111,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#f97316" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}` }} />
       </head>
       <body
