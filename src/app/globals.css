@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/80 shadow-glass;
+  }
+  .dark .glass-panel {
+    @apply bg-slate-900/70 border-white/10 shadow-glass-dark;
+  }
+  .glass-card {
+    @apply bg-white/50 backdrop-blur-lg border border-white/60 shadow-glass transition-all duration-300;
+  }
+  .dark .glass-card {
+    @apply bg-slate-800/40 border-white/5 shadow-glass-dark;
+  }
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-xl border-b border-white/40 sticky top-0 z-50;
+  }
+  .dark .glass-nav {
+    @apply bg-slate-900/80 border-b border-white/5;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-stitch to-orange-600;
+  }
+  .dark .text-gradient {
+    @apply bg-gradient-to-r from-orange-400 to-rose-500;
+  }
+  .glass-input {
+    @apply bg-white/60 backdrop-blur-md border border-slate-200 shadow-sm transition-all duration-300;
+  }
+  .glass-input:focus {
+    @apply border-primary-stitch/50 shadow-[0_0_15px_rgba(255,145,77,0.15)];
+  }
+  .dark .glass-input {
+    @apply bg-slate-800/50 border-white/10;
+  }
+  .dark .glass-input:focus {
+    @apply border-primary-stitch/40 shadow-[0_0_15px_rgba(255,145,77,0.1)];
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -9,6 +56,10 @@
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Loading = () => {
@@ -61,7 +62,7 @@ const Loading = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-cream via-primary-orange-bg to-neutral-cream-light flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background-light via-orange-50 to-background-light dark:from-background-dark dark:via-slate-900 dark:to-background-dark flex items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(8)].map((_, i) => (
           <div
@@ -96,13 +97,13 @@ const Loading = () => {
       <div className="relative z-10 text-center max-w-xs sm:max-w-md lg:max-w-lg mx-auto px-4 sm:px-6">
         <div className="relative mb-6 sm:mb-8">
           <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-36 lg:h-36 mx-auto relative">
-            <div className="w-20 h-16 sm:w-28 sm:h-20 lg:w-32 lg:h-24 bg-secondary-green-dark rounded-b-full absolute bottom-0 left-1/2 transform -translate-x-1/2 shadow-lg">
-              <div className="w-16 h-3 sm:w-24 sm:h-4 lg:w-28 lg:h-5 bg-secondary-green-medium rounded-full absolute -top-1.5 sm:-top-2 lg:-top-2.5 left-1/2 transform -translate-x-1/2"></div>
-              <div className="w-2 h-4 sm:w-3 sm:h-6 lg:w-4 lg:h-7 bg-secondary-green-medium rounded-full absolute -left-1 top-1 sm:top-2"></div>
-              <div className="w-2 h-4 sm:w-3 sm:h-6 lg:w-4 lg:h-7 bg-secondary-green-medium rounded-full absolute -right-1 top-1 sm:top-2"></div>
+            <div className="w-20 h-16 sm:w-28 sm:h-20 lg:w-32 lg:h-24 bg-slate-700 dark:bg-slate-600 rounded-b-full absolute bottom-0 left-1/2 transform -translate-x-1/2 shadow-lg">
+              <div className="w-16 h-3 sm:w-24 sm:h-4 lg:w-28 lg:h-5 bg-slate-600 dark:bg-slate-500 rounded-full absolute -top-1.5 sm:-top-2 lg:-top-2.5 left-1/2 transform -translate-x-1/2"></div>
+              <div className="w-2 h-4 sm:w-3 sm:h-6 lg:w-4 lg:h-7 bg-slate-600 dark:bg-slate-500 rounded-full absolute -left-1 top-1 sm:top-2"></div>
+              <div className="w-2 h-4 sm:w-3 sm:h-6 lg:w-4 lg:h-7 bg-slate-600 dark:bg-slate-500 rounded-full absolute -right-1 top-1 sm:top-2"></div>
             </div>
 
-            <div className="w-18 h-6 sm:w-24 sm:h-8 lg:w-28 lg:h-10 bg-secondary-green-light rounded-full absolute top-3 sm:top-4 lg:top-5 left-1/2 transform -translate-x-1/2 shadow-md animate-subtle-pulse">
+            <div className="w-18 h-6 sm:w-24 sm:h-8 lg:w-28 lg:h-10 bg-slate-500 dark:bg-slate-400 rounded-full absolute top-3 sm:top-4 lg:top-5 left-1/2 transform -translate-x-1/2 shadow-md animate-subtle-pulse">
               <div className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-primary-orange rounded-full absolute -top-1.5 sm:-top-2 lg:-top-2.5 left-1/2 transform -translate-x-1/2"></div>
             </div>
 
@@ -131,10 +132,15 @@ const Loading = () => {
         )}
 
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary-green-dark mb-2 animate-fade-in leading-tight">
-            RecipeNest
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-secondary-green-medium font-medium bg-gradient-to-r from-secondary-green-medium via-primary-orange to-secondary-green-medium bg-clip-text text-transparent animate-shimmer px-2">
+          <Image
+            src="/logos/logo-with-text-name.png"
+            alt="RecipeNest"
+            width={320}
+            height={96}
+            priority
+            className="h-12 sm:h-14 md:h-16 w-auto mx-auto mb-2 animate-fade-in"
+          />
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 font-medium bg-gradient-to-r from-slate-600 via-primary-orange to-slate-600 dark:from-slate-300 dark:via-primary-orange dark:to-slate-300 bg-clip-text text-transparent animate-shimmer px-2">
             {loadingText}
           </p>
         </div>
@@ -169,7 +175,7 @@ const Loading = () => {
           </div>
         </div>
 
-        <div className="text-xs sm:text-sm md:text-base text-secondary-green-medium/80 animate-fade-in px-2">
+        <div className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-400 animate-fade-in px-2">
           <p className="italic leading-relaxed">
             💡 Tip: Fresh ingredients make all the difference!
           </p>

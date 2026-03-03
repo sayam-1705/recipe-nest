@@ -10,10 +10,7 @@ export async function POST(req: NextRequest) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email and password are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
     const user = await User.findOne({ email });
@@ -21,20 +18,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Check if user is using Google auth
-    if (user.authProvider === 'google') {
-      return NextResponse.json(
-        { error: "Please use Google Sign-In for this account" },
-        { status: 400 }
-      );
+    if (user.authProvider === "google") {
+      return NextResponse.json({ error: "Please use Google Sign-In for this account" }, { status: 400 });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
     const token = sign(

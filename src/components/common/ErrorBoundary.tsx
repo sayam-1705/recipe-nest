@@ -28,6 +28,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             title="Something went wrong"
             message={message}
             onRetry={this.handleRetry}
+            fullPage
           />
         )
       );

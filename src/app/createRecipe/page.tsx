@@ -1,10 +1,12 @@
 "use client";
 
-import RecipeForm from "@/components/recipeForm/RecipeForm";
+import RecipeForm from "@/components/recipes/RecipeForm";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAuthToken } from "@/lib/auth";
+import { RECIPE_FORM_OPTIONS } from "@/lib/constants";
+import { fileToBase64 } from "@/lib/imageUtils";
 
 const CreateRecipe = () => {
   const router = useRouter();
@@ -34,79 +36,33 @@ const CreateRecipe = () => {
     },
   });
 
-  const staticFormData = {
-    dietaryTypes: [
-      "Vegetarian",
-      "Non-Vegetarian",
-      "Vegan",
-      "Gluten-Free",
-      "Dairy-Free",
-    ],
-    types: [
-      "Appetizer",
-      "Main Course",
-      "Dessert",
-      "Snack",
-      "Beverage",
-      "Salad",
-      "Soup",
-    ],
-    meals: ["Breakfast", "Lunch", "Dinner", "Snack", "Brunch"],
-    difficulties: ["Easy", "Medium", "Hard", "Expert"],
-    seasons: ["Spring", "Summer", "Fall", "Winter", "All Seasons"],
-    occasions: [
-      "Everyday",
-      "Party",
-      "Holiday",
-      "Special",
-      "Quick Meal",
-      "Date Night",
-      "Family Gathering",
-    ],
-  };
-
   const handleCreateRecipe = async (formData: RecipeFormData) => {
-    try {
-      let imageData = "";
-
-      if (formData.image && formData.image instanceof File) {
-        const arrayBuffer = await formData.image.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-        const binaryString = uint8Array.reduce(
-          (data, byte) => data + String.fromCharCode(byte),
-          ""
-        );
-        const base64String = btoa(binaryString);
-        const mimeType = formData.image.type || "image/png";
-        imageData = `data:${mimeType};base64,${base64String}`;
-      }
-
-      const recipeData: CreateRecipeData = {
-        name: formData.name,
-        type: formData.type,
-        meal: formData.meal,
-        time: String(formData.time),
-        difficulty: formData.difficulty,
-        season: formData.season,
-        occasion: formData.occasion,
-        dietaryType: formData.dietaryType,
-        servings: Number(formData.servings),
-        ingredients: formData.ingredients,
-        instructions: formData.instructions,
-        image: imageData,
-      };
-
-      await createRecipeMutation.mutateAsync(recipeData);
-    } catch (error) {
-      console.error("Error creating recipe:", error);
+    let imageData = "";
+    if (formData.image instanceof File) {
+      imageData = await fileToBase64(formData.image);
     }
+
+    await createRecipeMutation.mutateAsync({
+      name: formData.name,
+      type: formData.type,
+      meal: formData.meal,
+      time: String(formData.time),
+      difficulty: formData.difficulty,
+      season: formData.season,
+      occasion: formData.occasion,
+      dietaryType: formData.dietaryType,
+      servings: Number(formData.servings),
+      ingredients: formData.ingredients,
+      instructions: formData.instructions,
+      image: imageData,
+    });
   };
 
   return (
     <ProtectedRoute>
       <div>
         <RecipeForm
-          staticData={staticFormData}
+          staticData={RECIPE_FORM_OPTIONS}
           onSubmit={handleCreateRecipe}
           submitButtonText="Create Recipe"
           isSubmitting={createRecipeMutation.isPending}

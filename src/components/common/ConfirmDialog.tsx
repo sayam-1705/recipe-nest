@@ -39,18 +39,18 @@ const ConfirmDialog = ({
   const typeConfig = {
     danger: {
       icon: "⚠️",
-      iconBg: "bg-red-100",
+      iconBg: "bg-red-100 dark:bg-red-900/30",
       btnStyle: "from-red-500 to-red-600 hover:from-red-600 hover:to-red-700",
     },
     warning: {
       icon: "⚡",
-      iconBg: "bg-yellow-100",
+      iconBg: "bg-yellow-100 dark:bg-yellow-900/30",
       btnStyle:
         "from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700",
     },
     info: {
       icon: "ℹ️",
-      iconBg: "bg-blue-100",
+      iconBg: "bg-blue-100 dark:bg-blue-900/30",
       btnStyle:
         "from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700",
     },
@@ -65,7 +65,7 @@ const ConfirmDialog = ({
         onClick={onCancel}
       />
 
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full">
+      <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full">
         <div className="p-6 sm:p-8">
           <div className="flex items-start gap-4">
             <div
@@ -74,18 +74,18 @@ const ConfirmDialog = ({
               {config.icon}
             </div>
             <div className="flex-1">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                 {title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-600">{message}</p>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400">{message}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-50 px-6 py-4 sm:px-8 sm:py-5 flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 sm:justify-end">
+        <div className="bg-gray-50 dark:bg-slate-800/50 px-6 py-4 sm:px-8 sm:py-5 flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 sm:justify-end rounded-b-2xl">
           <button
             onClick={onCancel}
-            className="w-full sm:w-auto px-6 py-3 text-gray-700 bg-white border-2 border-gray-300 rounded-lg font-medium hover:bg-gray-50 hover:border-gray-400 transition-all active:scale-95"
+            className="w-full sm:w-auto px-6 py-3 text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border-2 border-gray-300 dark:border-slate-600 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 hover:border-gray-400 dark:hover:border-slate-500 transition-all active:scale-95"
           >
             {cancelText}
           </button>
