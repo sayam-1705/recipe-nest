@@ -5,7 +5,6 @@ import {
   Playfair_Display,
 } from "next/font/google";
 import "./globals.css";
-import "material-symbols/outlined.css";
 import QueryProvider from "@/providers/QueryProvider";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 

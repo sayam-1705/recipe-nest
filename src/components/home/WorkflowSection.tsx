@@ -1,26 +1,28 @@
 "use client";
 
+import { PenTool, FlaskConical, Share2 } from "lucide-react";
+
 export default function WorkflowSection() {
   const steps = [
     {
       id: 1,
       title: "Design",
       description: "Conceptualize your dish with our AI plating assistant. Mock up textures and colors before you even touch a pan.",
-      icon: "draw",
+      icon: PenTool,
       isPrimary: false
     },
     {
       id: 2,
       title: "Innovate",
       description: "Refine flavor pairings using our proprietary ingredient synergy engine. Discover unexpected chemical matches.",
-      icon: "biotech",
+      icon: FlaskConical,
       isPrimary: true
     },
     {
       id: 3,
       title: "Showcase",
       description: "Share your creation with a worldwide network of chefs. Get peer-reviewed feedback and earn innovation badges.",
-      icon: "share",
+      icon: Share2,
       isPrimary: false
     }
   ];
@@ -45,7 +47,7 @@ export default function WorkflowSection() {
               <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-5 sm:mb-7 md:mb-10 lg:mb-12 shadow-xl shrink-0 transition-colors duration-500 ${
                 step.isPrimary ? "bg-primary text-white" : "bg-slate-100 dark:bg-slate-800 group-hover:bg-primary group-hover:text-white"
               }`}>
-                <span className="material-symbols-outlined text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{step.icon}</span>
+                <step.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
               </div>
               <h3 className="font-display font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mb-3 sm:mb-4 md:mb-6">
                 {step.id}. {step.title}

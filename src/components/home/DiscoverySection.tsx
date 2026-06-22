@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight, Clock, ArrowRight } from "lucide-react";
 
 interface DiscoverySectionProps {
   recipes: Recipe[];
@@ -23,10 +24,10 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
           </div>
           <div className="flex gap-4">
             <button className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all">
-              <span className="material-symbols-outlined text-2xl md:text-3xl">chevron_left</span>
+              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
             </button>
             <button className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all">
-              <span className="material-symbols-outlined text-2xl md:text-3xl">chevron_right</span>
+              <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
             </button>
           </div>
         </div>
@@ -58,14 +59,14 @@ export default function DiscoverySection({ recipes }: DiscoverySectionProps) {
                   </p>
                   <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-700">
                     <span className="flex items-center gap-2 text-xs md:text-sm font-bold text-slate-500 uppercase tracking-tighter">
-                      <span className="material-symbols-outlined text-primary text-xl">schedule</span> 
+                      <Clock className="w-5 h-5 text-primary" /> 
                       {recipe.time}
                     </span>
                     <Link 
                       href={`/showRecipe/${recipe._id}`}
                       className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-orange-500/20"
                     >
-                      <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                      <ArrowRight className="w-5 h-5" />
                     </Link>
                   </div>
                 </div>

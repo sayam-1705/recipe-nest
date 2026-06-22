@@ -6,6 +6,7 @@ import { setAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import { User, Mail, Lock, Eye, EyeOff, ShieldCheck, AlertCircle, UserPlus } from "lucide-react";
 
 const Signup = () => {
   const router = useRouter();
@@ -155,9 +156,7 @@ const Signup = () => {
                     Your Name
                   </label>
                   <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
-                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
-                      person
-                    </span>
+                    <User className="w-5 h-5 text-slate-400 mr-3" />
                     <input
                       type="text"
                       name="name"
@@ -175,9 +174,7 @@ const Signup = () => {
                     Email Address
                   </label>
                   <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
-                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
-                      mail
-                    </span>
+                    <Mail className="w-5 h-5 text-slate-400 mr-3" />
                     <input
                       type="email"
                       name="email"
@@ -197,9 +194,7 @@ const Signup = () => {
                     Password
                   </label>
                   <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
-                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
-                      lock
-                    </span>
+                    <Lock className="w-5 h-5 text-slate-400 mr-3" />
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
@@ -214,9 +209,7 @@ const Signup = () => {
                       onClick={togglePasswordVisibility}
                       className="ml-2 text-slate-400 hover:text-primary-stitch transition-colors"
                     >
-                      <span className="material-symbols-outlined text-xl">
-                        {showPassword ? "visibility_off" : "visibility"}
-                      </span>
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -226,9 +219,7 @@ const Signup = () => {
                     Confirm Password
                   </label>
                   <div className="relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-slate-200 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
-                    <span className="material-symbols-outlined text-slate-400 text-xl mr-3">
-                      verified_user
-                    </span>
+                    <ShieldCheck className="w-5 h-5 text-slate-400 mr-3" />
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
@@ -243,9 +234,7 @@ const Signup = () => {
                       onClick={toggleConfirmPasswordVisibility}
                       className="ml-2 text-slate-400 hover:text-primary-stitch transition-colors"
                     >
-                      <span className="material-symbols-outlined text-xl">
-                        {showConfirmPassword ? "visibility_off" : "visibility"}
-                      </span>
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -253,9 +242,7 @@ const Signup = () => {
 
               {displayError && (
                 <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-bold animate-shake">
-                  <span className="material-symbols-outlined text-lg">
-                    error
-                  </span>
+                  <AlertCircle className="w-[18px] h-[18px]" />
                   {displayError}
                 </div>
               )}
@@ -270,9 +257,7 @@ const Signup = () => {
                 ) : (
                   <>
                     Create Account
-                    <span className="material-symbols-outlined text-xl">
-                      how_to_reg
-                    </span>
+                    <UserPlus className="w-5 h-5" />
                   </>
                 )}
               </button>
