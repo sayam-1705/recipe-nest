@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ExtendedInputProps extends InputProps {
-  icon?: string;
+  icon?: React.ComponentType<{ className?: string }> | string;
   charCount?: number;
   maxChars?: number;
 }
@@ -43,9 +43,13 @@ const Input: React.FC<ExtendedInputProps> = ({
       <div className="relative">
         {icon && (
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <span className="material-symbols-outlined text-gray-400 group-focus-within:text-primary-stitch transition-colors text-xl">
-              {icon}
-            </span>
+            {typeof icon === "string" ? (
+              <span className="text-gray-400 text-xl">{icon}</span>
+            ) : (
+              React.createElement(icon as React.ComponentType<{ className?: string }>, {
+                className: "w-5 h-5 text-gray-400 group-focus-within:text-primary-stitch transition-colors",
+              })
+            )}
           </div>
         )}
         

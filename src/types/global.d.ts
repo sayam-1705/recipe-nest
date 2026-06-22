@@ -163,7 +163,7 @@ declare global {
     value: string;
     onChange: (value: string) => void;
     options: SelectOption[] | string[];
-    icon?: string;
+    icon?: React.ComponentType<{ className?: string }> | string;
   }
 
   interface InputProps {
@@ -179,7 +179,7 @@ declare global {
     type?: "text" | "number" | "email" | "password" | "url" | "tel" | "textarea";
     min?: number;
     max?: number;
-    icon?: string;
+    icon?: React.ComponentType<{ className?: string }> | string;
     charCount?: number;
     maxChars?: number;
   }

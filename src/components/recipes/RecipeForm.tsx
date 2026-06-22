@@ -5,6 +5,25 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import StepProgress from "./StepProgress";
 import RecipePreview from "./RecipePreview";
+import {
+  FileText,
+  Utensils,
+  Leaf,
+  Clock,
+  ClipboardList,
+  Sun,
+  Sparkles,
+  Users,
+  Plus,
+  Trash2,
+  Camera,
+  AlertCircle,
+  ArrowRight,
+  Eye,
+  Lightbulb,
+  ChevronDown,
+  BookOpen
+} from "lucide-react";
 
 const RecipeForm: React.FC<RecipeFormProps> = ({
   initialData,
@@ -55,54 +74,23 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     }
   }, [formData, onFormDataChange]);
 
-  const validateStep = (step: number) => {
-    if (step === 1) {
-      if (!formData.name || !formData.dietaryType || !formData.type || !formData.meal) {
-        return "Please complete all fields in Recipe Essentials.";
-      }
-    }
-    if (step === 2) {
-      if (!formData.time || !formData.difficulty || !formData.season || !formData.occasion) {
-        return "Please complete all fields in Recipe Details.";
-      }
-    }
-    if (step === 3) {
-      if (formData.servings < 1 || formData.ingredients.some(i => !i.name || !i.quantity)) {
-        return "Please ensure all ingredients are filled out.";
-      }
-    }
-    return null;
-  };
-
-  const handleNext = () => {
-    const errorMsg = validateStep(currentStep);
-    if (errorMsg) {
-      setError(errorMsg);
-      return;
-    }
-    setError(null);
-    setCurrentStep((prev) => Math.min(prev + 1, 4));
-  };
-
-  const handlePrev = () => {
-    setError(null);
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
-  };
-
-  const handleInputChange = (field: keyof RecipeFormData, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, image: e.target.files![0] }));
-    }
+  const handleInputChange = (name: string, value: string | number) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleIngredientChange = (index: number, field: "name" | "quantity", value: string) => {
-    const newIngredients = [...formData.ingredients];
-    newIngredients[index] = { ...newIngredients[index], [field]: value };
-    setFormData((prev) => ({ ...prev, ingredients: newIngredients }));
+    const updatedIngredients = [...formData.ingredients];
+    updatedIngredients[index] = {
+      ...updatedIngredients[index],
+      [field]: value,
+    };
+    setFormData((prev) => ({
+      ...prev,
+      ingredients: updatedIngredients,
+    }));
   };
 
   const addIngredient = () => {
@@ -114,15 +102,21 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
   const removeIngredient = (index: number) => {
     if (formData.ingredients.length > 1) {
-      const newIngredients = formData.ingredients.filter((_, i) => i !== index);
-      setFormData((prev) => ({ ...prev, ingredients: newIngredients }));
+      const updatedIngredients = formData.ingredients.filter((_, idx) => idx !== index);
+      setFormData((prev) => ({
+        ...prev,
+        ingredients: updatedIngredients,
+      }));
     }
   };
 
   const handleInstructionChange = (index: number, value: string) => {
-    const newInstructions = [...formData.instructions];
-    newInstructions[index] = value;
-    setFormData((prev) => ({ ...prev, instructions: newInstructions }));
+    const updatedInstructions = [...formData.instructions];
+    updatedInstructions[index] = value;
+    setFormData((prev) => ({
+      ...prev,
+      instructions: updatedInstructions,
+    }));
   };
 
   const addInstruction = () => {
@@ -134,19 +128,67 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
   const removeInstruction = (index: number) => {
     if (formData.instructions.length > 1) {
-      const newInstructions = formData.instructions.filter((_, i) => i !== index);
-      setFormData((prev) => ({ ...prev, instructions: newInstructions }));
+      const updatedInstructions = formData.instructions.filter((_, idx) => idx !== index);
+      setFormData((prev) => ({
+        ...prev,
+        instructions: updatedInstructions,
+      }));
     }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        image: files[0],
+      }));
+    }
+  };
+
+  const validateStep = (step: number) => {
+    setError(null);
+    if (step === 1) {
+      if (!formData.name.trim()) return "Recipe Title is required.";
+      if (!formData.type) return "Category is required.";
+      if (!formData.meal) return "Meal type is required.";
+      if (!formData.dietaryType) return "Dietary Preference is required.";
+    } else if (step === 2) {
+      if (!formData.time || Number(formData.time) <= 0) return "Valid Prep Time is required.";
+      if (!formData.difficulty) return "Difficulty is required.";
+      if (!formData.season) return "Best Season is required.";
+      if (!formData.occasion) return "Occasion is required.";
+    } else if (step === 3) {
+      const emptyIng = formData.ingredients.some(ing => !ing.name.trim() || !ing.quantity.trim());
+      if (emptyIng) return "All ingredients must have a name and quantity.";
+    }
+    return null;
+  };
+
+  const handleNext = () => {
+    const validationError = validateStep(currentStep);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setCurrentStep((prev) => Math.min(prev + 1, 4));
+  };
+
+  const handlePrev = () => {
+    setError(null);
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (formData.instructions.some(i => !i) || !formData.image) {
-      setError("Please provide instructions and an image.");
+    const validationError = validateStep(currentStep);
+    if (validationError) {
+      setError(validationError);
       return;
     }
-    setError(null);
-    if (onSubmit) onSubmit(formData);
+    if (onSubmit) {
+      onSubmit(formData);
+    }
   };
 
   const renderCurrentStep = () => {
@@ -163,7 +205,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               name="name" 
               value={formData.name} 
               onChange={(v) => handleInputChange("name", v as string)} 
-              icon="edit_square"
+              icon={FileText}
               charCount={formData.name.length}
               maxChars={60}
               placeholder="e.g. Classic Beef Tacos"
@@ -175,7 +217,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 value={formData.type} 
                 onChange={(v) => handleInputChange("type", v)} 
                 options={staticData.types} 
-                icon="restaurant"
+                icon={Utensils}
                 placeholder="Select category"
               />
               <Select 
@@ -184,7 +226,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 value={formData.meal} 
                 onChange={(v) => handleInputChange("meal", v)} 
                 options={staticData.meals} 
-                icon="restaurant_menu"
+                icon={BookOpen}
                 placeholder="When to enjoy?"
               />
             </div>
@@ -194,7 +236,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               value={formData.dietaryType} 
               onChange={(v) => handleInputChange("dietaryType", v)} 
               options={staticData.dietaryTypes} 
-              icon="spa"
+              icon={Leaf}
               placeholder="Choose dietary type"
             />
           </div>
@@ -213,7 +255,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 name="time" 
                 value={formData.time} 
                 onChange={(v) => handleInputChange("time", v as string)} 
-                icon="timer"
+                icon={Clock}
                 placeholder="e.g. 30"
               />
               <Select 
@@ -222,7 +264,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 value={formData.difficulty} 
                 onChange={(v) => handleInputChange("difficulty", v)} 
                 options={staticData.difficulties} 
-                icon="signal_cellular_alt"
+                icon={ClipboardList}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -232,7 +274,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 value={formData.season} 
                 onChange={(v) => handleInputChange("season", v)} 
                 options={staticData.seasons} 
-                icon="wb_sunny"
+                icon={Sun}
               />
               <Select 
                 label="Occasion" 
@@ -240,7 +282,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                 value={formData.occasion} 
                 onChange={(v) => handleInputChange("occasion", v)} 
                 options={staticData.occasions} 
-                icon="celebration"
+                icon={Sparkles}
               />
             </div>
           </div>
@@ -258,7 +300,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               name="servings" 
               value={formData.servings} 
               onChange={(v) => handleInputChange("servings", v as number)} 
-              icon="group"
+              icon={Users}
             />
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -268,7 +310,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                   onClick={addIngredient}
                   className="px-4 py-2 bg-primary-stitch/10 text-primary-stitch rounded-xl font-bold text-xs hover:bg-primary-stitch/20 transition-all flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-sm">add</span> Add
+                  <Plus className="w-4 h-4" /> Add
                 </button>
               </div>
               {formData.ingredients.map((ing, idx) => (
@@ -293,7 +335,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                       onClick={() => removeIngredient(idx)}
                       className="p-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all h-[52px] mt-auto"
                     >
-                      <span className="material-symbols-outlined">delete</span>
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
                 </div>
@@ -316,7 +358,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                   onClick={addInstruction}
                   className="px-4 py-2 bg-primary-stitch/10 text-primary-stitch rounded-xl font-bold text-xs hover:bg-primary-stitch/20 transition-all flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-sm">add</span> Add Step
+                  <Plus className="w-4 h-4" /> Add Step
                 </button>
               </div>
               {formData.instructions.map((inst, idx) => (
@@ -338,7 +380,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                       onClick={() => removeInstruction(idx)}
                       className="p-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shrink-0 mt-3"
                     >
-                      <span className="material-symbols-outlined">delete</span>
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
                 </div>
@@ -349,7 +391,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               <div className="relative glass-panel rounded-2xl p-6 border-dashed border-2 border-gray-200 dark:border-gray-700 hover:border-primary-stitch transition-all cursor-pointer">
                 <input type="file" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
                 <div className="flex flex-col items-center gap-2">
-                  <span className="material-symbols-outlined text-4xl text-gray-400">add_a_photo</span>
+                  <Camera className="w-10 h-10 text-gray-400" />
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     {formData.image ? (typeof formData.image === 'string' ? "Replace Image" : (formData.image as File).name) : "Upload recipe photo"}
                   </span>
@@ -365,7 +407,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-300">
-      {/* Background Blobs for specific aesthetic */}
       <div className="fixed top-32 left-10 w-64 h-64 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-orange-900/30"></div>
       <div className="fixed bottom-32 right-10 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-purple-900/30"></div>
 
@@ -373,19 +414,17 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
         <StepProgress currentStep={currentStep} totalSteps={4} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">
-          {/* Main Form Area */}
           <div className="lg:col-span-12 xl:col-span-7 bg-white/70 dark:bg-black/30 backdrop-blur-xl border border-white dark:border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-10 shadow-glass">
             <form onSubmit={handleSubmit}>
               {renderCurrentStep()}
 
               {error && (
                 <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 rounded-2xl flex items-center gap-3 text-red-600 dark:text-red-400 animate-shake">
-                  <span className="material-symbols-outlined">error</span>
+                  <AlertCircle className="w-5 h-5 text-red-500" />
                   <p className="text-sm font-medium">{error}</p>
                 </div>
               )}
 
-              {/* Laptop Desktop Navigation (Inside Form Card) */}
               <div className="hidden lg:flex items-center justify-between mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
                 <button 
                   type="button" 
@@ -403,7 +442,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                       onClick={handleNext}
                       className="px-8 py-3 rounded-2xl bg-gradient-to-r from-primary-stitch to-orange-600 text-white font-bold text-sm shadow-glow hover:shadow-glow-hover transition-all flex items-center gap-2"
                     >
-                      Next Step <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      Next Step <ArrowRight className="w-4 h-4" />
                     </button>
                   ) : (
                     <button 
@@ -419,19 +458,18 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             </form>
           </div>
 
-          {/* Real-time Preview Sidebar (Laptop/Desktop only, sticky) */}
           <div className="hidden xl:block xl:col-span-5 h-full">
             <div className="sticky top-32 space-y-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base">visibility</span> Live Preview
+                  <Eye className="w-4 h-4" /> Live Preview
                 </h3>
               </div>
               <RecipePreview formData={formData} />
               
               <div className="p-6 rounded-3xl bg-gradient-to-br from-orange-50 to-white dark:from-gray-800/50 dark:to-gray-900/50 border border-orange-100 dark:border-gray-700 flex items-start gap-4 shadow-sm">
                 <div className="p-2.5 bg-orange-100 dark:bg-orange-900/30 rounded-xl text-primary-stitch flex-shrink-0">
-                  <span className="material-symbols-outlined text-2xl">lightbulb</span>
+                  <Lightbulb className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="font-bold text-base text-gray-900 dark:text-white">Pro Tip</h4>
@@ -443,17 +481,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             </div>
           </div>
 
-          {/* Tablet/Mobile Preview Card (Collapsible for Mobile, Visible for Tablet) */}
           <div className="xl:hidden bg-white/50 dark:bg-black/20 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 overflow-hidden shadow-sm lg:col-span-5 xl:col-span-0">
             <button 
               onClick={() => setIsPreviewOpen(!isPreviewOpen)}
               className="w-full flex items-center justify-between p-4 px-6 md:hidden"
             >
                <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary-stitch">visibility</span>
+                <Eye className="w-5 h-5 text-primary-stitch" />
                 <span className="font-bold text-sm">Live Preview</span>
               </div>
-              <span className={`material-symbols-outlined transition-transform duration-300 ${isPreviewOpen ? 'rotate-180' : ''}`}>expand_more</span>
+              <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isPreviewOpen ? 'rotate-180' : ''}`} />
             </button>
             <div className={`p-4 md:block ${isPreviewOpen ? 'block' : 'hidden'}`}>
               <RecipePreview formData={formData} />
@@ -462,7 +499,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
         </div>
       </main>
 
-      {/* Mobile Sticky Footer */}
       <footer className="lg:hidden fixed bottom-6 sm:bottom-10 left-3 right-3 sm:left-5 sm:right-5 z-40">
         <div className="glass-panel rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-2xl flex items-center gap-2 sm:gap-3">
           <button type="button" className="flex-1 py-3 sm:py-4 px-2 rounded-lg sm:rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold text-[10px] sm:text-xs shadow-sm border border-gray-100 dark:border-gray-800">
@@ -478,7 +514,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
               className="flex-[2] py-3 sm:py-4 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary-stitch to-orange-600 text-white font-bold text-xs sm:text-sm shadow-glow flex items-center justify-center gap-2"
               onClick={handleNext}
             >
-              Next Step <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              Next Step <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
             <button 

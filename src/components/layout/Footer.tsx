@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Share2, Globe } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -50,10 +51,10 @@ export default function Footer() {
         </p>
         <div className="flex gap-6">
           <Link href="#" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white transition-all">
-            <span className="material-symbols-outlined text-xl">share</span>
+            <Share2 className="w-5 h-5" />
           </Link>
           <Link href="#" className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white transition-all">
-            <span className="material-symbols-outlined text-xl">public</span>
+            <Globe className="w-5 h-5" />
           </Link>
         </div>
       </div>

@@ -2,6 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import {
+  LucideIcon,
+  Sun,
+  Cloud,
+  CloudRain,
+  Snowflake,
+  CloudLightning,
+  CloudFog,
+  CloudSun,
+  ArrowRight,
+  Play,
+  Leaf,
+  Utensils,
+} from "lucide-react";
 
 interface HomeHeroProps {
   featuredRecipe?: Recipe;
@@ -9,18 +23,18 @@ interface HomeHeroProps {
   weatherLoading?: boolean;
 }
 
-// Map weather descriptions to icons
-const getWeatherIcon = (description?: string): string => {
-  if (!description) return "partly_cloudy_day";
+// Map weather descriptions to Lucide components
+const getWeatherIcon = (description?: string): LucideIcon => {
+  if (!description) return CloudSun;
   const desc = description.toLowerCase();
-  if (desc.includes("clear") || desc.includes("sun")) return "sunny";
-  if (desc.includes("cloud")) return "cloud";
-  if (desc.includes("rain") || desc.includes("drizzle")) return "rainy";
-  if (desc.includes("snow") || desc.includes("blizzard")) return "ac_unit";
-  if (desc.includes("thunder") || desc.includes("storm")) return "thunderstorm";
+  if (desc.includes("clear") || desc.includes("sun")) return Sun;
+  if (desc.includes("cloud")) return Cloud;
+  if (desc.includes("rain") || desc.includes("drizzle")) return CloudRain;
+  if (desc.includes("snow") || desc.includes("blizzard")) return Snowflake;
+  if (desc.includes("thunder") || desc.includes("storm")) return CloudLightning;
   if (desc.includes("fog") || desc.includes("mist") || desc.includes("haze"))
-    return "foggy";
-  return "partly_cloudy_day";
+    return CloudFog;
+  return CloudSun;
 };
 
 export default function HomeHero({
@@ -53,9 +67,10 @@ export default function HomeHero({
               </>
             ) : weatherInfo ? (
               <>
-                <span className="material-symbols-outlined text-base md:text-lg text-primary fill-1">
-                  {getWeatherIcon(weatherInfo.description)}
-                </span>
+                {(() => {
+                  const WeatherIcon = getWeatherIcon(weatherInfo.description);
+                  return <WeatherIcon className="w-4 h-4 md:w-5 md:h-5 text-primary" />;
+                })()}
                 <span>
                   {weatherInfo.place} — {weatherInfo.temperature}°C,{" "}
                   {weatherInfo.description}
@@ -87,20 +102,16 @@ export default function HomeHero({
           <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 md:gap-6 w-full">
             <Link
               href="/search"
-              className="inline-flex items-center justify-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 sm:py-4 md:px-12 md:py-6 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-bold shadow-glow hover:shadow-2xl transition-all text-sm sm:text-base md:text-xl"
+              className="inline-flex items-center justify-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 sm:py-4 md:px-12 md:py-6 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-bold shadow-glow hover:shadow-2xl transition-all text-sm sm:text-base md:text-xl animate-bounce-subtle"
             >
               Start Cooking
-              <span className="material-symbols-outlined font-bold text-lg md:text-2xl">
-                arrow_forward
-              </span>
+              <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
             </Link>
             <Link
               href="#workflow"
               className="inline-flex items-center justify-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 sm:py-4 md:px-12 md:py-6 bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-700/60 text-slate-900 dark:text-white rounded-2xl font-bold backdrop-blur-md border border-white/40 dark:border-white/10 transition-all text-sm sm:text-base md:text-xl"
             >
-              <span className="material-symbols-outlined text-primary text-2xl md:text-3xl">
-                play_circle
-              </span>
+              <Play className="w-5 h-5 md:w-6 md:h-6 text-primary fill-current" />
               Watch Demo
             </Link>
           </div>
@@ -116,9 +127,10 @@ export default function HomeHero({
               </span>
               {weatherInfo && (
                 <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] md:text-xs font-bold flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm fill-1">
-                    {getWeatherIcon(weatherInfo.description)}
-                  </span>
+                  {(() => {
+                    const WeatherIcon = getWeatherIcon(weatherInfo.description);
+                    return <WeatherIcon className="w-3.5 h-3.5" />;
+                  })()}
                   {weatherInfo.temperature}°C
                 </span>
               )}
@@ -167,11 +179,11 @@ export default function HomeHero({
             <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-4 sm:pt-6 md:pt-8">
               <div className="flex items-center gap-3 md:gap-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-primary text-xl md:text-2xl">
-                    {featuredRecipe?.dietaryType?.toLowerCase().includes("veg")
-                      ? "eco"
-                      : "restaurant"}
-                  </span>
+                  {featuredRecipe?.dietaryType?.toLowerCase().includes("veg") ? (
+                    <Leaf className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                  ) : (
+                    <Utensils className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                  )}
                 </div>
                 <div>
                   <p className="text-xs md:text-sm font-bold text-slate-900 dark:text-white leading-tight">
@@ -210,8 +222,12 @@ export default function HomeHero({
             transform: translateY(-20px);
           }
         }
-        .fill-1 {
-          font-variation-settings: "FILL" 1;
+        @keyframes bounce-subtle {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(4px); }
+        }
+        .animate-bounce-subtle {
+          animation: bounce-subtle 2s ease-in-out infinite;
         }
       `}</style>
     </header>

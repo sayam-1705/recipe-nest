@@ -1,7 +1,8 @@
 import React from "react";
+import { ChevronDown } from "lucide-react";
 
 interface ExtendedSelectProps extends SelectProps {
-  icon?: string;
+  icon?: React.ComponentType<{ className?: string }> | string;
 }
 
 const Select: React.FC<ExtendedSelectProps> = ({
@@ -40,9 +41,13 @@ const Select: React.FC<ExtendedSelectProps> = ({
       <div className="relative">
         {icon && (
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <span className="material-symbols-outlined text-gray-400 group-focus-within:text-primary-stitch transition-colors text-xl">
-              {icon}
-            </span>
+            {typeof icon === "string" ? (
+              <span className="text-gray-400 text-xl">{icon}</span>
+            ) : (
+              React.createElement(icon as React.ComponentType<{ className?: string }>, {
+                className: "w-5 h-5 text-gray-400 group-focus-within:text-primary-stitch transition-colors",
+              })
+            )}
           </div>
         )}
         <select
@@ -64,9 +69,7 @@ const Select: React.FC<ExtendedSelectProps> = ({
           ))}
         </select>
         <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-          <span className="material-symbols-outlined text-gray-400 group-focus-within:text-primary-stitch transition-colors">
-            expand_more
-          </span>
+          <ChevronDown className="w-5 h-5 text-gray-400 group-focus-within:text-primary-stitch transition-colors" />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import RecipeCard from "@/components/recipes/RecipeCard";
 import ErrorDisplay from "@/components/common/ErrorDisplay";
 import AdvancedFilters from "../../components/recipes/AdvancedFilters";
 import { Suspense, useState, useEffect } from "react";
+import { Search, Beef, UtensilsCrossed, Leaf, Heart, Cake, Sparkles, Frown } from "lucide-react";
 
 function SearchResults() {
   const searchParams = useSearchParams();
@@ -103,9 +104,7 @@ function SearchResults() {
             className="glass-panel rounded-3xl p-2 sm:p-3 flex flex-col sm:flex-row gap-2 shadow-2xl shadow-primary-stitch/5"
           >
             <div className="flex-1 relative flex items-center bg-white/50 dark:bg-slate-800/40 rounded-2xl px-4 py-3 border border-white/60 dark:border-white/5 focus-within:ring-2 focus-within:ring-primary-stitch/30 transition-all">
-              <span className="material-symbols-outlined text-slate-400 text-2xl mr-3">
-                search
-              </span>
+              <Search className="w-6 h-6 text-slate-400 mr-3" />
               <input
                 type="text"
                 value={searchInput}
@@ -150,17 +149,17 @@ function SearchResults() {
                 }}
                 className="px-4 py-1.5 rounded-full glass-card text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-primary-stitch hover:border-primary-stitch transition-colors flex items-center gap-1.5"
               >
-                <span className="material-symbols-outlined text-[14px]">
-                  {tag === "Chicken"
-                    ? "lunch_dining"
-                    : tag === "Pasta"
-                    ? "ramen_dining"
-                    : tag === "Vegan"
-                    ? "spa"
-                    : tag === "Healthy"
-                    ? "favorite"
-                    : "cake"}
-                </span>
+                {(() => {
+                  const tagIconMap: Record<string, React.ComponentType<{className?: string}>> = {
+                    Chicken: Beef,
+                    Pasta: UtensilsCrossed,
+                    Vegan: Leaf,
+                    Healthy: Heart,
+                    Dessert: Cake,
+                  };
+                  const TagIcon = tagIconMap[tag] || Sparkles;
+                  return <TagIcon className="w-3.5 h-3.5" />;
+                })()}
                 {tag}
               </button>
             ))}
@@ -191,9 +190,7 @@ function SearchResults() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {/* Recommendation placeholders or static featured content could go here */}
             <div className="col-span-full py-10 sm:py-20 text-center glass-card rounded-[2.5rem]">
-              <span className="material-symbols-outlined text-5xl sm:text-7xl text-primary-stitch/20 mb-4 block">
-                search_spark
-              </span>
+              <Sparkles className="w-14 h-14 sm:w-16 sm:h-16 text-primary-stitch/20 mb-4 mx-auto" />
               <h3 className="text-xl sm:text-2xl font-bold text-slate-400 mb-2 px-4">
                 Ready to find your next masterpiece?
               </h3>
@@ -226,9 +223,7 @@ function SearchResults() {
           </div>
         ) : recipes.length === 0 ? (
           <div className="glass-panel rounded-[2.5rem] p-10 sm:p-20 text-center">
-            <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-6 block">
-              sentiment_dissatisfied
-            </span>
+            <Frown className="w-16 h-16 text-slate-300 dark:text-slate-700 mb-6 mx-auto" />
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3">
               No recipes found
             </h3>

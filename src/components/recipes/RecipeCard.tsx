@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAuthToken } from "@/lib/auth";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import AlertDialog from "@/components/common/AlertDialog";
+import { Clock, Edit2, Trash2, ArrowRight } from "lucide-react";
 
 const useGetUserById = (userId: string, enabled: boolean = true) => {
   return useQuery({
@@ -110,7 +111,7 @@ const RecipeCard = ({
           {/* Top Indicators */}
           <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex justify-between items-start">
             <div className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full flex items-center gap-1 shadow-lg">
-              <span className="material-symbols-outlined text-primary text-base">schedule</span>
+              <Clock className="w-3.5 h-3.5 text-primary" />
               <span className="text-xs font-black text-slate-900 dark:text-white">{recipe.time || "30 min"}</span>
             </div>
 
@@ -120,14 +121,14 @@ const RecipeCard = ({
                   onClick={editRecipeHandler}
                   className="w-10 h-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary-stitch transition-all shadow-xl"
                 >
-                  <span className="material-symbols-outlined text-lg">edit</span>
+                  <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={deleteRecipeHandler}
                   className="w-10 h-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-rose-500 transition-all shadow-xl"
                   disabled={deleteRecipeMutation.isPending}
                 >
-                  <span className="material-symbols-outlined text-lg">delete</span>
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             )}
@@ -164,9 +165,7 @@ const RecipeCard = ({
                 {userData?.name || "Loading..."}
               </span>
             </div>
-            <span className="material-symbols-outlined text-slate-300 group-hover:text-primary-stitch transition-all group-hover:translate-x-1">
-              arrow_forward
-            </span>
+            <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-primary-stitch transition-all group-hover:translate-x-1" />
           </div>
         </div>
       </div>

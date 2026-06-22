@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Frown, BadgeCheck, Flame, Check, Clock, BarChart3, Utensils, Zap, PlayCircle, ShoppingBag, ShieldCheck, Dumbbell, Droplets, Wheat } from "lucide-react";
 
 
 interface RecipeDisplayProps {
@@ -58,7 +59,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
     return (
       <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4 sm:p-6">
         <div className="glass-panel p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] text-center max-w-md w-full">
-          <span className="material-symbols-outlined text-6xl text-rose-500 mb-6 block">sentiment_dissatisfied</span>
+          <Frown className="w-16 h-16 text-rose-500 mb-6 mx-auto" />
           <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Recipe Not Found</h2>
           <p className="text-slate-500 dark:text-slate-400 mb-8 font-medium">
             {error || "The recipe you are looking for has been moved or deleted."}
@@ -109,10 +110,10 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
               {/* Image Overlays */}
               <div className="absolute top-6 left-6 flex flex-col gap-2 scale-90 lg:scale-100 origin-top-left">
                 <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px] fill-1">verified</span> {recipe.dietaryType}
+                  <BadgeCheck className="w-4 h-4" /> {recipe.dietaryType}
                 </span>
                 <span className="bg-orange-500/80 backdrop-blur-md border border-orange-400/30 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.4)]">
-                  <span className="material-symbols-outlined text-[18px] fill-1">whatshot</span> {recipe.difficulty}
+                  <Flame className="w-4 h-4" /> {recipe.difficulty}
                 </span>
               </div>
 
@@ -152,7 +153,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
                         unoptimized
                       />
                       <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-0.5 lg:p-1 rounded-full border-2 border-white dark:border-slate-800">
-                        <span className="material-symbols-outlined text-[12px] lg:text-[14px] block font-black">check</span>
+                        <Check className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
                       </div>
                     </div>
                     <div className="flex-1">
@@ -163,14 +164,14 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
 
                   <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
                     {[
-                      { label: "Time", value: recipe.time, icon: "schedule", bg: "orange" },
-                      { label: "Level", value: recipe.difficulty, icon: "bar_chart", bg: "blue" },
-                      { label: "Serves", value: `${recipe.servings} People`, icon: "restaurant", bg: "green" },
-                      { label: "Calories", value: calories ? `${calories} kcal` : "N/A", icon: "local_fire_department", bg: "purple" }
+                      { label: "Time", value: recipe.time, icon: Clock, bg: "orange" },
+                      { label: "Level", value: recipe.difficulty, icon: BarChart3, bg: "blue" },
+                      { label: "Serves", value: `${recipe.servings} People`, icon: Utensils, bg: "green" },
+                      { label: "Calories", value: calories ? `${calories} kcal` : "N/A", icon: Zap, bg: "purple" }
                     ].map((stat, idx) => (
                         <div key={idx} className="glass-card p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex items-center gap-2 sm:gap-3 lg:gap-4 border-white/60 dark:border-white/10 hover:scale-[1.02] transition-transform">
                           <div className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl sm:rounded-2xl bg-${stat.bg}-50 dark:bg-${stat.bg}-900/30 text-${stat.bg}-600 dark:text-${stat.bg}-400 flex items-center justify-center border border-${stat.bg}-100 dark:border-${stat.bg}-800/50 shrink-0`}>
-                          <span className="material-symbols-outlined text-[20px] lg:text-[22px]">{stat.icon}</span>
+                          <stat.icon className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-[9px] lg:text-[10px] text-slate-500 font-black uppercase tracking-widest truncate">{stat.label}</p>
@@ -188,7 +189,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
                       }}
                       className="w-full py-5 lg:py-6 bg-slate-900 dark:bg-primary text-white font-black rounded-[1.5rem] shadow-xl shadow-slate-900/10 dark:shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-base lg:text-lg uppercase tracking-widest group"
                     >
-                      <span className="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">play_circle</span> Start Cooking
+                      <PlayCircle className="w-6 h-6 group-hover:rotate-12 transition-transform" /> Start Cooking
                     </button>
                   </div>
                 </div>
@@ -204,7 +205,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
               <div className="glass-panel p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] shadow-glass relative overflow-hidden">
                 <div className="flex justify-between items-center mb-6 sm:mb-8 md:mb-10">
                   <h2 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-3xl">grocery</span> 
+                    <ShoppingBag className="w-8 h-8 text-primary" /> 
                     Ingredients
                   </h2>
                   <span className="text-[10px] font-black bg-primary/10 text-primary px-3 py-1.5 rounded-full border border-primary/20 uppercase tracking-widest">{recipe.ingredients.length} items</span>
@@ -273,7 +274,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
                 <div className="absolute top-0 right-0 w-40 h-40 bg-green-500/5 rounded-full blur-[60px] pointer-events-none"></div>
                 
                 <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mb-6 sm:mb-8 md:mb-12 self-start flex items-center gap-3">
-                  <span className="material-symbols-outlined text-green-500 text-3xl">health_and_safety</span>
+                  <ShieldCheck className="w-8 h-8 text-green-500" />
                   Nutrition
                 </h2>
 
@@ -301,14 +302,14 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
                 {/* Linear Progress Stats */}
                 <div className="w-full space-y-5">
                   {[
-                    { label: "Protein", value: protein, color: "green", icon: "fitness_center" },
-                    { label: "Fats", value: fats, color: "yellow", icon: "water_drop" },
-                    { label: "Carbs", value: carbs, color: "blue", icon: "grain" }
+                    { label: "Protein", value: protein, color: "green", icon: Dumbbell },
+                    { label: "Fats", value: fats, color: "yellow", icon: Droplets },
+                    { label: "Carbs", value: carbs, color: "blue", icon: Wheat }
                   ].map((stat, i) => (
                     <div key={i} className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex items-center justify-between group hover:border-primary/30 transition-all">
                       <div className="flex items-center gap-4">
                         <div className={`bg-${stat.color}-500/10 p-3 rounded-2xl text-${stat.color}-600 dark:text-${stat.color}-400 group-hover:scale-110 transition-transform`}>
-                          <span className="material-symbols-outlined text-[20px] lg:text-[22px]">{stat.icon}</span>
+                          <stat.icon className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
                         </div>
                         <div>
                           <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{stat.label}</p>

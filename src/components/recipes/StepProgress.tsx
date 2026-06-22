@@ -1,4 +1,5 @@
 import React from "react";
+import { Check, ClipboardList, ShoppingBag, BookOpen } from "lucide-react";
 
 interface StepProgressProps {
   currentStep: number;
@@ -6,10 +7,10 @@ interface StepProgressProps {
 }
 
 const steps = [
-  { id: 1, label: "Basics", icon: "check" },
-  { id: 2, label: "Details", icon: "description" },
-  { id: 3, label: "Ingredients", icon: "grocery" },
-  { id: 4, label: "Instructions", icon: "menu_book" },
+  { id: 1, label: "Basics", icon: Check },
+  { id: 2, label: "Details", icon: ClipboardList },
+  { id: 3, label: "Ingredients", icon: ShoppingBag },
+  { id: 4, label: "Instructions", icon: BookOpen },
 ];
 
 const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) => {
@@ -40,9 +41,10 @@ const StepProgress: React.FC<StepProgressProps> = ({ currentStep, totalSteps }) 
                       : "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400"
                 }`}
               >
-                <span className="material-symbols-outlined text-base sm:text-xl">
-                  {isCompleted ? "check" : step.icon}
-                </span>
+                {(() => {
+                  const Icon = isCompleted ? Check : step.icon;
+                  return <Icon className="w-4 h-4 sm:w-5 sm:h-5" />;
+                })()}
               </div>
               <span className={`text-[8px] sm:text-[10px] font-bold uppercase tracking-wider ${isActive ? 'text-primary-stitch' : 'text-gray-500 dark:text-gray-400'}`}>
                 {step.label}

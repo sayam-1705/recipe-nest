@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { isAuthenticated, getUser } from "@/lib/auth";
+import { Search, PlusCircle, Moon, Sun, Menu, X, Circle, Home } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -45,9 +46,9 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Recipes", href: "/search", icon: "search" },
-    { label: "Create", href: "/createRecipe", icon: "add_circle", protected: true },
+    { label: "Home", href: "/", icon: Home },
+    { label: "Recipes", href: "/search", icon: Search },
+    { label: "Create", href: "/createRecipe", icon: PlusCircle, protected: true },
   ];
 
   return (
@@ -81,11 +82,9 @@ export default function Navbar() {
                 }`}
               >
                 {link.icon && (
-                  <span className={`material-symbols-outlined text-[18px] transition-colors ${
+                  <link.icon className={`w-4 h-4 transition-colors ${
                     pathname === link.href ? "text-primary" : "text-slate-400 group-hover:text-primary"
-                  }`}>
-                    {link.icon}
-                  </span>
+                  }`} />
                 )}
                 {link.label}
               </Link>
@@ -100,8 +99,8 @@ export default function Navbar() {
             onClick={toggleDarkMode}
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all text-slate-600 dark:text-accent-neon shadow-sm"
           >
-            <span className="material-symbols-outlined text-lg md:text-xl !block dark:!hidden">dark_mode</span>
-            <span className="material-symbols-outlined text-lg md:text-xl !hidden dark:!block">light_mode</span>
+            <Moon className="w-5 h-5 !block dark:!hidden" />
+            <Sun className="w-5 h-5 !hidden dark:!block" />
           </button>
           
           {user ? (
@@ -129,7 +128,7 @@ export default function Navbar() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-900 dark:text-white"
           >
-            <span className="material-symbols-outlined">{isMobileMenuOpen ? "close" : "menu"}</span>
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -150,7 +149,7 @@ export default function Navbar() {
                       : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`}
                 >
-                  <span className="material-symbols-outlined">{link.icon || "circle"}</span>
+                  {link.icon ? <link.icon className="w-5 h-5" /> : <Circle className="w-2 h-2" />}
                   {link.label}
                 </Link>
               )

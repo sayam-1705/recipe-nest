@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { Image as ImageIcon, Clock, Utensils, User, Star } from "lucide-react";
 
 interface RecipePreviewProps {
   formData: RecipeFormData;
@@ -38,18 +39,18 @@ const RecipePreview: React.FC<RecipePreviewProps> = ({ formData }) => {
           />
         ) : (
           <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400">
-            <span className="material-symbols-outlined text-6xl">image</span>
+            <ImageIcon className="w-16 h-16 text-gray-400" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div className="absolute bottom-6 left-6 right-6">
           <div className="flex items-center gap-3 text-white/90 text-sm mb-3">
             <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg">
-              <span className="material-symbols-outlined text-sm">schedule</span>
+              <Clock className="w-4 h-4" />
               <span className="font-medium">{formData.time || "0"}m</span>
             </div>
             <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg">
-              <span className="material-symbols-outlined text-sm">restaurant</span>
+              <Utensils className="w-4 h-4" />
               <span className="font-medium">{formData.type || "Main"}</span>
             </div>
           </div>
@@ -62,7 +63,7 @@ const RecipePreview: React.FC<RecipePreviewProps> = ({ formData }) => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary-stitch/20 flex items-center justify-center text-primary-stitch">
-              <span className="material-symbols-outlined">person</span>
+              <User className="w-5 h-5 text-primary-stitch" />
             </div>
             <div>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold tracking-widest">Recipe for</p>
@@ -71,9 +72,7 @@ const RecipePreview: React.FC<RecipePreviewProps> = ({ formData }) => {
           </div>
           <div className="flex text-yellow-400 gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
-              <span key={star} className={`material-symbols-outlined text-lg ${star <= 4 ? "fill-current" : "text-gray-200 dark:text-gray-700"}`}>
-                star
-              </span>
+              <Star key={star} className={`w-4 h-4 ${star <= 4 ? "text-yellow-400 fill-current" : "text-gray-200 dark:text-gray-700"}`} />
             ))}
           </div>
         </div>

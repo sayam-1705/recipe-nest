@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { clearAuth, getUser, getAuthToken } from "@/lib/auth";
+import { BadgeCheck, LogOut, PlusCircle, ChefHat, Trash2 } from "lucide-react";
 
 const Profile = () => {
   const router = useRouter();
@@ -130,9 +131,7 @@ const Profile = () => {
                   <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                     {currentUser?.name}
                   </h2>
-                  <span className="material-symbols-outlined text-blue-500 text-2xl" title="Verified Chef">
-                    verified
-                  </span>
+                  <BadgeCheck className="w-6 h-6 text-blue-500" />
                 </div>
                 <p className="text-slate-500 dark:text-slate-400 font-medium text-sm sm:text-base md:text-lg mb-4 sm:mb-6">
                   {currentUser?.email}
@@ -154,7 +153,7 @@ const Profile = () => {
                 onClick={handleLogOut}
                 className="w-full px-8 py-4 rounded-2xl bg-slate-900 dark:bg-primary-stitch text-white font-black shadow-lg shadow-primary-stitch/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 duration-200"
               >
-                <span className="material-symbols-outlined">logout</span>
+                <LogOut className="w-5 h-5" />
                 Sign Out
               </button>
             </div>
@@ -173,7 +172,7 @@ const Profile = () => {
                 onClick={() => router.push("/createRecipe")}
                 className="flex items-center gap-2 text-primary-stitch font-black hover:gap-3 transition-all text-sm uppercase tracking-wider"
               >
-                Create New <span className="material-symbols-outlined">add_circle</span>
+                Create New <PlusCircle className="w-5 h-5 inline" />
               </button>
             </div>
 
@@ -185,9 +184,7 @@ const Profile = () => {
               </div>
             ) : recipes.length === 0 ? (
               <div className="col-span-full py-20 text-center glass-card rounded-[2.5rem]">
-                <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700 mb-6 block">
-                  soup_kitchen
-                </span>
+                <ChefHat className="w-16 h-16 text-slate-300 dark:text-slate-700 mb-6 mx-auto" />
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3 px-4">
                   No recipes yet
                 </h3>
@@ -218,7 +215,7 @@ const Profile = () => {
               className="group relative px-10 py-4 rounded-full border border-rose-200 dark:border-rose-900/30 text-rose-500 hover:text-white hover:bg-rose-500 transition-all duration-300 font-bold overflow-hidden shadow-sm hover:shadow-rose-500/30 active:scale-90"
             >
               <span className="relative z-10 flex items-center justify-center gap-2 text-sm uppercase tracking-[0.2em]">
-                <span className="material-symbols-outlined">delete_forever</span>
+                <Trash2 className="w-5 h-5" />
                 Delete Account
               </span>
             </button>

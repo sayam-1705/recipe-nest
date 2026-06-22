@@ -3,6 +3,7 @@
 // Advanced filters component for recipe search results
 
 import { useState, useRef, useEffect } from "react";
+import { SlidersHorizontal, ListFilter, X, Leaf, UtensilsCrossed, BarChart3 } from "lucide-react";
 
 interface AdvancedFiltersProps {
   onFilter: (filters: FilterOptions) => void;
@@ -14,19 +15,19 @@ const filterConfig = [
     name: "dietaryType",
     label: "Dietary",
     options: ["Vegetarian", "Non-Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free"],
-    icon: "spa",
+    icon: Leaf,
   },
   {
     name: "meal",
     label: "Meal Time",
     options: ["Breakfast", "Lunch", "Dinner", "Snack", "Brunch"],
-    icon: "restaurant_menu",
+    icon: UtensilsCrossed,
   },
   {
     name: "difficulty",
     label: "Level",
     options: ["Easy", "Medium", "Hard", "Expert"],
-    icon: "signal_cellular_alt",
+    icon: BarChart3,
   },
 ];
 
@@ -79,7 +80,7 @@ export default function AdvancedFilters({ onFilter, initialFilters }: AdvancedFi
             : "bg-white/50 dark:bg-slate-800/40 border-white/60 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:border-primary-stitch/30 hover:text-primary-stitch"
         }`}
       >
-        <span className="material-symbols-outlined text-base sm:text-lg">tune</span>
+        <SlidersHorizontal className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
         <span className="hidden xs:inline">Filters</span>
         {activeCount > 0 && (
           <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-stitch text-white text-[10px] font-black">
@@ -94,7 +95,7 @@ export default function AdvancedFilters({ onFilter, initialFilters }: AdvancedFi
           {/* Header */}
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200/50 dark:border-slate-700/50">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary-stitch text-lg">filter_list</span>
+              <ListFilter className="w-[18px] h-[18px] text-primary-stitch" />
               <span className="text-sm sm:text-base font-black text-slate-900 dark:text-white">Refine Search</span>
             </div>
             {hasActiveFilters && (
@@ -103,7 +104,7 @@ export default function AdvancedFilters({ onFilter, initialFilters }: AdvancedFi
                 onClick={clearFilters}
                 className="text-[10px] sm:text-xs font-bold text-primary-stitch hover:underline underline-offset-4 flex items-center gap-1"
               >
-                <span className="material-symbols-outlined text-sm">close</span>
+                <X className="w-3.5 h-3.5" />
                 Clear All
               </button>
             )}
@@ -114,7 +115,7 @@ export default function AdvancedFilters({ onFilter, initialFilters }: AdvancedFi
             {filterConfig.map((group) => (
               <div key={group.name} className="space-y-2.5">
                 <div className="flex items-center gap-2 px-1">
-                  <span className="material-symbols-outlined text-sm text-slate-400">{group.icon}</span>
+                  <group.icon className="w-3.5 h-3.5 text-slate-400" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{group.label}</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
