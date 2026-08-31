@@ -89,7 +89,7 @@ const Login = () => {
 
   return (
     <ProtectedRoute requireAuth={false}>
-      <div className="relative min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark transition-colors duration-500 overflow-hidden font-outfit">
+      <div className="relative min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark transition-colors duration-500 overflow-hidden font-outfit -mt-20 md:-mt-28">
         {/* Background Decorative Elements */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary-stitch/10 rounded-full blur-[120px] dark:bg-primary-stitch/5 animate-pulse"></div>
@@ -97,7 +97,7 @@ const Login = () => {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.02)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-md px-4 sm:px-6 py-8 sm:py-12">
+        <div className="relative z-10 w-full max-w-md px-4 sm:px-6 py-8 sm:py-12 pt-24 md:pt-32">
           {/* Brand Logo/Header */}
           <div className="text-center mb-6 sm:mb-8 md:mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-[0.2em] mb-4">

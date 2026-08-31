@@ -118,7 +118,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <QueryProvider>
             <Navbar />
-            <main className="min-h-screen w-full pt-10 md:pt-18">{children}</main>
+            <main className="min-h-screen w-full pt-20 md:pt-28">{children}</main>
             <Footer />
           </QueryProvider>
         </ErrorBoundary>

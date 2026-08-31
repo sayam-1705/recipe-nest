@@ -78,7 +78,7 @@ function SearchResults() {
         <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-orange-400/10 rounded-full blur-[80px] dark:bg-orange-600/5"></div>
       </div>
 
-      <div className="relative z-10 pt-20 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+      <div className="relative z-10 pt-4 sm:pt-8 md:pt-12 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
         {/* Search Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-stitch/10 border border-primary-stitch/20 text-primary-stitch text-[10px] font-black uppercase tracking-widest mb-6">

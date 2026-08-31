@@ -89,7 +89,7 @@ const RecipeDisplay = ({ recipeId }: RecipeDisplayProps) => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-100/30 dark:bg-blue-900/10 rounded-full blur-[120px]"></div>
       </div>
 
-      <main className="pt-20 sm:pt-24 lg:pt-36 pb-8 sm:pb-12 md:pb-16">
+      <main className="pt-4 sm:pt-8 md:pt-12 pb-8 sm:pb-12 md:pb-16">
         {/* Main Content Grid */}
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 lg:px-8 space-y-6 sm:space-y-8 lg:space-y-12 animate-fade-in-up">
           

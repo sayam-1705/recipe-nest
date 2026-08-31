@@ -94,7 +94,7 @@ const Profile = () => {
           <div className="absolute bottom-[-10%] right-[-5%] w-[40vw] h-[40vw] bg-blue-100/50 rounded-full blur-[90px] dark:bg-indigo-950/20"></div>
         </div>
 
-        <div className="relative z-10 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
+        <div className="relative z-10 pt-4 sm:pt-8 md:pt-12 pb-16 sm:pb-24 md:pb-32 px-3 xs:px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
           {/* Profile Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <span className="inline-block py-1.5 px-4 rounded-full bg-primary-stitch/10 text-primary-stitch text-xs font-bold uppercase tracking-widest border border-primary-stitch/20 mb-6 transition-all animate-fade-in text-[10px]">

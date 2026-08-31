@@ -410,7 +410,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       <div className="fixed top-32 left-10 w-64 h-64 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-orange-900/30"></div>
       <div className="fixed bottom-32 right-10 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 -z-10 dark:bg-purple-900/30"></div>
 
-      <main className="pt-20 sm:pt-24 md:pt-28 pb-24 sm:pb-28 md:pb-32 lg:pb-12 px-3 sm:px-5 max-w-7xl mx-auto w-full">
+      <main className="pt-4 sm:pt-8 md:pt-12 pb-24 sm:pb-28 md:pb-32 lg:pb-12 px-3 sm:px-5 max-w-7xl mx-auto w-full">
         <StepProgress currentStep={currentStep} totalSteps={4} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12">

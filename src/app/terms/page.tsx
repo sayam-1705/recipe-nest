@@ -1,7 +1,7 @@
 export default function TermsPage() {
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto dark:text-slate-200">
-      <h1 className="text-4xl font-bold mb-8 md:pt-6">Terms of Service</h1>
+      <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
       <div className="space-y-6 text-slate-600 dark:text-slate-400">
         <p>Welcome to RecipeNest. By using our website, you agree to comply with and be bound by the following terms of service.</p>
         <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">1. Acceptance of Terms</h2>

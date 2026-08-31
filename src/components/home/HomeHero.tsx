@@ -43,7 +43,7 @@ export default function HomeHero({
   weatherLoading,
 }: HomeHeroProps) {
   return (
-    <header className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 overflow-hidden min-h-screen flex items-center justify-center">
+    <header className="relative pt-4 sm:pt-8 md:pt-12 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 overflow-hidden min-h-screen flex items-center justify-center">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
