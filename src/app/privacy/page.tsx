@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto dark:text-slate-200">
-      <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
+      <h1 className="text-4xl font-bold mb-8 md:pt-6">Privacy Policy</h1>
       <div className="space-y-6 text-slate-600 dark:text-slate-400">
         <p>Your privacy is important to us. It is RecipeNest&#39;s policy to respect your privacy regarding any information we may collect from you across our website.</p>
         <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">1. Information We Collect</h2>
