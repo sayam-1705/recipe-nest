@@ -201,7 +201,7 @@ const Profile = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {recipes.map((recipe: Recipe) => (
-                  <RecipeCard key={recipe._id} recipe={recipe} />
+                  <RecipeCard key={recipe._id} recipe={recipe} isModified={true} />
                 ))}
               </div>
             )}

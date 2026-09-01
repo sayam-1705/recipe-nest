@@ -100,12 +100,18 @@ const RecipeCard = ({
         className="glass-card rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] p-3 sm:p-4 group cursor-pointer relative"
       >
         <div className="relative aspect-[4/5] rounded-xl sm:rounded-[1.5rem] md:rounded-[2rem] overflow-hidden mb-3 sm:mb-4 md:mb-6">
-          <Image
-            src={recipe.image}
-            alt={recipe.name}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
+          {recipe.image ? (
+            <Image
+              src={recipe.image}
+              alt={recipe.name}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+          ) : (
+            <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+              <span className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Image</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
           
           {/* Top Indicators */}

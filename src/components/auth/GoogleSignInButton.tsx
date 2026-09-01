@@ -79,12 +79,12 @@ export default function GoogleSignInButton({
         size: "large",
         text: text,
         shape: "rectangular",
-        width: "100%",
+        width: "400",
       });
     };
 
     loadGoogleScript();
   }, [onSuccess, onError, text]);
 
-  return <div ref={buttonRef} className="w-full"></div>;
+  return <div ref={buttonRef} className="w-full flex justify-center"></div>;
 }

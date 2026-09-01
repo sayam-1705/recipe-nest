@@ -161,6 +161,10 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     } else if (step === 3) {
       const emptyIng = formData.ingredients.some(ing => !ing.name.trim() || !ing.quantity.trim());
       if (emptyIng) return "All ingredients must have a name and quantity.";
+    } else if (step === 4) {
+      const emptyInst = formData.instructions.some(inst => !inst.trim());
+      if (emptyInst || formData.instructions.length === 0) return "Please provide all cooking instructions.";
+      if (!formData.image) return "A recipe image is required.";
     }
     return null;
   };
@@ -186,6 +190,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
       setError(validationError);
       return;
     }
+
+    if (currentStep < 4) {
+      setCurrentStep((prev) => prev + 1);
+      return;
+    }
+
     if (onSubmit) {
       onSubmit(formData);
     }
@@ -447,6 +457,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
                   ) : (
                     <button 
                       type="submit" 
+                      onClick={handleSubmit}
                       disabled={isSubmitting}
                       className="px-10 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-sm shadow-lg hover:bg-green-600 transition-all disabled:opacity-50"
                     >
@@ -505,12 +516,13 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             Draft
           </button>
           {currentStep > 1 && (
-            <button onClick={handlePrev} className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-gray-800">
+            <button type="button" onClick={handlePrev} className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-gray-800">
               ←
             </button>
           )}
           {currentStep < 4 ? (
             <button 
+              type="button"
               className="flex-[2] py-3 sm:py-4 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary-stitch to-orange-600 text-white font-bold text-xs sm:text-sm shadow-glow flex items-center justify-center gap-2"
               onClick={handleNext}
             >
@@ -518,6 +530,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
             </button>
           ) : (
             <button 
+              type="button"
               className="flex-[2] py-3 sm:py-4 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2"
               onClick={handleSubmit}
               disabled={isSubmitting}
